@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA 재무비율 완전 정리 — CFA Level 1</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+  --r-md:8px;--r-lg:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* header */
+.ph{margin-bottom:1.75rem}
+.ph h1{font-size:22px;font-weight:500;margin-bottom:.2rem}
+.ph p{font-size:13px;color:var(--text2)}
+
+/* nav */
+.nav{display:flex;gap:.4rem;margin-bottom:2rem;flex-wrap:wrap}
+.nb{padding:6px 16px;border:0.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+
+/* section */
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:0.5px solid var(--border)}
+
+/* card */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:500;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct,.c-blue .lb{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct,.c-green .lb{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct,.c-amber .lb{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct,.c-red .lb{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct,.c-purple .lb{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct,.c-teal .lb{color:var(--teal-t)}
+
+/* grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+@media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* table */
+.tw{overflow-x:auto;border-radius:var(--r-lg);border:0.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:500;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:0.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:0.5px solid var(--border);vertical-align:top;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:500}
+.dn{color:var(--red-t);font-weight:500}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:500}
+
+/* formula */
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 var(--r-md) var(--r-md) 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;color:var(--text);margin:.4rem 0}
+
+/* pts */
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.pts li strong{font-weight:500}
+
+/* kp */
+.kp{background:var(--amber-bg);border:0.5px solid var(--amber-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:0.5px solid var(--red-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--red-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:0.5px solid var(--green-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--green-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:0.5px solid var(--blue-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--blue-t);margin-top:.5rem}
+
+/* badge */
+.bdg{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;margin-right:3px;vertical-align:middle}
+.bdg-up{background:var(--green-bg);color:var(--green-t);border:0.5px solid var(--green-bd)}
+.bdg-dn{background:var(--red-bg);color:var(--red-t);border:0.5px solid var(--red-bd)}
+.bdg-warn{background:var(--amber-bg);color:var(--amber-t);border:0.5px solid var(--amber-bd)}
+.bdg-blue{background:var(--blue-bg);color:var(--blue-t);border:0.5px solid var(--blue-bd)}
+
+/* dupont boxes */
+.dp-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
+.dp-box{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r-md);padding:.5rem .75rem;text-align:center;min-width:96px}
+.dp-box .dl{font-size:10px;color:var(--text2);margin-bottom:2px}
+.dp-box .dv{font-size:14px;font-weight:500;color:var(--text)}
+.dp-box .ds{font-size:10px;color:var(--text3);margin-top:1px}
+.dp-sep{font-size:16px;color:var(--text3)}
+.dp-res{background:var(--blue-bg);border:0.5px solid var(--blue-bd);border-radius:var(--r-md);padding:.5rem .75rem;text-align:center;min-width:80px}
+.dp-res .dl{font-size:10px;color:var(--blue-t)}
+.dp-res .dv{font-size:16px;font-weight:500;color:var(--blue-t)}
+
+/* IS flow */
+.isflow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:.6rem 0;font-size:12px}
+.isb{background:var(--bg2);border:0.5px solid var(--border);border-radius:6px;padding:4px 10px}
+.isb.hi{background:var(--blue-bg);border-color:var(--blue-bd);color:var(--blue-t);font-weight:500}
+.isa{color:var(--text3);font-size:13px}
+
+/* keyword table */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw-item{background:var(--bg2);border-radius:var(--r-md);padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kw-key{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.kw-arr{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kw-val{font-size:12px;font-weight:500;color:var(--text);flex:1.2}
+
+/* credit signal */
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.6rem}
+.sig-item{border-radius:var(--r-md);padding:.65rem .85rem}
+.sig-item.danger{background:var(--red-bg);border:0.5px solid var(--red-bd)}
+.sig-item.warn{background:var(--amber-bg);border:0.5px solid var(--amber-bd)}
+.sig-item .si-label{font-size:11px;font-weight:500;margin-bottom:3px}
+.sig-item.danger .si-label{color:var(--red-t)}
+.sig-item.warn .si-label{color:var(--amber-t)}
+.sig-item .si-desc{font-size:12px;color:var(--text2)}
+
+.footer{font-size:11px;color:var(--text3);margin-top:3rem;padding-top:1rem;border-top:0.5px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="ph">
+  <h1>FSA 재무비율 완전 정리</h1>
+  <p>CFA Level 1 — Profitability · Activity · Liquidity · Solvency · Valuation · DuPont</p>
+</div>
+
+<div class="nav">
+  <button class="nb active" onclick="show('prof',this)">Profitability</button>
+  <button class="nb" onclick="show('act',this)">Activity</button>
+  <button class="nb" onclick="show('liq',this)">Liquidity</button>
+  <button class="nb" onclick="show('solv',this)">Solvency</button>
+  <button class="nb" onclick="show('val',this)">Valuation</button>
+  <button class="nb" onclick="show('dupont',this)">DuPont</button>
+  <button class="nb" onclick="show('keyword',this)">키워드 매핑</button>
+  <button class="nb" onclick="show('credit',this)">여신심사 포인트</button>
+</div>
+
+<!-- ===== PROFITABILITY ===== -->
+<div id="tab-prof" class="tp active">
+
+  <div class="sec">
+    <div class="st">손익계산서 구조 — 비율의 출발점</div>
+    <div class="card">
+      <div class="isflow">
+        <div class="isb">Revenue</div><div class="isa">−</div>
+        <div class="isb">COGS</div><div class="isa">=</div>
+        <div class="isb hi">Gross Profit</div><div class="isa">−</div>
+        <div class="isb">Operating Exp</div><div class="isa">=</div>
+        <div class="isb hi">EBIT</div><div class="isa">−</div>
+        <div class="isb">Interest</div><div class="isa">=</div>
+        <div class="isb hi">EBT</div><div class="isa">−</div>
+        <div class="isb">Tax</div><div class="isa">=</div>
+        <div class="isb hi">Net Income</div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:.4rem">각 단계에서 멈추면 → 해당 수준의 Margin 비율이 됨</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">수익성 비율 전체</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th style="min-width:160px">비율</th><th>공식</th><th>의미</th><th>높으면</th><th>여신 포인트</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Gross Profit Margin</strong><br><span class="na" style="font-size:11px">매출총이익률</span></td>
+            <td><span style="font-family:monospace">(Revenue − COGS) / Revenue</span></td>
+            <td>원가 제어 효율성</td>
+            <td><span class="bdg bdg-up">좋음</span> 원가 관리 우수</td>
+            <td>COGS 상승 시 → 하락 추이 주목</td>
+          </tr>
+          <tr>
+            <td><strong>Operating Profit Margin</strong><br><span class="na" style="font-size:11px">영업이익률 (EBIT Margin)</span></td>
+            <td><span style="font-family:monospace">EBIT / Revenue</span></td>
+            <td>이자·세금 전 핵심 영업 효율</td>
+            <td><span class="bdg bdg-up">좋음</span> 영업 효율 우수</td>
+            <td>금융비용 영향 없는 순수 영업력</td>
+          </tr>
+          <tr>
+            <td><strong>Net Profit Margin</strong><br><span class="na" style="font-size:11px">순이익률</span></td>
+            <td><span style="font-family:monospace">Net Income / Revenue</span></td>
+            <td>이자·세금까지 제외 최종 수익</td>
+            <td><span class="bdg bdg-up">좋음</span> 전반적 수익성</td>
+            <td>DuPont 1번째 factor</td>
+          </tr>
+          <tr>
+            <td><strong>EBITDA Margin</strong></td>
+            <td><span style="font-family:monospace">EBITDA / Revenue</span></td>
+            <td>감가상각 제외 현금창출력</td>
+            <td><span class="bdg bdg-up">좋음</span> 현금창출 우수</td>
+            <td>DSCR 계산의 분자로 활용</td>
+          </tr>
+          <tr>
+            <td><strong>ROA</strong><br><span class="na" style="font-size:11px">총자산이익률</span></td>
+            <td><span style="font-family:monospace">NI / Avg Total Assets<br>or EBIT(1−t) / Avg Assets</span></td>
+            <td>자산 활용 수익성</td>
+            <td><span class="bdg bdg-up">좋음</span> 자산 효율</td>
+            <td>= NPM × Asset Turnover</td>
+          </tr>
+          <tr>
+            <td><strong>ROE</strong><br><span class="na" style="font-size:11px">자기자본이익률</span></td>
+            <td><span style="font-family:monospace">NI / Avg Total Equity</span></td>
+            <td>주주 관점 수익성</td>
+            <td><span class="bdg bdg-up">좋음</span> but 원인 분석 필요</td>
+            <td>Leverage로 뻥튀기 가능 → DuPont 확인</td>
+          </tr>
+          <tr>
+            <td><strong>ROCE</strong><br><span class="na" style="font-size:11px">투하자본이익률</span></td>
+            <td><span style="font-family:monospace">EBIT / (Equity + LT Debt)</span></td>
+            <td>장기 투하자본 대비 수익</td>
+            <td><span class="bdg bdg-up">좋음</span> 투자 효율</td>
+            <td>장기 자금조달 효율성 평가</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp" style="margin-top:.75rem">⚠ ROE가 높아도 Leverage(부채) 때문이면 질 나쁜 ROE — 반드시 DuPont으로 원인 분해</div>
+  </div>
+
+</div>
+
+<!-- ===== ACTIVITY ===== -->
+<div id="tab-act" class="tp">
+
+  <div class="sec">
+    <div class="st">활동성(회전율) 비율 전체</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th style="min-width:160px">비율</th><th>공식</th><th>의미</th><th>Days 버전</th><th>방향</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Inventory Turnover</strong><br><span class="na" style="font-size:11px">재고자산회전율</span></td>
+            <td><span style="font-family:monospace">COGS / Avg Inventory</span></td>
+            <td>재고 소진 속도</td>
+            <td>DIO = 365 / Inv T/O</td>
+            <td><span class="bdg bdg-up">높을수록 좋음</span></td>
+          </tr>
+          <tr>
+            <td><strong>AR Turnover</strong><br><span class="na" style="font-size:11px">매출채권회전율</span></td>
+            <td><span style="font-family:monospace">Revenue / Avg AR</span><br><span style="font-size:11px;color:var(--amber-t)">원칙: Credit Sales / Avg AR<br>(현금매출 제외, 신용매출만)</span></td>
+            <td>매출채권 회수 속도</td>
+            <td>DSO = 365 / AR T/O</td>
+            <td><span class="bdg bdg-up">높을수록 좋음</span></td>
+          </tr>
+          <tr>
+            <td><strong>AP Turnover</strong><br><span class="na" style="font-size:11px">매입채무회전율</span></td>
+            <td><span style="font-family:monospace">COGS / Avg AP</span></td>
+            <td>매입채무 지급 속도</td>
+            <td>DPO = 365 / AP T/O</td>
+            <td><span class="bdg bdg-dn">낮을수록 유리</span> (늦게 지급)</td>
+          </tr>
+          <tr>
+            <td><strong>Fixed Asset Turnover</strong><br><span class="na" style="font-size:11px">고정자산회전율</span></td>
+            <td><span style="font-family:monospace">Revenue / Avg Net Fixed Assets</span></td>
+            <td>고정자산 활용도</td>
+            <td>—</td>
+            <td><span class="bdg bdg-up">높을수록 좋음</span></td>
+          </tr>
+          <tr>
+            <td><strong>Total Asset Turnover</strong><br><span class="na" style="font-size:11px">총자산회전율</span></td>
+            <td><span style="font-family:monospace">Revenue / Avg Total Assets</span></td>
+            <td>전체 자산 활용도</td>
+            <td>—</td>
+            <td><span class="bdg bdg-up">높을수록 좋음</span> DuPont 핵심</td>
+          </tr>
+          <tr>
+            <td><strong>Working Capital Turnover</strong></td>
+            <td><span style="font-family:monospace">Revenue / Avg Working Capital</span></td>
+            <td>운전자본 효율성</td>
+            <td>—</td>
+            <td><span class="bdg bdg-up">높을수록 좋음</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp" style="margin-top:.75rem">⚠ Inventory Turnover 분자는 반드시 COGS — Revenue 아님! 시험 함정</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Cash Conversion Cycle (CCC) ★★</div>
+    <div class="card c-blue">
+      <div class="ct">CCC = DIO + DSO − DPO</div>
+      <div class="fm">CCC = (365/Inv T/O) + (365/AR T/O) − (365/AP T/O)</div>
+      <div class="g2" style="margin-top:.75rem">
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--blue-t);margin-bottom:.3rem">CCC ↓ (좋음)</div>
+          <ul class="pts">
+            <li>현금 빨리 회수</li>
+            <li>유동성 좋음</li>
+            <li>운전자금 부담 낮음</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--red-t);margin-bottom:.3rem">CCC ↑ (나쁨)</div>
+          <ul class="pts">
+            <li>현금 묶임</li>
+            <li>운전자금 부족 위험</li>
+            <li>단기 유동성 악화</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:.6rem;font-size:12px;color:var(--blue-t)">최소화 전략: DIO↓ + DSO↓ + DPO↑</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== LIQUIDITY ===== -->
+<div id="tab-liq" class="tp">
+
+  <div class="sec">
+    <div class="st">유동성 비율 전체</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th style="min-width:150px">비율</th><th>공식</th><th>의미</th><th>기준</th><th>보수성</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Current Ratio</strong><br><span class="na" style="font-size:11px">유동비율</span></td>
+            <td><span style="font-family:monospace">Current Assets / Current Liabilities</span></td>
+            <td>단기 부채 상환 능력 — 가장 기본</td>
+            <td>&gt;1.0 일반적<br>&gt;2.0 안정적</td>
+            <td>낮음</td>
+          </tr>
+          <tr>
+            <td><strong>Quick Ratio</strong><br><span class="na" style="font-size:11px">당좌비율</span></td>
+            <td><span style="font-family:monospace">(Cash + ST Inv + AR) / Current Liab<br>= (CA − Inventory) / CL</span></td>
+            <td>재고 제외 즉시 상환 능력</td>
+            <td>&gt;1.0 권장</td>
+            <td>중간</td>
+          </tr>
+          <tr>
+            <td><strong>Cash Ratio</strong><br><span class="na" style="font-size:11px">현금비율</span></td>
+            <td><span style="font-family:monospace">(Cash + ST Investments) / Current Liab</span></td>
+            <td>즉시 현금화 가능 자산만</td>
+            <td>가장 엄격</td>
+            <td>높음</td>
+          </tr>
+          <tr>
+            <td><strong>Defensive Interval</strong></td>
+            <td><span style="font-family:monospace">(Cash + ST Inv + AR) / Daily Operating Exp</span><br><span style="font-size:11px;color:var(--red-t)">⚠ Daily Op Exp = (Total Op Exp <strong>− D&amp;A</strong>) ÷ 365<br>감가상각은 현금 지출 아님 → 반드시 제외</span></td>
+            <td>외부 자금 없이 버티는 일수</td>
+            <td>높을수록 좋음</td>
+            <td>중간</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp" style="margin-top:.75rem">⚠ Current Ratio 높다고 무조건 좋은 것 아님 — 재고 과다, AR 회수 불능인 경우도 있음 → Quick Ratio 함께 확인</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">유동성 비율 관계 (보수성 순서)</div>
+    <div class="card">
+      <div class="isflow">
+        <div class="isb hi">Current Ratio<br><span style="font-size:10px">CA 전체</span></div>
+        <div class="isa">→ 재고 제외 →</div>
+        <div class="isb hi">Quick Ratio<br><span style="font-size:10px">Cash+ST+AR</span></div>
+        <div class="isa">→ AR 제외 →</div>
+        <div class="isb hi">Cash Ratio<br><span style="font-size:10px">Cash+ST만</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:.4rem">오른쪽으로 갈수록 더 보수적 / 더 엄격한 기준</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== SOLVENCY ===== -->
+<div id="tab-solv" class="tp">
+
+  <div class="sec">
+    <div class="st">부채/레버리지 비율 전체</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th style="min-width:160px">비율</th><th>공식</th><th>의미</th><th>높으면</th><th>기준</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Debt-to-Equity (D/E)</strong></td>
+            <td><span style="font-family:monospace">Total Debt / Total Equity</span><br><span style="font-size:11px;color:var(--amber-t)">Total Debt = 이자성 부채만<br>(차입금+사채 / AP·미지급비용 제외)</span></td>
+            <td>자기자본 대비 부채 수준</td>
+            <td><span class="bdg bdg-warn">주의</span> 레버리지↑</td>
+            <td>업종별 상이</td>
+          </tr>
+          <tr>
+            <td><strong>Debt-to-Assets</strong></td>
+            <td><span style="font-family:monospace">Total Debt / Total Assets</span><br><span style="font-size:11px;color:var(--amber-t)">Total Liabilities ≠ Total Debt<br>이자성 부채만 분자에 포함</span></td>
+            <td>자산 중 부채 비중</td>
+            <td><span class="bdg bdg-warn">주의</span> 부채의존도↑</td>
+            <td>&lt;0.5 일반적</td>
+          </tr>
+          <tr>
+            <td><strong>Financial Leverage</strong></td>
+            <td><span style="font-family:monospace">Avg Total Assets / Avg Total Equity</span></td>
+            <td>DuPont Leverage factor</td>
+            <td><span class="bdg bdg-warn">주의</span> 재무위험↑</td>
+            <td>DuPont 3번째</td>
+          </tr>
+          <tr>
+            <td><strong>Interest Coverage ★★</strong><br><span class="na" style="font-size:11px">이자보상배율</span></td>
+            <td><span style="font-family:monospace">EBIT / Interest Expense</span></td>
+            <td>이자 상환 능력 — 여신심사 핵심</td>
+            <td><span class="bdg bdg-up">좋음</span> 상환 여력</td>
+            <td class="warn">&lt;1.5x → 위험신호</td>
+          </tr>
+          <tr>
+            <td><strong>Fixed Charge Coverage</strong></td>
+            <td><span style="font-family:monospace">(EBIT + Lease) / (Interest + Lease)</span></td>
+            <td>고정비용 전체 커버 능력</td>
+            <td><span class="bdg bdg-up">좋음</span></td>
+            <td>높을수록 안전</td>
+          </tr>
+          <tr>
+            <td><strong>DSCR ★★</strong><br><span class="na" style="font-size:11px">부채상환비율</span></td>
+            <td><span style="font-family:monospace">EBITDA / (Interest + Principal Repayment)</span></td>
+            <td>원리금 상환 능력 — 여신심사 핵심</td>
+            <td><span class="bdg bdg-up">좋음</span> 상환 여력</td>
+            <td class="warn">&gt;1.25x 일반적 기준</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">여신심사 핵심 — Interest Coverage vs DSCR</div>
+    <div class="g2">
+      <div class="card c-blue">
+        <div class="ct">Interest Coverage = EBIT / Interest</div>
+        <ul class="pts">
+          <li>이자만 커버하는지 확인</li>
+          <li>감가상각 차감 후 (EBIT 기준)</li>
+          <li>1.0x = 번 돈 전부 이자로 냄</li>
+          <li>1.0 이하 = 이자도 못 냄</li>
+        </ul>
+        <div class="kp">1.5x 미만 → 위험신호 / 1.0x 미만 → 즉각 경보</div>
+      </div>
+      <div class="card c-purple">
+        <div class="ct">DSCR = EBITDA / (이자 + 원금상환)</div>
+        <ul class="pts">
+          <li>원리금(이자+원금) 전체 커버</li>
+          <li>감가 더함 (현금 기준에 가까움)</li>
+          <li>실제 대출 심사에서 더 중요</li>
+          <li>1.0x = 원리금 겨우 커버</li>
+        </ul>
+        <div class="kp">1.25x 이상이 일반적 여신 기준</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== VALUATION ===== -->
+<div id="tab-val" class="tp">
+
+  <div class="sec">
+    <div class="st">밸류에이션 비율 전체</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th style="min-width:140px">비율</th><th>공식</th><th>의미</th><th>높으면</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>P/E</strong><br><span class="na" style="font-size:11px">주가수익비율</span></td>
+            <td><span style="font-family:monospace">Price / EPS<br>or Market Cap / Net Income</span></td>
+            <td>이익 대비 주가 — 가장 많이 쓰임</td>
+            <td>고평가 or 성장 기대↑</td>
+          </tr>
+          <tr>
+            <td><strong>P/B</strong><br><span class="na" style="font-size:11px">주가순자산비율</span></td>
+            <td><span style="font-family:monospace">Price / Book Value per Share</span></td>
+            <td>장부가치 대비 주가</td>
+            <td>고평가 or 수익성 높음</td>
+          </tr>
+          <tr>
+            <td><strong>P/S</strong></td>
+            <td><span style="font-family:monospace">Price / Revenue per Share</span></td>
+            <td>매출 대비 주가</td>
+            <td>고평가</td>
+          </tr>
+          <tr>
+            <td><strong>P/CF</strong></td>
+            <td><span style="font-family:monospace">Price / CFO per Share</span></td>
+            <td>현금흐름 대비 주가</td>
+            <td>고평가</td>
+          </tr>
+          <tr>
+            <td><strong>EV/EBITDA</strong></td>
+            <td><span style="font-family:monospace">Enterprise Value / EBITDA<br>EV = Market Cap + Debt − Cash</span></td>
+            <td>M&amp;A 밸류에이션 — 자본구조 중립</td>
+            <td>고평가</td>
+          </tr>
+          <tr>
+            <td><strong>Dividend Yield</strong></td>
+            <td><span style="font-family:monospace">DPS / Price per Share</span></td>
+            <td>배당 수익률</td>
+            <td>배당 많음 (성장주는 낮음)</td>
+          </tr>
+          <tr>
+            <td><strong>Dividend Payout Ratio</strong></td>
+            <td><span style="font-family:monospace">DPS / EPS = Dividends / NI</span></td>
+            <td>이익 중 배당 비율</td>
+            <td>배당 많이 줌 (재투자 적음)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">EV/EBITDA — 자본구조(부채 비중)가 달라도 비교 가능 → M&A, 기업 비교 분석에 가장 많이 씀</div>
+  </div>
+
+</div>
+
+<!-- ===== DUPONT ===== -->
+<div id="tab-dupont" class="tp">
+
+  <div class="sec">
+    <div class="st">3-Factor DuPont</div>
+    <div class="card">
+      <div class="dp-row">
+        <div class="dp-box">
+          <div class="dl">Net Profit Margin</div>
+          <div class="dv">NI / Revenue</div>
+          <div class="ds">수익성</div>
+        </div>
+        <div class="dp-sep">×</div>
+        <div class="dp-box">
+          <div class="dl">Asset Turnover</div>
+          <div class="dv">Revenue / Assets</div>
+          <div class="ds">효율성</div>
+        </div>
+        <div class="dp-sep">×</div>
+        <div class="dp-box">
+          <div class="dl">Financial Leverage</div>
+          <div class="dv">Assets / Equity</div>
+          <div class="ds">레버리지</div>
+        </div>
+        <div class="dp-sep">=</div>
+        <div class="dp-res">
+          <div class="dl">ROE</div>
+          <div class="dv">NI / Equity</div>
+        </div>
+      </div>
+      <div class="tw" style="margin-top:.75rem">
+        <table>
+          <thead><tr><th>Factor</th><th>의미</th><th>ROE 기여</th><th>판단</th></tr></thead>
+          <tbody>
+            <tr><td>NPM ↑</td><td>이익을 더 많이 남김</td><td class="up">ROE ↑</td><td><span class="bdg bdg-up">질 좋음</span></td></tr>
+            <tr><td>Asset T/O ↑</td><td>같은 자산으로 더 많은 매출</td><td class="up">ROE ↑</td><td><span class="bdg bdg-up">질 좋음</span></td></tr>
+            <tr><td>Leverage ↑</td><td>부채 늘려 자산 키움</td><td class="up">ROE ↑</td><td><span class="bdg bdg-warn">부채 증가 위험</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="kp">ROE가 높아진 이유가 Leverage ↑ 때문이면 → 질 나쁜 ROE. Margin↑ or Turnover↑이어야 진짜 개선</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">5-Factor DuPont (확장)</div>
+    <div class="card">
+      <div class="dp-row" style="font-size:12px">
+        <div class="dp-box">
+          <div class="dl">Tax Burden</div>
+          <div class="dv" style="font-size:13px">NI / EBT</div>
+          <div class="ds">세금 부담<br>1 = 세금 없음</div>
+        </div>
+        <div class="dp-sep">×</div>
+        <div class="dp-box">
+          <div class="dl">Interest Burden</div>
+          <div class="dv" style="font-size:13px">EBT / EBIT</div>
+          <div class="ds">이자 부담<br>1 = 부채 없음</div>
+        </div>
+        <div class="dp-sep">×</div>
+        <div class="dp-box">
+          <div class="dl">EBIT Margin</div>
+          <div class="dv" style="font-size:13px">EBIT / Rev</div>
+          <div class="ds">영업 효율</div>
+        </div>
+        <div class="dp-sep">×</div>
+        <div class="dp-box">
+          <div class="dl">Asset T/O</div>
+          <div class="dv" style="font-size:13px">Rev / Assets</div>
+          <div class="ds">자산 효율</div>
+        </div>
+        <div class="dp-sep">×</div>
+        <div class="dp-box">
+          <div class="dl">Leverage</div>
+          <div class="dv" style="font-size:13px">Assets / Eq</div>
+          <div class="ds">재무 레버리지</div>
+        </div>
+        <div class="dp-sep">=</div>
+        <div class="dp-res">
+          <div class="dl">ROE</div>
+          <div class="dv">NI / Equity</div>
+        </div>
+      </div>
+      <div class="tw" style="margin-top:.75rem">
+        <table>
+          <thead><tr><th>Factor</th><th>공식</th><th>의미</th><th>낮으면</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Tax Burden</strong></td><td><span style="font-family:monospace">NI / EBT</span></td><td>세금 부담 정도 (1 = 무세금)</td><td>세금 부담 높음</td></tr>
+            <tr><td><strong>Interest Burden</strong></td><td><span style="font-family:monospace">EBT / EBIT</span></td><td>이자 부담 정도 (1 = 무부채)</td><td>이자 부담 높음</td></tr>
+            <tr><td><strong>EBIT Margin</strong></td><td><span style="font-family:monospace">EBIT / Revenue</span></td><td>영업 효율성</td><td>영업 수익성 낮음</td></tr>
+            <tr><td><strong>Asset Turnover</strong></td><td><span style="font-family:monospace">Revenue / Assets</span></td><td>자산 활용도</td><td>자산 비효율</td></tr>
+            <tr><td><strong>Leverage</strong></td><td><span style="font-family:monospace">Assets / Equity</span></td><td>재무 레버리지</td><td>레버리지 낮음</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">ROE 분석 — 진짜 개선 vs 가짜 개선</div>
+    <div class="g2">
+      <div class="card c-green">
+        <div class="ct">진짜 좋은 ROE 개선</div>
+        <ul class="pts">
+          <li>NPM ↑ → 수익성이 실제로 좋아진 것</li>
+          <li>Asset Turnover ↑ → 자산을 더 효율적으로 사용</li>
+          <li>EBIT Margin ↑ → 영업 자체가 강해진 것</li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <div class="ct">가짜 ROE 개선 (위험)</div>
+        <ul class="pts">
+          <li>Financial Leverage ↑ → 부채 늘려서 분모(Equity) 줄인 것</li>
+          <li>ROE ↑인데 ROA는 그대로 → Leverage 때문</li>
+          <li>Interest Coverage ↓ 동반 → 재무위험 증가</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== KEYWORD ===== -->
+<div id="tab-keyword" class="tp">
+
+  <div class="sec">
+    <div class="st">문제 키워드 → 바로 떠올릴 것</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">production cost efficiency</span><span class="kw-arr">→</span><span class="kw-val">Gross Profit Margin</span></div>
+      <div class="kw-item"><span class="kw-key">core operating performance / excluding financing</span><span class="kw-arr">→</span><span class="kw-val">Operating Margin (EBIT/Rev)</span></div>
+      <div class="kw-item"><span class="kw-key">return generated from assets</span><span class="kw-arr">→</span><span class="kw-val">ROA = NI / Avg Assets</span></div>
+      <div class="kw-item"><span class="kw-key">return to shareholders / equity holders</span><span class="kw-arr">→</span><span class="kw-val">ROE = NI / Avg Equity</span></div>
+      <div class="kw-item"><span class="kw-key">cash generation / depreciation added back</span><span class="kw-arr">→</span><span class="kw-val">EBITDA Margin</span></div>
+      <div class="kw-item"><span class="kw-key">decompose / break down ROE</span><span class="kw-arr">→</span><span class="kw-val">DuPont (3 or 5 factor)</span></div>
+      <div class="kw-item"><span class="kw-key">ROE = ROA × ?</span><span class="kw-arr">→</span><span class="kw-val">Leverage (Assets/Equity)</span></div>
+      <div class="kw-item"><span class="kw-key">ROE increased due to higher financial leverage</span><span class="kw-arr">→</span><span class="kw-val">부채로 뻥튀기 → 질 나쁜 ROE</span></div>
+      <div class="kw-item"><span class="kw-key">how quickly inventory is sold</span><span class="kw-arr">→</span><span class="kw-val">Inventory T/O = COGS/Inv</span></div>
+      <div class="kw-item"><span class="kw-key">how quickly receivables are collected</span><span class="kw-arr">→</span><span class="kw-val">DSO = 365 / AR Turnover</span></div>
+      <div class="kw-item"><span class="kw-key">how long company takes to pay suppliers</span><span class="kw-arr">→</span><span class="kw-val">AP Turnover / DPO</span></div>
+      <div class="kw-item"><span class="kw-key">efficiency of fixed asset use</span><span class="kw-arr">→</span><span class="kw-val">Fixed Asset Turnover</span></div>
+      <div class="kw-item"><span class="kw-key">cash operating cycle / working capital cycle</span><span class="kw-arr">→</span><span class="kw-val">CCC = DIO + DSO − DPO</span></div>
+      <div class="kw-item"><span class="kw-key">inventory uses COGS not revenue</span><span class="kw-arr">→</span><span class="kw-val">Inv T/O = COGS / Avg Inv (Revenue 아님!)</span></div>
+      <div class="kw-item"><span class="kw-key">ability to meet short-term obligations</span><span class="kw-arr">→</span><span class="kw-val">Liquidity (Current/Quick/Cash)</span></div>
+      <div class="kw-item"><span class="kw-key">most conservative liquidity measure</span><span class="kw-arr">→</span><span class="kw-val">Cash Ratio (현금만)</span></div>
+      <div class="kw-item"><span class="kw-key">excludes inventory from liquid assets</span><span class="kw-arr">→</span><span class="kw-val">Quick Ratio</span></div>
+      <div class="kw-item"><span class="kw-key">how many days without external financing</span><span class="kw-arr">→</span><span class="kw-val">Defensive Interval</span></div>
+      <div class="kw-item"><span class="kw-key">times interest earned</span><span class="kw-arr">→</span><span class="kw-val">Interest Coverage = EBIT/Interest</span></div>
+      <div class="kw-item"><span class="kw-key">long-term solvency / meet debt obligations</span><span class="kw-arr">→</span><span class="kw-val">Solvency (D/E, Interest Coverage)</span></div>
+      <div class="kw-item"><span class="kw-key">proportion of assets financed by debt</span><span class="kw-arr">→</span><span class="kw-val">Debt-to-Assets</span></div>
+      <div class="kw-item"><span class="kw-key">M&A valuation / capital structure neutral</span><span class="kw-arr">→</span><span class="kw-val">EV/EBITDA</span></div>
+      <div class="kw-item"><span class="kw-key">earnings per share multiple</span><span class="kw-arr">→</span><span class="kw-val">P/E ratio</span></div>
+      <div class="kw-item"><span class="kw-key">AP 오래 버팀 → CCC?</span><span class="kw-arr">→</span><span class="kw-val">DPO↑ → CCC↓ (좋음)</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">자주 나오는 함정</div>
+    <div class="g2">
+      <div class="card c-red">
+        <div class="ct">공식 함정</div>
+        <ul class="pts">
+          <li>Inventory Turnover 분자 → <strong>COGS</strong> (Revenue 아님)</li>
+          <li>AR Turnover 분자 → <strong>Credit Sales</strong> 원칙 (현금매출 제외)</li>
+          <li>AP Turnover 분자 → <strong>COGS</strong> (Revenue 아님)</li>
+          <li>ROA 분자 → NI or <strong>EBIT(1−t)</strong> (문제에서 확인)</li>
+          <li>DuPont Leverage → <strong>Assets/Equity</strong> (Debt/Equity 아님)</li>
+          <li>Defensive Interval 분모 → Total Op Exp <strong>− D&amp;A</strong> (비현금 제외)</li>
+          <li>D/E, Debt-to-Assets 분자 → <strong>이자성 부채만</strong> (AP·미지급비용 제외)</li>
+        </ul>
+      </div>
+      <div class="card c-amber">
+        <div class="ct">해석 함정</div>
+        <ul class="pts">
+          <li>Current Ratio 높음 → 무조건 좋은 것 아님 (재고 과다일 수 있음)</li>
+          <li>ROE 높음 → Leverage 때문일 수 있음 (DuPont 확인)</li>
+          <li>DPO 높음 → 지급 느린 것 → 유리 (나쁜 것 아님)</li>
+          <li>Interest Coverage 1.0x → 이자 겨우 커버 → 위험</li>
+          <li>CCC 높음 → 현금 묶임 → 나쁨</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== CREDIT ===== -->
+<div id="tab-credit" class="tp">
+
+  <div class="sec">
+    <div class="st">여신심사 핵심 위험 신호</div>
+    <div class="sig-grid">
+      <div class="sig-item danger">
+        <div class="si-label">Interest Coverage &lt; 1.5x</div>
+        <div class="si-desc">이자 상환 여력 부족 — 즉각 검토 필요</div>
+      </div>
+      <div class="sig-item danger">
+        <div class="si-label">Current Ratio &lt; 1.0</div>
+        <div class="si-desc">유동부채 &gt; 유동자산 — 단기 유동성 위기</div>
+      </div>
+      <div class="sig-item danger">
+        <div class="si-label">DSCR &lt; 1.0</div>
+        <div class="si-desc">원리금 상환 불가 — 대출 조건 위반 위험</div>
+      </div>
+      <div class="sig-item warn">
+        <div class="si-label">D/E 급격히 상승</div>
+        <div class="si-desc">재무구조 악화 — 추가 차입 리스크</div>
+      </div>
+      <div class="sig-item warn">
+        <div class="si-label">AR Turnover ↓ (DSO ↑)</div>
+        <div class="si-desc">매출채권 회수 지연 — 불량채권 가능성</div>
+      </div>
+      <div class="sig-item warn">
+        <div class="si-label">Inventory ↑ + Sales ↓</div>
+        <div class="si-desc">재고 누적 — 판매 둔화 또는 진부화 위험</div>
+      </div>
+      <div class="sig-item warn">
+        <div class="si-label">CCC 급격히 증가</div>
+        <div class="si-desc">운전자본 필요액 증가 — 유동성 압박</div>
+      </div>
+      <div class="sig-item warn">
+        <div class="si-label">EBITDA Margin 지속 하락</div>
+        <div class="si-desc">현금창출 능력 약화 — DSCR 악화 전조</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">여신심사 분석 순서 (실무 활용)</div>
+    <div class="card">
+      <div class="isflow" style="flex-direction:column;align-items:flex-start;gap:.5rem">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div class="isb hi" style="min-width:40px;text-align:center">①</div>
+          <div><strong>수익성 확인</strong> — GPM, OPM, NPM 추이 / EBITDA Margin 안정성</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div class="isb hi" style="min-width:40px;text-align:center">②</div>
+          <div><strong>상환능력 확인</strong> — Interest Coverage, DSCR (핵심)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div class="isb hi" style="min-width:40px;text-align:center">③</div>
+          <div><strong>유동성 확인</strong> — Current Ratio, Quick Ratio, CCC</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div class="isb hi" style="min-width:40px;text-align:center">④</div>
+          <div><strong>재무구조 확인</strong> — D/E, Debt-to-Assets, Financial Leverage 추이</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div class="isb hi" style="min-width:40px;text-align:center">⑤</div>
+          <div><strong>활동성 확인</strong> — AR Turnover, Inventory Turnover, CCC 변화</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">비율별 방향 요약</div>
+    <div class="g2">
+      <div class="card c-green">
+        <div class="ct">높을수록 좋음</div>
+        <ul class="pts">
+          <li>Profit Margins (GPM, OPM, NPM)</li>
+          <li>ROA / ROE / ROCE</li>
+          <li>Asset Turnover (효율)</li>
+          <li>Interest Coverage / DSCR</li>
+          <li>Current Ratio / Quick Ratio</li>
+          <li>Inventory Turnover / AR Turnover</li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <div class="ct">낮을수록 좋음</div>
+        <ul class="pts">
+          <li>Days Inventory (재고 빨리 팔수록)</li>
+          <li>Days Sales Outstanding (빨리 회수)</li>
+          <li>Cash Conversion Cycle</li>
+          <li>Debt-to-Equity / Debt-to-Assets</li>
+          <li>AP Turnover (낮을수록 늦게 지급 → 유리)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">FSA 시험은 숫자 계산보다 "이 비율이 무엇을 말하는가"를 묻는다 — 방향과 의미를 먼저 잡아라</div>
+  </div>
+
+</div>
+
+<div class="footer">CFA Level 1 FSA — 재무비율 완전 정리 레퍼런스</div>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

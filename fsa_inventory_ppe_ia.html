@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA — Inventory / PPE / IA 요약</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);
+  --blue-bg:#e8f1fb;--blue-border:rgba(24,95,165,0.25);--blue-text:#0c447c;
+  --green-bg:#eaf3de;--green-border:rgba(59,109,17,0.25);--green-text:#27500a;
+  --amber-bg:#faeeda;--amber-border:rgba(133,79,11,0.3);--amber-text:#633806;
+  --red-bg:#fcebeb;--red-border:rgba(163,45,45,0.25);--red-text:#791f1f;
+  --purple-bg:#eeedfe;--purple-border:rgba(83,74,183,0.25);--purple-text:#3c3489;
+  --teal-bg:#e1f5ee;--teal-border:rgba(15,110,86,0.25);--teal-text:#085041;
+  --r-md:8px;--r-lg:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+    --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+    --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.16);
+    --blue-bg:#0c2240;--blue-border:rgba(55,138,221,0.3);--blue-text:#85b7eb;
+    --green-bg:#172704;--green-border:rgba(99,153,34,0.3);--green-text:#c0dd97;
+    --amber-bg:#2a1800;--amber-border:rgba(239,159,39,0.3);--amber-text:#fac775;
+    --red-bg:#200a0a;--red-border:rgba(226,75,74,0.3);--red-text:#f09595;
+    --purple-bg:#1a1840;--purple-border:rgba(127,119,221,0.3);--purple-text:#afa9ec;
+    --teal-bg:#03201a;--teal-border:rgba(29,158,117,0.3);--teal-text:#5dcaa5;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* nav tabs */
+.nav{display:flex;gap:.4rem;margin-bottom:2rem;flex-wrap:wrap}
+.nav-btn{padding:7px 18px;border:0.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s}
+.nav-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* header */
+.page-header{margin-bottom:1.75rem}
+.page-header h1{font-size:22px;font-weight:500;margin-bottom:.2rem}
+.page-header p{font-size:13px;color:var(--text2)}
+
+/* section */
+.sec{margin-bottom:2rem}
+.sec-title{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:0.5px solid var(--border)}
+
+/* cards */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:.75rem}
+.card-title{font-size:13px;font-weight:500;margin-bottom:.6rem}
+
+/* grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+@media(max-width:700px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+
+/* colored cards */
+.c-blue{background:var(--blue-bg);border-color:var(--blue-border)}
+.c-blue .card-title,.c-blue .label{color:var(--blue-text)}
+.c-green{background:var(--green-bg);border-color:var(--green-border)}
+.c-green .card-title,.c-green .label{color:var(--green-text)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-border)}
+.c-amber .card-title,.c-amber .label{color:var(--amber-text)}
+.c-red{background:var(--red-bg);border-color:var(--red-border)}
+.c-red .card-title,.c-red .label{color:var(--red-text)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-border)}
+.c-purple .card-title,.c-purple .label{color:var(--purple-text)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-border)}
+.c-teal .card-title,.c-teal .label{color:var(--teal-text)}
+
+/* badge */
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;margin-right:4px}
+.badge-blue{background:var(--blue-bg);color:var(--blue-text);border:0.5px solid var(--blue-border)}
+.badge-green{background:var(--green-bg);color:var(--green-text);border:0.5px solid var(--green-border)}
+.badge-amber{background:var(--amber-bg);color:var(--amber-text);border:0.5px solid var(--amber-border)}
+.badge-red{background:var(--red-bg);color:var(--red-text);border:0.5px solid var(--red-border)}
+.badge-purple{background:var(--purple-bg);color:var(--purple-text);border:0.5px solid var(--purple-border)}
+.badge-teal{background:var(--teal-bg);color:var(--teal-text);border:0.5px solid var(--teal-border)}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-weight:500;font-size:11px;color:var(--text2);padding:6px 10px;background:var(--bg2);border-bottom:0.5px solid var(--border)}
+.tbl td{padding:7px 10px;border-bottom:0.5px solid var(--border);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg2)}
+.center{text-align:center}
+.up{color:var(--green-text);font-weight:500}
+.dn{color:var(--red-text);font-weight:500}
+.na{color:var(--text3)}
+
+/* formula box */
+.formula{background:var(--bg2);border-left:3px solid var(--blue-border);border-radius:0 var(--r-md) var(--r-md) 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;color:var(--text);margin:.4rem 0}
+
+/* flow arrow */
+.flow{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;font-size:13px;margin:.4rem 0}
+.flow-box{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r-md);padding:4px 10px;font-size:12px}
+.flow-arr{color:var(--text3);font-size:14px}
+
+/* point list */
+.pts{list-style:none;padding:0}
+.pts li{padding:4px 0 4px 16px;position:relative;font-size:13px;color:var(--text)}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.pts li strong{font-weight:500}
+
+/* key point highlight */
+.kp{background:var(--amber-bg);border:0.5px solid var(--amber-border);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--amber-text);margin-top:.5rem}
+
+/* compare table wrapper */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-lg);border:0.5px solid var(--border)}
+.tbl-wrap .tbl th:first-child,.tbl-wrap .tbl td:first-child{border-right:0.5px solid var(--border)}
+
+/* timeline */
+.timeline{display:flex;gap:0;margin:.75rem 0}
+.tl-item{flex:1;text-align:center;position:relative}
+.tl-item::after{content:'';position:absolute;top:14px;right:0;width:50%;height:1px;background:var(--border2)}
+.tl-item:last-child::after{display:none}
+.tl-item::before{content:'';position:absolute;top:14px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--text2);transform:translate(-50%,-50%)}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--text2);margin:0 auto 6px}
+.tl-label{font-size:11px;color:var(--text2);margin-top:16px}
+
+/* footer */
+.footer{font-size:11px;color:var(--text3);margin-top:3rem;padding-top:1rem;border-top:0.5px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="page-header">
+  <h1>FSA — Inventory / PPE / Intangible Assets</h1>
+  <p>CFA Level 1 핵심 요약 — Long-term Assets 파트 레퍼런스</p>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showTab('inv',this)">Inventory</button>
+  <button class="nav-btn" onclick="showTab('ppe',this)">PPE</button>
+  <button class="nav-btn" onclick="showTab('ia',this)">Intangible Assets</button>
+  <button class="nav-btn" onclick="showTab('compare',this)">IFRS vs GAAP 비교</button>
+</div>
+
+<!-- ===== INVENTORY ===== -->
+<div id="tab-inv" class="tab-panel active">
+
+  <div class="sec">
+    <div class="sec-title">1. 기본 방정식</div>
+    <div class="card">
+      <div class="formula">Good Available for Sale = Beginning Inventory + Purchase = CGS + Ending Inventory</div>
+      <ul class="pts" style="margin-top:.5rem">
+        <li>기말재고(E.I.) ↑ → CGS ↓ → NI ↑ → Retained Earning ↑</li>
+        <li>기말재고(E.I.) ↓ → CGS ↑ → NI ↓ → Retained Earning ↓</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">2. 원가 배분 방법 (P×Q)</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">P — 가격 결정 (어떤 원가 적용?)</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>방법</th><th>IFRS</th><th>GAAP</th><th>특징</th></tr></thead>
+            <tbody>
+              <tr><td><strong>FIFO</strong></td><td class="center up">✓</td><td class="center up">✓</td><td>Perpetual = Periodic</td></tr>
+              <tr><td><strong>LIFO</strong></td><td class="center dn">✗</td><td class="center up">✓</td><td>Perpetual ≠ Periodic</td></tr>
+              <tr><td><strong>Weighted Avg</strong></td><td class="center up">✓</td><td class="center up">✓</td><td>평균 원가</td></tr>
+              <tr><td><strong>Specific ID</strong></td><td class="center up">✓</td><td class="center up">✓</td><td>이상적 but 출제 ↓</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Q — 수량 결정 (몇 개 팔았나?)</div>
+        <ul class="pts">
+          <li><strong>Perpetual (계속기록법)</strong> — 수시로 확인, CGS → Inventory 파악</li>
+          <li><strong>Periodic (실지재고조사법)</strong> — 기말에 재고 세고 CGS 역산</li>
+        </ul>
+        <div class="kp">⚠ LIFO에서 Perpetual ≠ Periodic → 시험에서 방법 명시 확인</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">3. 물가 상승(P↑) 시 FIFO vs LIFO 효과</div>
+    <div class="card">
+      <div class="kp" style="margin-bottom:.75rem">⚠ 전제: 반드시 P↑ & Q↑(or same)일 때만 성립. P↓이면 부등호 반대, Q↓이면 성립 안 함.</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>LIFO</th><th>FIFO</th><th>방향</th></tr></thead>
+          <tbody>
+            <tr><td>CGS</td><td>High (최신 비싼 원가)</td><td>Low</td><td class="dn">LIFO &gt; FIFO</td></tr>
+            <tr><td>EBT / Tax</td><td>Low</td><td>High</td><td class="dn">LIFO &lt; FIFO</td></tr>
+            <tr><td>Net Income</td><td>Low</td><td>High</td><td class="dn">LIFO &lt; FIFO</td></tr>
+            <tr><td>Ending Inventory</td><td>Low (오래된 싼 재고)</td><td>High</td><td class="dn">LIFO &lt; FIFO</td></tr>
+            <tr><td>Working Capital</td><td>Low</td><td>High</td><td class="dn">LIFO &lt; FIFO</td></tr>
+            <tr><td>CFO</td><td class="up">High (세금 ↓)</td><td>Low</td><td class="up">LIFO &gt; FIFO</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">4. LIFO → FIFO Conversion</div>
+    <div class="grid2">
+      <div class="card c-blue">
+        <div class="card-title">LIFO Reserve 개념</div>
+        <ul class="pts">
+          <li>LIFO Reserve = FIFO 기준 재고 − LIFO 기준 재고</li>
+          <li>통상 (+) — FIFO 재고가 더 크므로</li>
+          <li>(−)이면 P↓ 상황 → 부등호 반대</li>
+        </ul>
+        <div class="formula">FIFO Inventory = LIFO Inventory + LIFO Reserve</div>
+      </div>
+      <div class="card c-green">
+        <div class="card-title">빠른 풀이 순서</div>
+        <ul class="pts">
+          <li>B/S: Inventory에 Reserve 더하기</li>
+          <li>B/S: Tax만큼 Cash 감소</li>
+          <li>B/S: R/E = Reserve × (1−t) 누적 반영</li>
+          <li>I/S: Beginning/Ending Inv으로 CGS 구하기</li>
+          <li>I/S: NI = Pretax − Tax (세율 × CGS 차이)</li>
+        </ul>
+        <div class="kp">R/E는 Stock 개념 → 전년도 누적 더해야 함</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:.75rem">
+      <div class="card-title">Tax 없는 경우 빠른 공식</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>변화</th></tr></thead>
+          <tbody>
+            <tr><td>Inventory</td><td>+ LIFO Reserve</td></tr>
+            <tr><td>Cash</td><td>− LIFO Reserve × t</td></tr>
+            <tr><td>Retained Earning</td><td>+ LIFO Reserve × (1−t) 누적</td></tr>
+            <tr><td>CGS (당기)</td><td>− △LIFO Reserve (Reserve 증가분만큼 CGS ↓)</td></tr>
+            <tr><td>NI (당기)</td><td>+ △LIFO Reserve × (1−t)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">5. LIFO Liquidation</div>
+    <div class="card c-amber">
+      <div class="card-title">⚠ LIFO Reserve와 다른 개념</div>
+      <ul class="pts">
+        <li>당기 판매량 &gt; 당기 구매량 → 오래된(싼) 재고까지 팔림</li>
+        <li>인플레이션 상황에서 CGS ↓ → NI ↑ (Earning 뻥튀기)</li>
+        <li>주석에 disclosure → 분석 시 반드시 확인</li>
+        <li>CEO 교체 or 불황기에 자주 발생</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">6. LCM (Lower of Cost or Market) — 저가법</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Market Value 정의</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th></th><th>IFRS / GAAP(FIFO)</th><th>GAAP(LIFO)</th></tr></thead>
+            <tbody>
+              <tr><td>Market</td><td>NRV<br><span style="font-size:11px;color:var(--text3)">(Selling Price − Selling Cost)</span></td><td>Replacement Cost<br><span style="font-size:11px;color:var(--text3)">(Ceiling/Floor 제한)</span></td></tr>
+              <tr><td>Write-up (Recovery)</td><td class="up">허용 — 손상 없었을 경우의 정상 BV까지</td><td class="dn">불허</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card c-red">
+        <div class="card-title">Big Bath Accounting</div>
+        <ul class="pts">
+          <li>LCM을 극단적으로 보수적으로 적용</li>
+          <li>1차 연도에 손실 대거 인식 → 이후 이익 극대화</li>
+          <li>CEO 교체 시점에 자주 발생</li>
+          <li>코로나 등 불황기에 대거 활용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">7. Inventory 회계정책 변경</div>
+    <div class="card c-purple">
+      <div class="card-title">Change in Accounting Principle (LIFO → FIFO)</div>
+      <ul class="pts">
+        <li><strong>Retrospective approach</strong> — 과거 재무제표 전부 소급 restate</li>
+        <li>PPE의 Estimated 변경(Prospective)과 구분 필수</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- end inv -->
+
+<!-- ===== PPE ===== -->
+<div id="tab-ppe" class="tab-panel">
+
+  <div class="sec">
+    <div class="sec-title">큰 그림 — PPE 회계처리 4단계</div>
+    <div class="flow" style="margin-bottom:1rem">
+      <div class="flow-box">① Initial Recognition<br><span style="font-size:11px;color:var(--text3)">최초 인식</span></div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box">② Depreciation<br><span style="font-size:11px;color:var(--text3)">원가 배분</span></div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box">③ Subsequent Measurement<br><span style="font-size:11px;color:var(--text3)">후속 측정</span></div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box">④ Derecognition<br><span style="font-size:11px;color:var(--text3)">매각/폐기</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">① 취득원가 (Initial Cost)</div>
+    <div class="grid2">
+      <div class="card c-blue">
+        <div class="card-title">PPE에 포함되는 항목</div>
+        <ul class="pts">
+          <li>Purchase cost</li>
+          <li>관세 / 세금</li>
+          <li>운송비 (Freight-in)</li>
+          <li>설치비 (Installation)</li>
+          <li>시운전비 (Testing)</li>
+          <li>이자비용 자본화 (Interest Capitalization)</li>
+        </ul>
+      </div>
+      <div class="card c-amber">
+        <div class="card-title">이자비용 자본화 (Interest Capitalization)</div>
+        <ul class="pts">
+          <li>차입금으로 PPE 취득 시 — Ready to use까지의 이자를 PPE에 포함</li>
+          <li>원래 이자는 CFO → 자본화 시 CFI로 분류</li>
+          <li>→ CFO ↑, CFI ↓ 효과</li>
+        </ul>
+        <div class="kp">Ready to use 이후 이자는 다시 CFO (비용처리)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Capitalization vs Expensing 효과</div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>Capitalization</th><th>Expensing</th></tr></thead>
+          <tbody>
+            <tr><td>초기 NI</td><td class="up">높음 (비용 즉시 X)</td><td class="dn">낮음 (즉시 비용처리)</td></tr>
+            <tr><td>이후 NI</td><td class="dn">낮음 (감가상각 지속)</td><td class="up">높음 (비용 이미 처리)</td></tr>
+            <tr><td>총 NI</td><td colspan="2" class="center na">동일 (차이 없음)</td></tr>
+            <tr><td>CFO</td><td class="up">높음</td><td class="dn">낮음</td></tr>
+            <tr><td>CFI</td><td class="dn">낮음</td><td class="up">영향 없음</td></tr>
+            <tr><td>Asset (초기)</td><td class="up">높음</td><td>동일</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">② 감가상각 (Depreciation)</div>
+    <div class="card" style="margin-bottom:.75rem">
+      <div class="card-title">핵심 개념</div>
+      <div class="formula">Depreciation Base = Historical Cost (ⓐ) − Salvage Value (ⓑ)</div>
+      <ul class="pts" style="margin-top:.5rem">
+        <li><strong>Historical Cost</strong> — Ready to use까지의 총원가</li>
+        <li><strong>Salvage Value (잔존가치)</strong> — 내용연수 후 남길 가치 → 경영진 판단</li>
+        <li><strong>Estimated Useful Life (내용연수)</strong> — 몇 년 쓸 건지 → 경영진 판단</li>
+        <li><strong>Book Value</strong> = Historical Cost − Accumulated Depreciation</li>
+        <li>Accumulated Depreciation은 Fair Value와 관계 없음 (Valuation X)</li>
+      </ul>
+      <div class="kp">ⓑ↑ or ⓒ↑ → Depreciation ↓ → NI ↑ (이익 부풀리기 가능)</div>
+    </div>
+
+    <div class="grid3">
+      <div class="card c-blue">
+        <div class="card-title">Straight-Line (정액법)</div>
+        <div class="formula">(ⓐ − ⓑ) ÷ ⓒ</div>
+        <ul class="pts">
+          <li>매년 동일한 금액</li>
+          <li>IFRS / GAAP 모두 허용</li>
+        </ul>
+      </div>
+      <div class="card c-amber">
+        <div class="card-title">DDB (정률법)</div>
+        <div class="formula">Book Value × (2 ÷ ⓒ)</div>
+        <ul class="pts">
+          <li>초기 비용 많음, 후기 적음</li>
+          <li>Early year → Dep ↑, NI ↓</li>
+          <li>Growing firm → 매년 Early year 효과</li>
+        </ul>
+      </div>
+      <div class="card c-teal">
+        <div class="card-title">Units-of-Production</div>
+        <div class="formula">(ⓐ − ⓑ) × (실제사용량 ÷ 총예상사용량)</div>
+        <ul class="pts">
+          <li>생산량 비례로 감가</li>
+          <li>IFRS / GAAP <strong>모두 허용</strong></li>
+          <li>GAAP 불허인 것은 <strong>Component Depreciation</strong> (부품별 감가) — 혼동 주의</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:.75rem">
+      <div class="card-title">수명 추정 공식 (암기 말고 개념으로)</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>지표</th><th>공식</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><td>Average Age</td><td>Accumulated Dep ÷ Annual Dep</td><td>지금까지 몇 년 씀</td></tr>
+            <tr><td>Total Useful Life</td><td>Historical Cost ÷ Annual Dep</td><td>총 내용연수</td></tr>
+            <tr><td>Remaining Life</td><td>Book Value ÷ Annual Dep</td><td>앞으로 몇 년 더 씀</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card c-purple" style="margin-top:.75rem">
+      <div class="card-title">A Change in Accounting Estimate (PPE) vs Principle (Inventory)</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th></th><th>PPE (Estimate 변경)</th><th>Inventory (Principle 변경)</th></tr></thead>
+          <tbody>
+            <tr><td>예시</td><td>Salvage Value, Useful Life, Dep Method 변경</td><td>LIFO → FIFO</td></tr>
+            <tr><td>방법</td><td class="up">Prospective (미래만 적용)</td><td class="dn">Retrospective (과거 소급 restate)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">③ 후속 측정 — Revaluation (IFRS only)</div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>상황</th><th>IS 반영</th><th>BS 반영</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>가치 상승 (Gain)</td><td class="na">NI X → OCI</td><td class="up">AOCI ↑ (Revaluation Surplus)</td><td>주주배당 방지</td></tr>
+            <tr><td>가치 하락 (Loss)</td><td class="dn">기존 OCI 잔액 먼저 상계 → 초과분만 NI ↓</td><td class="dn">AOCI ↓ → 초과분 R/E ↓</td><td>⚠ OCI 잔액 있으면 NI 직접 안 깎음</td></tr>
+            <tr><td>Loss 후 회복</td><td>NI ↑ (이전 NI 손실 범위까지) → 초과분 OCI</td><td>R/E ↑ → 초과분 AOCI ↑</td><td>원래 OCI로 복귀</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="kp" style="margin-top:.75rem">⚠ Revaluation을 굳이 했다? → 재무구조가 매우 안 좋다는 신호. 대부분 Land만 적용.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">③ 후속 측정 — Impairment (손상)</div>
+    <div class="grid2">
+      <div class="card c-red">
+        <div class="card-title">U.S. GAAP — 2 Steps</div>
+        <ul class="pts">
+          <li><strong>Step 1 (Recovery Test)</strong> — BV &gt; Undiscounted Future CF → 손상</li>
+          <li><strong>Step 2 (Loss 인식)</strong> — Loss = BV − Fair Value</li>
+        </ul>
+        <div class="kp">Recovery (write-up) 불허</div>
+      </div>
+      <div class="card c-amber">
+        <div class="card-title">IFRS — 1 Step</div>
+        <ul class="pts">
+          <li>Loss = BV − Recoverable Amount</li>
+          <li>Recoverable Amount = max(NRV, Value in Use)</li>
+          <li>Value in Use = PV of Future CF</li>
+        </ul>
+        <div class="kp">Recovery (write-up) 허용 — 손상 없었을 경우 정상 감가 후 BV까지 (취득원가 아님)</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:.75rem">
+      <div class="card-title">BS / IS 영향</div>
+      <ul class="pts">
+        <li>PPE ↓ / Impairment Loss ↑ (IS) / RE ↓ / NI ↓</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">④ Derecognition (매각/폐기)</div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>유형</th><th>회계처리</th><th>Gain/Loss</th></tr></thead>
+          <tbody>
+            <tr><td>Sale (매각)</td><td>Cash ↑, PPE(BV) ↓</td><td>차이만큼 Gain or Loss</td></tr>
+            <tr><td>Abandon (폐기)</td><td>PPE(BV) ↓</td><td>Loss만 발생</td></tr>
+            <tr><td>Exchange (교환)</td><td>PPE(BV) ↓, 새 PPE(FV) ↑</td><td>차이만큼 Gain or Loss</td></tr>
+            <tr><td>Spin-off (분할)</td><td>BV 그대로 이전</td><td>Gain/Loss 없음</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Investment Property (IFRS)</div>
+    <div class="card c-teal">
+      <div class="card-title">임대/투자 목적 부동산 — for rental or investment</div>
+      <div class="tbl-wrap" style="margin-top:.5rem">
+        <table class="tbl">
+          <thead><tr><th>모델</th><th>Gain</th><th>Loss</th><th>감가상각</th></tr></thead>
+          <tbody>
+            <tr><td>Cost Model</td><td class="na">X</td><td class="dn">NI ↓</td><td>O</td></tr>
+            <tr><td>Fair Value Model</td><td class="up">NI ↑ (R/E ↑)</td><td class="dn">NI ↓</td><td>X</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="kp" style="margin-top:.5rem">PPE Revaluation은 Gain → OCI인데, Investment Property Fair Value Model은 Gain → NI (다름!)</div>
+    </div>
+  </div>
+
+</div><!-- end ppe -->
+
+<!-- ===== IA ===== -->
+<div id="tab-ia" class="tab-panel">
+
+  <div class="sec">
+    <div class="sec-title">1. 정의 및 최초 인식</div>
+    <div class="grid2">
+      <div class="card c-blue">
+        <div class="card-title">Externally Purchased (외부 취득)</div>
+        <ul class="pts">
+          <li>Future benefit이 있으니 샀겠지 → <strong>Capitalize</strong></li>
+          <li>PPE와 동일하게 원가로 최초 인식</li>
+        </ul>
+      </div>
+      <div class="card c-amber">
+        <div class="card-title">Internally Developed (내부 개발)</div>
+        <ul class="pts">
+          <li>원칙: <strong>Expense</strong> (불확실성 때문에)</li>
+          <li>예외 1) R&D under IFRS — Research: Expense / Development: 조건 충족 시 Capitalize</li>
+          <li>예외 2) Software under GAAP — for use: Capitalize / for sale: Technological feasibility 이후 Capitalize</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:.75rem">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th></th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+          <tbody>
+            <tr><td>Research Cost</td><td class="dn">Expense</td><td class="dn">Expense</td></tr>
+            <tr><td>Development Cost</td><td class="up">Capitalize 가능 (조건 충족 시)</td><td class="dn">Expense</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">2. Amortization (상각)</div>
+    <div class="grid2">
+      <div class="card c-green">
+        <div class="card-title">Definite Life (유한 내용연수)</div>
+        <ul class="pts">
+          <li>내용연수 확실 → Amortize</li>
+          <li>대부분의 무형자산</li>
+          <li>ex) 특허권, 라이선스</li>
+        </ul>
+      </div>
+      <div class="card c-purple">
+        <div class="card-title">Indefinite Life (무한 내용연수)</div>
+        <ul class="pts">
+          <li>Amortize 안 함</li>
+          <li>대신 매년 Impairment test 필수</li>
+          <li>ex) Goodwill, 상표권</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">3. Goodwill (영업권)</div>
+    <div class="card">
+      <div class="card-title">M&A 시 Goodwill 계산</div>
+      <div class="formula">Goodwill = Acquisition Cost − Fair Value of Identifiable Net Assets</div>
+      <div class="tbl-wrap" style="margin-top:.75rem">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>Acquisition Cost ①</td><td>인수에 지불한 금액 (ex. 2,000)</td></tr>
+            <tr><td>FV of Net Assets ②</td><td>인수한 회사의 자산 FV − 부채 FV (ex. 1,000)</td></tr>
+            <tr><td>Goodwill</td><td>① − ② = 무형의 가치 (브랜드, 인적자원 등)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card c-red" style="margin-top:.75rem">
+      <div class="card-title">Goodwill 처리</div>
+      <ul class="pts">
+        <li><strong>Amortization</strong> — 없음 (indefinite life)</li>
+        <li><strong>Impairment</strong> — 매년 test 필수 (GAAP: 2 steps / IFRS: 1 step)</li>
+        <li>Impairment → NI ↓, R/E ↓, Goodwill ↓</li>
+        <li>Impairment 후 Recovery — GAAP: 불허 / IFRS: 불허 (Goodwill만 예외적으로 둘 다 불허)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">4. 후속 측정</div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+          <tbody>
+            <tr><td>Cost Model</td><td class="up">허용</td><td class="up">허용</td></tr>
+            <tr><td>Revaluation Model</td><td class="up">허용 (active market 있을 때)</td><td class="dn">불허</td></tr>
+            <tr><td>Impairment Recovery</td><td class="up">허용 (Goodwill 제외)</td><td class="dn">불허</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end ia -->
+
+<!-- ===== COMPARE ===== -->
+<div id="tab-compare" class="tab-panel">
+
+  <div class="sec">
+    <div class="sec-title">Inventory — IFRS vs GAAP</div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+          <tbody>
+            <tr><td>LIFO 허용</td><td class="dn">불허</td><td class="up">허용</td></tr>
+            <tr><td>Market Value (LCM)</td><td>NRV</td><td>FIFO: NRV / LIFO: Replacement Cost</td></tr>
+            <tr><td>Write-up (Recovery)</td><td class="up">허용 — 손상 없었을 경우 정상 BV까지</td><td class="dn">불허</td></tr>
+            <tr><td>정책 변경 방법</td><td>Retrospective</td><td>Retrospective</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">PPE — IFRS vs GAAP</div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+          <tbody>
+            <tr><td>Revaluation Model</td><td class="up">허용</td><td class="dn">불허 (Cost Model only)</td></tr>
+            <tr><td>Revaluation Gain</td><td>OCI → AOCI</td><td class="na">해당 없음</td></tr>
+            <tr><td>Impairment (단계)</td><td>1 Step (Recoverable Amount)</td><td>2 Steps (Recovery Test → Loss)</td></tr>
+            <tr><td>Impairment Recovery</td><td class="up">허용</td><td class="dn">불허</td></tr>
+            <tr><td>Component Depreciation</td><td class="up">필수</td><td>허용 but 잘 안 씀</td></tr>
+            <tr><td>Investment Property</td><td>별도 계정 (FV Model 가능)</td><td>PPE로 처리</td></tr>
+            <tr><td>Interest Capitalization</td><td>필수</td><td>필수</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">IA (Intangible Assets) — IFRS vs GAAP</div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>항목</th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+          <tbody>
+            <tr><td>Research Cost</td><td class="dn">Expense</td><td class="dn">Expense</td></tr>
+            <tr><td>Development Cost</td><td class="up">조건 충족 시 Capitalize</td><td class="dn">Expense</td></tr>
+            <tr><td>Revaluation Model</td><td class="up">허용 (active market)</td><td class="dn">불허</td></tr>
+            <tr><td>Impairment Recovery</td><td class="up">허용 (Goodwill 제외)</td><td class="dn">불허</td></tr>
+            <tr><td>Goodwill Amortization</td><td class="dn">없음 (Impairment only)</td><td class="dn">없음 (Impairment only)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">핵심 암기 포인트 — 시험 자주 나오는 것</div>
+    <div class="grid2">
+      <div class="card c-red">
+        <div class="card-title">GAAP만 허용</div>
+        <ul class="pts">
+          <li>LIFO (재고 평가)</li>
+          <li>Straight-Line + DDB 선택 (PPE)</li>
+        </ul>
+      </div>
+      <div class="card c-blue">
+        <div class="card-title">IFRS만 허용</div>
+        <ul class="pts">
+          <li>Revaluation Model (PPE, IA)</li>
+          <li>Investment Property Fair Value Model</li>
+          <li>Development Cost Capitalize</li>
+          <li>Impairment Recovery (Goodwill 제외)</li>
+          <li>Units-of-Production (PPE) — IFRS / GAAP 모두 허용 (GAAP 불허는 Component Dep)</li>
+        </ul>
+      </div>
+      <div class="card c-amber">
+        <div class="card-title">Prospective (소급 X)</div>
+        <ul class="pts">
+          <li>PPE Estimate 변경 (Salvage Value, Useful Life, Dep Method)</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <div class="card-title">Retrospective (소급 O)</div>
+        <ul class="pts">
+          <li>Inventory 정책 변경 (LIFO→FIFO)</li>
+          <li>Prior Period Adjustment (오류 수정)</li>
+          <li>Discontinued Operation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end compare -->
+
+<div class="footer">CFA Level 1 FSA — Inventory / PPE / Intangible Assets 요약 레퍼런스</div>
+
+</div><!-- page -->
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

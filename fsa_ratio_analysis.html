@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Ratio Analysis — CFA Level 1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f3; --bg3: #ededea;
+    --text: #1a1a18; --text2: #5a5a56; --text3: #9a9a94;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --info-bg: #e6f1fb; --info-border: rgba(24,95,165,0.3); --info-text: #0c447c;
+    --radius-md: 8px; --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a; --bg2: #252523; --bg3: #2e2e2c;
+      --text: #f0f0ec; --text2: #a0a09a; --text3: #606058;
+      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
+      --info-bg: #0c2240; --info-border: rgba(55,138,221,0.35); --info-text: #85b7eb;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); font-size: 15px; line-height: 1.6; }
+  .page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: .25rem; }
+  .subtitle { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
+  .section-title { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .75rem; }
+  .fs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  @media (max-width: 640px) { .fs-grid { grid-template-columns: 1fr; } }
+  .fs-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; }
+  .fs-card h3 { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: .75rem; padding-bottom: .5rem; border-bottom: 0.5px solid var(--border); }
+  .item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border-radius: 6px; cursor: pointer; transition: background .15s; }
+  .item:hover { background: var(--bg2); }
+  .item.active { background: var(--info-bg); outline: 1px solid var(--info-border); }
+  .item-label { font-size: 13px; color: var(--text); }
+  .item-val input { width: 72px; text-align: right; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 1px solid var(--border2); color: var(--text); padding: 1px 2px; }
+  .hint { font-size: 12px; color: var(--text2); margin-bottom: 1rem; padding: .5rem .75rem; background: var(--bg2); border-radius: var(--radius-md); }
+  .tab-row { display: flex; gap: .5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .tab { font-size: 12px; padding: 5px 14px; border: 0.5px solid var(--border2); border-radius: 20px; cursor: pointer; background: transparent; color: var(--text2); transition: all .15s; }
+  .tab.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .ratio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: .75rem; margin-bottom: 1rem; }
+  .ratio-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: .75rem 1rem; transition: border-color .2s, background .2s; }
+  .ratio-card.highlight { border-color: var(--info-border); background: var(--info-bg); }
+  .ratio-name { font-size: 11px; font-weight: 500; color: var(--text2); margin-bottom: 2px; }
+  .ratio-formula { font-size: 10px; color: var(--text3); margin-bottom: 6px; font-family: monospace; }
+  .ratio-value { font-size: 20px; font-weight: 500; color: var(--text); }
+  .ratio-card.highlight .ratio-name, .ratio-card.highlight .ratio-formula, .ratio-card.highlight .ratio-value { color: var(--info-text); }
+  .ratio-note { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .ratio-card.highlight .ratio-note { color: var(--info-text); opacity: .75; }
+  .section { margin-bottom: 2rem; }
+  .dupont-row { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .dupont-box { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: .5rem .75rem; text-align: center; min-width: 90px; }
+  .dupont-box .d-label { font-size: 10px; color: var(--text2); }
+  .dupont-box .d-val { font-size: 16px; font-weight: 500; color: var(--text); }
+  .dupont-box .d-sub { font-size: 10px; color: var(--text3); }
+  .dupont-sep { font-size: 18px; color: var(--text2); }
+  .dupont-result { background: var(--info-bg); border: 0.5px solid var(--info-border); border-radius: var(--radius-md); padding: .5rem .75rem; text-align: center; min-width: 90px; }
+  .dupont-result .d-label { font-size: 10px; color: var(--info-text); }
+  .dupont-result .d-val { font-size: 16px; font-weight: 500; color: var(--info-text); }
+  .ext-box { background: var(--bg2); border-radius: var(--radius-md); padding: .75rem 1rem; margin-top: .75rem; }
+  .ext-title { font-size: 12px; font-weight: 500; margin-bottom: .5rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>FSA Ratio Analysis</h1>
+  <p class="subtitle">CFA Level 1 — 재무제표 항목 클릭 시 관련 비율 하이라이트 / 수치 변경 시 실시간 계산</p>
+
+  <div class="section">
+    <div class="section-title">재무제표 수치 입력</div>
+    <div class="hint">💡 항목을 클릭하면 관련 비율이 하이라이트됩니다. 수치를 바꾸면 모든 비율이 실시간으로 업데이트됩니다.</div>
+    <div class="fs-grid">
+      <div class="fs-card">
+        <h3>Balance Sheet (BS)</h3>
+        <div class="item" data-affects="current,quick,cash,ccc,wc" onclick="selectItem(this)">
+          <span class="item-label">Cash &amp; CE</span>
+          <span class="item-val"><input type="number" id="cash_ce" value="200" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="current,quick,ccc,wc,ar_to" onclick="selectItem(this)">
+          <span class="item-label">Accounts Receivable</span>
+          <span class="item-val"><input type="number" id="ar" value="300" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="current,ccc,wc,inv_to" onclick="selectItem(this)">
+          <span class="item-label">Inventory</span>
+          <span class="item-val"><input type="number" id="inv" value="400" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="roa,asset_to,leverage,roe,dupont" onclick="selectItem(this)">
+          <span class="item-label">Total Asset</span>
+          <span class="item-val"><input type="number" id="total_asset" value="2000" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="current,quick,cash,ccc,wc" onclick="selectItem(this)">
+          <span class="item-label">Current Liability</span>
+          <span class="item-val"><input type="number" id="cl" value="400" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="debt,leverage,roe,dupont" onclick="selectItem(this)">
+          <span class="item-label">Total Debt</span>
+          <span class="item-val"><input type="number" id="total_debt" value="1200" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="debt,leverage,roe,roa,dupont" onclick="selectItem(this)">
+          <span class="item-label">Total Equity</span>
+          <span class="item-val"><input type="number" id="equity" value="800" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+      </div>
+      <div class="fs-card">
+        <h3>Income Statement (IS)</h3>
+        <div class="item" data-affects="gpm,opm,npm,ar_to,inv_to,ccc,asset_to,roe,roa,dupont" onclick="selectItem(this)">
+          <span class="item-label">Sales Revenue</span>
+          <span class="item-val"><input type="number" id="sales" value="1500" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="gpm,inv_to,ccc,ap_to" onclick="selectItem(this)">
+          <span class="item-label">COGS (매출원가)</span>
+          <span class="item-val"><input type="number" id="cogs" value="900" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="opm,interest_cov" onclick="selectItem(this)">
+          <span class="item-label">EBIT (영업이익)</span>
+          <span class="item-val"><input type="number" id="ebit" value="300" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="interest_cov,debt" onclick="selectItem(this)">
+          <span class="item-label">Interest Expense</span>
+          <span class="item-val"><input type="number" id="int_exp" value="60" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="npm,roe,roa,dupont" onclick="selectItem(this)">
+          <span class="item-label">Net Income</span>
+          <span class="item-val"><input type="number" id="ni" value="180" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+        <div class="item" data-affects="ap_to,ccc" onclick="selectItem(this)">
+          <span class="item-label">Accounts Payable</span>
+          <span class="item-val"><input type="number" id="ap" value="250" oninput="recalc()" onclick="event.stopPropagation()"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">비율 결과</div>
+    <div class="tab-row">
+      <button class="tab active" onclick="switchTab('liquidity',this)">Liquidity</button>
+      <button class="tab" onclick="switchTab('activity',this)">Activity / Turnover</button>
+      <button class="tab" onclick="switchTab('solvency',this)">Solvency</button>
+      <button class="tab" onclick="switchTab('profitability',this)">Profitability</button>
+      <button class="tab" onclick="switchTab('dupont',this)">DuPont ROE</button>
+    </div>
+
+    <div id="tab-liquidity" class="tab-content">
+      <div class="ratio-grid">
+        <div class="ratio-card" id="rc-current">
+          <div class="ratio-name">Current Ratio</div>
+          <div class="ratio-formula">CA ÷ CL</div>
+          <div class="ratio-value" id="rv-current">-</div>
+          <div class="ratio-note">높을수록 단기 유동성 ↑<br>너무 높으면 자산 비효율</div>
+        </div>
+        <div class="ratio-card" id="rc-quick">
+          <div class="ratio-name">Quick Ratio</div>
+          <div class="ratio-formula">(Cash + AR) ÷ CL</div>
+          <div class="ratio-value" id="rv-quick">-</div>
+          <div class="ratio-note">재고 제외 — 더 보수적</div>
+        </div>
+        <div class="ratio-card" id="rc-cash">
+          <div class="ratio-name">Cash Ratio</div>
+          <div class="ratio-formula">Cash ÷ CL</div>
+          <div class="ratio-value" id="rv-cash">-</div>
+          <div class="ratio-note">가장 보수적 유동성</div>
+        </div>
+        <div class="ratio-card" id="rc-wc">
+          <div class="ratio-name">Working Capital</div>
+          <div class="ratio-formula">CA − CL</div>
+          <div class="ratio-value" id="rv-wc">-</div>
+          <div class="ratio-note">비율 아님 — 절대값 (운전자본)</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-activity" class="tab-content" style="display:none">
+      <div class="ratio-grid">
+        <div class="ratio-card" id="rc-ar_to">
+          <div class="ratio-name">AR Turnover</div>
+          <div class="ratio-formula">Sales ÷ AR</div>
+          <div class="ratio-value" id="rv-ar_to">-</div>
+          <div class="ratio-note">높을수록 수금 빠름</div>
+        </div>
+        <div class="ratio-card" id="rc-inv_to">
+          <div class="ratio-name">Inventory Turnover</div>
+          <div class="ratio-formula">COGS ÷ Inventory</div>
+          <div class="ratio-value" id="rv-inv_to">-</div>
+          <div class="ratio-note">높을수록 재고 회전 빠름</div>
+        </div>
+        <div class="ratio-card" id="rc-ap_to">
+          <div class="ratio-name">AP Turnover</div>
+          <div class="ratio-formula">COGS ÷ AP</div>
+          <div class="ratio-value" id="rv-ap_to">-</div>
+          <div class="ratio-note">낮을수록 지급 늦게 함</div>
+        </div>
+        <div class="ratio-card" id="rc-dso">
+          <div class="ratio-name">Days Sales Outstanding</div>
+          <div class="ratio-formula">365 ÷ AR T/O</div>
+          <div class="ratio-value" id="rv-dso">-</div>
+          <div class="ratio-note">수금까지 걸리는 일수</div>
+        </div>
+        <div class="ratio-card" id="rc-dio">
+          <div class="ratio-name">Days Inventory Outstanding</div>
+          <div class="ratio-formula">365 ÷ Inv T/O</div>
+          <div class="ratio-value" id="rv-dio">-</div>
+          <div class="ratio-note">재고 소진까지 걸리는 일수</div>
+        </div>
+        <div class="ratio-card" id="rc-dpo">
+          <div class="ratio-name">Days Payable Outstanding</div>
+          <div class="ratio-formula">365 ÷ AP T/O</div>
+          <div class="ratio-value" id="rv-dpo">-</div>
+          <div class="ratio-note">대금 지급까지 걸리는 일수</div>
+        </div>
+        <div class="ratio-card" id="rc-ccc">
+          <div class="ratio-name">Cash Conversion Cycle</div>
+          <div class="ratio-formula">DSO + DIO − DPO</div>
+          <div class="ratio-value" id="rv-ccc">-</div>
+          <div class="ratio-note">낮을수록 현금회수 빠름</div>
+        </div>
+        <div class="ratio-card" id="rc-asset_to">
+          <div class="ratio-name">Asset Turnover</div>
+          <div class="ratio-formula">Sales ÷ Total Asset</div>
+          <div class="ratio-value" id="rv-asset_to">-</div>
+          <div class="ratio-note">DuPont 2번째 요소</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-solvency" class="tab-content" style="display:none">
+      <div class="ratio-grid">
+        <div class="ratio-card" id="rc-debt">
+          <div class="ratio-name">Debt-to-Equity</div>
+          <div class="ratio-formula">Total Debt ÷ Equity</div>
+          <div class="ratio-value" id="rv-debt">-</div>
+          <div class="ratio-note">높을수록 레버리지 ↑</div>
+        </div>
+        <div class="ratio-card" id="rc-leverage">
+          <div class="ratio-name">Financial Leverage</div>
+          <div class="ratio-formula">Total Asset ÷ Equity</div>
+          <div class="ratio-value" id="rv-leverage">-</div>
+          <div class="ratio-note">DuPont 3번째 요소</div>
+        </div>
+        <div class="ratio-card" id="rc-interest_cov">
+          <div class="ratio-name">Interest Coverage</div>
+          <div class="ratio-formula">EBIT ÷ Interest Expense</div>
+          <div class="ratio-value" id="rv-interest_cov">-</div>
+          <div class="ratio-note">1 이하 → 이자도 못 냄</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-profitability" class="tab-content" style="display:none">
+      <div class="ratio-grid">
+        <div class="ratio-card" id="rc-gpm">
+          <div class="ratio-name">Gross Profit Margin</div>
+          <div class="ratio-formula">(Sales − COGS) ÷ Sales</div>
+          <div class="ratio-value" id="rv-gpm">-</div>
+          <div class="ratio-note">원가 효율성</div>
+        </div>
+        <div class="ratio-card" id="rc-opm">
+          <div class="ratio-name">Operating Profit Margin</div>
+          <div class="ratio-formula">EBIT ÷ Sales</div>
+          <div class="ratio-value" id="rv-opm">-</div>
+          <div class="ratio-note">영업 효율성</div>
+        </div>
+        <div class="ratio-card" id="rc-npm">
+          <div class="ratio-name">Net Profit Margin</div>
+          <div class="ratio-formula">NI ÷ Sales</div>
+          <div class="ratio-value" id="rv-npm">-</div>
+          <div class="ratio-note">DuPont 1번째 요소</div>
+        </div>
+        <div class="ratio-card" id="rc-roa">
+          <div class="ratio-name">ROA</div>
+          <div class="ratio-formula">NI ÷ Total Asset</div>
+          <div class="ratio-value" id="rv-roa">-</div>
+          <div class="ratio-note">= NPM × Asset T/O</div>
+        </div>
+        <div class="ratio-card" id="rc-roe">
+          <div class="ratio-name">ROE</div>
+          <div class="ratio-formula">NI ÷ Equity</div>
+          <div class="ratio-value" id="rv-roe">-</div>
+          <div class="ratio-note">= NPM × AT × FL</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-dupont" class="tab-content" style="display:none">
+      <div class="hint">ROE = Net Profit Margin × Asset Turnover × Financial Leverage<br>숫자를 바꾸면 어느 요소가 ROE를 움직이는지 바로 확인 가능</div>
+      <div class="dupont-row">
+        <div class="dupont-box">
+          <div class="d-label">Net Profit Margin</div>
+          <div class="d-val" id="dp-npm">-</div>
+          <div class="d-sub">NI ÷ Sales</div>
+        </div>
+        <div class="dupont-sep">×</div>
+        <div class="dupont-box">
+          <div class="d-label">Asset Turnover</div>
+          <div class="d-val" id="dp-at">-</div>
+          <div class="d-sub">Sales ÷ Asset</div>
+        </div>
+        <div class="dupont-sep">×</div>
+        <div class="dupont-box">
+          <div class="d-label">Financial Leverage</div>
+          <div class="d-val" id="dp-fl">-</div>
+          <div class="d-sub">Asset ÷ Equity</div>
+        </div>
+        <div class="dupont-sep">=</div>
+        <div class="dupont-result">
+          <div class="d-label">ROE</div>
+          <div class="d-val" id="dp-roe">-</div>
+        </div>
+      </div>
+      <div class="ext-box">
+        <div class="ext-title">5-factor DuPont (확장)</div>
+        <div class="dupont-row" style="font-size:12px;gap:.4rem">
+          <div style="text-align:center;min-width:78px">
+            <div style="font-size:10px;color:var(--text2)">EBIT Margin</div>
+            <div style="font-weight:500;font-size:14px" id="dp-ebit">-</div>
+            <div style="font-size:10px;color:var(--text3)">EBIT÷Sales</div>
+          </div>
+          <div class="dupont-sep" style="font-size:14px">×</div>
+          <div style="text-align:center;min-width:78px">
+            <div style="font-size:10px;color:var(--text2)">Interest Burden</div>
+            <div style="font-weight:500;font-size:14px" id="dp-int">-</div>
+            <div style="font-size:10px;color:var(--text3)">EBT÷EBIT</div>
+          </div>
+          <div class="dupont-sep" style="font-size:14px">×</div>
+          <div style="text-align:center;min-width:78px">
+            <div style="font-size:10px;color:var(--text2)">Tax Burden</div>
+            <div style="font-weight:500;font-size:14px" id="dp-tax">-</div>
+            <div style="font-size:10px;color:var(--text3)">NI÷EBT</div>
+          </div>
+          <div class="dupont-sep" style="font-size:14px">×</div>
+          <div style="text-align:center;min-width:78px">
+            <div style="font-size:10px;color:var(--text2)">Asset T/O</div>
+            <div style="font-weight:500;font-size:14px" id="dp-at2">-</div>
+          </div>
+          <div class="dupont-sep" style="font-size:14px">×</div>
+          <div style="text-align:center;min-width:60px">
+            <div style="font-size:10px;color:var(--text2)">F/L</div>
+            <div style="font-weight:500;font-size:14px" id="dp-fl2">-</div>
+          </div>
+          <div class="dupont-sep" style="font-size:14px">=</div>
+          <div style="background:var(--info-bg);border:0.5px solid var(--info-border);border-radius:var(--radius-md);padding:.4rem .6rem;text-align:center;min-width:70px">
+            <div style="font-size:10px;color:var(--info-text)">ROE</div>
+            <div style="font-weight:500;font-size:14px;color:var(--info-text)" id="dp-roe2">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;color:var(--text3);margin-top:2rem;padding-top:1rem;border-top:0.5px solid var(--border)">
+    CFA Level 1 FSA — Ratio Analysis 인터랙티브 참고자료
+  </div>
+</div>
+
+<script>
+let activeAffects = [];
+
+function selectItem(el) {
+  document.querySelectorAll('.item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  activeAffects = el.dataset.affects ? el.dataset.affects.split(',') : [];
+  highlightRatios();
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).style.display = '';
+  btn.classList.add('active');
+}
+
+function g(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function pct(v) { return (v * 100).toFixed(1) + '%'; }
+function x(v) { return v.toFixed(2) + 'x'; }
+function days(v) { return v.toFixed(1) + ' days'; }
+function abs(v) { return v.toLocaleString(); }
+
+function recalc() {
+  const cash = g('cash_ce'), ar = g('ar'), inv = g('inv'), ta = g('total_asset');
+  const cl = g('cl'), debt = g('total_debt'), eq = g('equity');
+  const sales = g('sales'), cogs = g('cogs'), ebit = g('ebit'), ie = g('int_exp'), ni = g('ni'), ap = g('ap');
+  const ca = cash + ar + inv;
+  const ar_to = sales / ar;
+  const inv_to = cogs / inv;
+  const ap_to = cogs / ap;
+  const dso = 365 / ar_to;
+  const dio = 365 / inv_to;
+  const dpo = 365 / ap_to;
+  const asset_to = sales / ta;
+  const fl = ta / eq;
+  const npm = ni / sales;
+  const ebt = ebit - ie;
+
+  document.getElementById('rv-current').textContent = x(ca / cl);
+  document.getElementById('rv-quick').textContent = x((cash + ar) / cl);
+  document.getElementById('rv-cash').textContent = x(cash / cl);
+  document.getElementById('rv-wc').textContent = abs(ca - cl);
+  document.getElementById('rv-ar_to').textContent = x(ar_to);
+  document.getElementById('rv-inv_to').textContent = x(inv_to);
+  document.getElementById('rv-ap_to').textContent = x(ap_to);
+  document.getElementById('rv-dso').textContent = days(dso);
+  document.getElementById('rv-dio').textContent = days(dio);
+  document.getElementById('rv-dpo').textContent = days(dpo);
+  document.getElementById('rv-ccc').textContent = days(dso + dio - dpo);
+  document.getElementById('rv-asset_to').textContent = x(asset_to);
+  document.getElementById('rv-debt').textContent = x(debt / eq);
+  document.getElementById('rv-leverage').textContent = x(fl);
+  document.getElementById('rv-interest_cov').textContent = x(ebit / ie);
+  document.getElementById('rv-gpm').textContent = pct((sales - cogs) / sales);
+  document.getElementById('rv-opm').textContent = pct(ebit / sales);
+  document.getElementById('rv-npm').textContent = pct(npm);
+  document.getElementById('rv-roa').textContent = pct(ni / ta);
+  document.getElementById('rv-roe').textContent = pct(ni / eq);
+
+  document.getElementById('dp-npm').textContent = pct(npm);
+  document.getElementById('dp-at').textContent = x(asset_to);
+  document.getElementById('dp-fl').textContent = x(fl);
+  document.getElementById('dp-roe').textContent = pct(ni / eq);
+  document.getElementById('dp-ebit').textContent = pct(ebit / sales);
+  document.getElementById('dp-int').textContent = x(ebt / ebit);
+  document.getElementById('dp-tax').textContent = x(ni / ebt);
+  document.getElementById('dp-at2').textContent = x(asset_to);
+  document.getElementById('dp-fl2').textContent = x(fl);
+  document.getElementById('dp-roe2').textContent = pct(ni / eq);
+
+  highlightRatios();
+}
+
+function highlightRatios() {
+  const affectMap = {
+    current: ['current'], quick: ['quick'], cash: ['cash'], wc: ['wc'],
+    ccc: ['dso','dio','dpo','ccc','ar_to','inv_to','ap_to'],
+    ar_to: ['ar_to','dso'], inv_to: ['inv_to','dio'], ap_to: ['ap_to','dpo'],
+    gpm: ['gpm'], opm: ['opm'], npm: ['npm','roa','roe'],
+    roa: ['roa'], roe: ['roe'], debt: ['debt','interest_cov'],
+    leverage: ['leverage','roe'], asset_to: ['asset_to','roa','roe'],
+    interest_cov: ['interest_cov'],
+    dupont: ['npm','asset_to','leverage','roe','roa']
+  };
+  const toHighlight = new Set();
+  activeAffects.forEach(a => { if (affectMap[a]) affectMap[a].forEach(r => toHighlight.add(r)); });
+  const allIds = ['current','quick','cash','wc','ar_to','inv_to','ap_to','dso','dio','dpo','ccc','asset_to','debt','leverage','interest_cov','gpm','opm','npm','roa','roe'];
+  allIds.forEach(id => {
+    const el = document.getElementById('rc-' + id);
+    if (!el) return;
+    if (activeAffects.length === 0 || !toHighlight.has(id)) el.classList.remove('highlight');
+    else el.classList.add('highlight');
+  });
+}
+
+recalc();
+</script>
+</body>
+</html>

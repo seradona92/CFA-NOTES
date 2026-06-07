@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Level 1 노트</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f7f5;--card:#ffffff;--text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--card:#252523;--text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1.5rem 4rem}
+.wrap{max-width:600px;margin:0 auto}
+.header{margin-bottom:2rem}
+.header h1{font-size:24px;font-weight:500;margin-bottom:.3rem}
+.header p{font-size:13px;color:var(--text2)}
+.section-title{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;margin-top:1.75rem}
+.card-link{display:block;background:var(--card);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:.6rem;text-decoration:none;transition:all .15s;cursor:pointer}
+.card-link:hover{border-color:var(--border2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.card-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.3rem}
+.card-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ic-blue{background:var(--blue-bg)}
+.ic-green{background:var(--green-bg)}
+.ic-amber{background:var(--amber-bg)}
+.ic-purple{background:var(--purple-bg)}
+.card-title{font-size:15px;font-weight:500;color:var(--text)}
+.card-desc{font-size:12px;color:var(--text2);margin-left:44px}
+.card-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;margin-left:44px}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.tag-blue{background:var(--blue-bg);color:var(--blue-t);border:0.5px solid var(--blue-bd)}
+.tag-green{background:var(--green-bg);color:var(--green-t);border:0.5px solid var(--green-bd)}
+.tag-amber{background:var(--amber-bg);color:var(--amber-t);border:0.5px solid var(--amber-bd)}
+.tag-purple{background:var(--purple-bg);color:var(--purple-t);border:0.5px solid var(--purple-bd)}
+.footer{margin-top:3rem;font-size:11px;color:var(--text3);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>CFA Level 1 노트</h1>
+    <p>FSA · Quantitative Methods — 학습 레퍼런스</p>
+  </div>
+
+  <div class="section-title">Financial Statement Analysis (FSA)</div>
+
+  <a class="card-link" href="fsa_ratio_complete.html">
+    <div class="card-top">
+      <div class="card-icon ic-blue">📊</div>
+      <div class="card-title">재무비율 완전 정리</div>
+    </div>
+    <div class="card-desc">Profitability · Activity · Liquidity · Solvency · Valuation · DuPont</div>
+    <div class="card-tags">
+      <span class="tag tag-blue">Profitability</span>
+      <span class="tag tag-blue">DuPont</span>
+      <span class="tag tag-blue">키워드 매핑</span>
+      <span class="tag tag-blue">여신심사</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_ratio_analysis.html">
+    <div class="card-top">
+      <div class="card-icon ic-green">🧮</div>
+      <div class="card-title">재무비율 인터랙티브 계산기</div>
+    </div>
+    <div class="card-desc">BS/IS 수치 입력 → 비율 실시간 계산 · 항목 클릭 시 관련 비율 하이라이트</div>
+    <div class="card-tags">
+      <span class="tag tag-green">실시간 계산</span>
+      <span class="tag tag-green">인터랙티브</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_inventory_ppe_ia.html">
+    <div class="card-top">
+      <div class="card-icon ic-amber">📦</div>
+      <div class="card-title">Inventory / PPE / Intangible Assets</div>
+    </div>
+    <div class="card-desc">FIFO/LIFO · 감가상각 · Revaluation · Impairment · Goodwill · IFRS vs GAAP</div>
+    <div class="card-tags">
+      <span class="tag tag-amber">Inventory</span>
+      <span class="tag tag-amber">PPE</span>
+      <span class="tag tag-amber">IA</span>
+      <span class="tag tag-amber">IFRS vs GAAP</span>
+    </div>
+  </a>
+
+  <div class="section-title">Quantitative Methods</div>
+
+  <a class="card-link" href="quant_r3_r9.html">
+    <div class="card-top">
+      <div class="card-icon ic-purple">📐</div>
+      <div class="card-title">Quant R3–R9 완전 정리</div>
+    </div>
+    <div class="card-desc">통계 · 확률 · 포트폴리오 수학 · 시뮬레이션 · 추정/검정 · 회귀분석 · 독립성 검정</div>
+    <div class="card-tags">
+      <span class="tag tag-purple">R3~R9</span>
+      <span class="tag tag-purple">가설검정</span>
+      <span class="tag tag-purple">회귀분석</span>
+      <span class="tag tag-purple">키워드 매핑</span>
+    </div>
+  </a>
+
+  <div class="footer">CFA Level 1 — November 2026</div>
+</div>
+</body>
+</html>

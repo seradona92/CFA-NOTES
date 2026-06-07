@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Quant R3–R9 완전 정리</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+  --r-md:8px;--r-lg:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.ph{margin-bottom:1.75rem}
+.ph h1{font-size:22px;font-weight:500;margin-bottom:.2rem}
+.ph p{font-size:13px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:2rem;flex-wrap:wrap}
+.nb{padding:6px 16px;border:0.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:0.5px solid var(--border)}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:500;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+@media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:var(--r-lg);border:0.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:500;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:0.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:0.5px solid var(--border);vertical-align:top;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.up{color:var(--green-t);font-weight:500}
+.dn{color:var(--red-t);font-weight:500}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:500}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 var(--r-md) var(--r-md) 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;color:var(--text);margin:.4rem 0}
+.fm-red{background:var(--red-bg);border-left:3px solid var(--red-bd);border-radius:0 var(--r-md) var(--r-md) 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;color:var(--red-t);margin:.4rem 0}
+.fm-green{background:var(--green-bg);border-left:3px solid var(--green-bd);border-radius:0 var(--r-md) var(--r-md) 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;color:var(--green-t);margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.pts li strong{font-weight:500}
+.kp{background:var(--amber-bg);border:0.5px solid var(--amber-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:0.5px solid var(--red-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--red-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:0.5px solid var(--green-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--green-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:0.5px solid var(--blue-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--blue-t);margin-top:.5rem}
+.kp-purple{background:var(--purple-bg);border:0.5px solid var(--purple-bd);border-radius:var(--r-md);padding:.5rem .75rem;font-size:12px;color:var(--purple-t);margin-top:.5rem}
+.new-badge{display:inline-block;font-size:9px;font-weight:500;padding:2px 6px;border-radius:8px;background:var(--red-bg);color:var(--red-t);border:0.5px solid var(--red-bd);margin-left:6px;vertical-align:middle}
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw-item{background:var(--bg2);border-radius:var(--r-md);padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kw-key{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.kw-arr{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kw-val{font-size:12px;font-weight:500;color:var(--text);flex:1.2}
+.step-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
+.step-box{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r-md);padding:.5rem .75rem;text-align:center;flex:1;min-width:120px}
+.step-box .sl{font-size:10px;color:var(--text2);margin-bottom:2px}
+.step-box .sv{font-size:12px;font-weight:500;color:var(--text)}
+.step-arr{color:var(--text3);font-size:16px;align-self:center}
+.footer{font-size:11px;color:var(--text3);margin-top:3rem;padding-top:1rem;border-top:0.5px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="ph">
+  <h1>CFA Quant R3–R9 완전 정리</h1>
+  <p>Statistical Measures · Probability · Portfolio Math · Simulation · Estimation &amp; Inference · Regression · Independence Tests</p>
+</div>
+
+<div class="nav">
+  <button class="nb active" onclick="show('routine',this)">풀이 루틴</button>
+  <button class="nb" onclick="show('r3',this)">R3 통계</button>
+  <button class="nb" onclick="show('r4',this)">R4 확률</button>
+  <button class="nb" onclick="show('r5',this)">R5 포트폴리오</button>
+  <button class="nb" onclick="show('r6',this)">R6 시뮬레이션</button>
+  <button class="nb" onclick="show('r7',this)">R7 추정/검정</button>
+  <button class="nb" onclick="show('r8',this)">R8 회귀분석</button>
+  <button class="nb" onclick="show('r9',this)">R9 독립성검정</button>
+  <button class="nb" onclick="show('keyword',this)">초압축 키워드</button>
+</div>
+
+<!-- ===== 풀이 루틴 ===== -->
+<div id="tab-routine" class="tp active">
+  <div class="sec">
+    <div class="st">시험장 문제 풀이 루틴 — 이 순서로</div>
+    <div class="step-row">
+      <div class="step-box"><div class="sl">STEP 1</div><div class="sv">무엇을 묻는가?</div><div style="font-size:11px;color:var(--text3);margin-top:3px">mean / variance / probability / regression</div></div>
+      <div class="step-arr">→</div>
+      <div class="step-box"><div class="sl">STEP 2</div><div class="sv">키워드 찾기</div><div style="font-size:11px;color:var(--text3);margin-top:3px">significant / given that / unknown σ / ranked / categorical</div></div>
+      <div class="step-arr">→</div>
+      <div class="step-box"><div class="sl">STEP 3</div><div class="sv">테스트/공식 결정</div><div style="font-size:11px;color:var(--text3);margin-top:3px">σ unknown→t / 분산→χ² / 비교→F / 확률→Bayes / 순위→Spearman</div></div>
+      <div class="step-arr">→</div>
+      <div class="step-box"><div class="sl">STEP 4</div><div class="sv">판단</div><div style="font-size:11px;color:var(--text3);margin-top:3px">p≤α → reject / CI 밖 → reject / SFR 최대 선택</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">테스트 선택 핵심 요약</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>무엇을 검정?</th><th>검정통계량</th><th>분포</th><th>df</th></tr></thead>
+        <tbody>
+          <tr><td><strong>모평균</strong> (σ unknown) ★</td><td><span style="font-family:monospace">t = (X̄ − μ₀) / (s/√n)</span></td><td>t</td><td>n−1</td></tr>
+          <tr><td><strong>모평균</strong> (σ known)</td><td><span style="font-family:monospace">z = (X̄ − μ₀) / (σ/√n)</span></td><td>z</td><td>—</td></tr>
+          <tr><td><strong>두 평균 차이</strong> (독립, 등분산)</td><td><span style="font-family:monospace">pooled t-test</span></td><td>t</td><td>n₁+n₂−2</td></tr>
+          <tr><td><strong>Paired 비교</strong> (종속)</td><td><span style="font-family:monospace">t = (d̄ − μdz) / sd̄</span></td><td>t</td><td>n−1</td></tr>
+          <tr><td><strong>단일 분산</strong> ★</td><td><span style="font-family:monospace">χ² = (n−1)s² / σ₀²</span></td><td>χ²</td><td>n−1</td></tr>
+          <tr><td><strong>분산 비교</strong> (두 그룹)</td><td><span style="font-family:monospace">F = s₁² / s₂²</span></td><td>F</td><td>n₁−1, n₂−1</td></tr>
+          <tr><td><strong>상관관계</strong></td><td><span style="font-family:monospace">t = r√(n−2) / √(1−r²)</span></td><td>t</td><td>n−2</td></tr>
+          <tr><td><strong>회귀계수</strong></td><td><span style="font-family:monospace">t = (b̂₁ − 0) / s_{b̂₁}</span></td><td>t</td><td>n−2</td></tr>
+          <tr><td><strong>범주형 독립성</strong></td><td><span style="font-family:monospace">χ² = ΣΣ(O−E)²/E</span></td><td>χ²</td><td>(r−1)(c−1)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">평균/상관 → t | 분산(단일) → χ² | 분산비교 → F | 범주형 → χ²(contingency)</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">판단 규칙 — 결론 내리는 법</div>
+    <div class="g2">
+      <div class="card c-green">
+        <div class="ct">Reject H₀ 조건</div>
+        <ul class="pts">
+          <li>p ≤ α → reject H₀</li>
+          <li>test stat &gt; critical value → reject</li>
+          <li>μ₀가 CI <strong>밖</strong> → reject</li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <div class="ct">Fail to Reject H₀ 조건</div>
+        <ul class="pts">
+          <li>p &gt; α → fail to reject</li>
+          <li>test stat &lt; critical value → fail</li>
+          <li>μ₀가 CI <strong>안</strong> → fail to reject</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Type I / II Error 관계</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Error</th><th>정의</th><th>기호</th><th>직관</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Type I</strong></td><td>참인 H₀를 기각</td><td>α</td><td class="warn">괜히 의심</td></tr>
+          <tr><td><strong>Type II</strong></td><td>거짓 H₀를 채택</td><td>β</td><td class="warn">놓침</td></tr>
+          <tr><td><strong>Power</strong></td><td>거짓 H₀를 올바르게 기각</td><td>1−β</td><td class="up">정확히 잡음</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp">⚠ α ↓ → Type I ↓ BUT Type II ↑ — 반드시 trade-off 관계</div>
+  </div>
+</div>
+
+<!-- ===== R3 ===== -->
+<div id="tab-r3" class="tp">
+  <div class="sec">
+    <div class="st">중심경향값 (Central Tendency)</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>측도</th><th>특징</th><th>언제 쓰나</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Arithmetic Mean</strong></td><td>가장 널리 쓰임</td><td>모평균 추정, 일반적 상황</td></tr>
+          <tr><td><strong>Median</strong></td><td>이상치(outlier)에 영향 안 받음 ★</td><td>"not affected by extreme values"</td></tr>
+          <tr><td><strong>Mode</strong></td><td>가장 자주 나오는 값</td><td>범주형 데이터</td></tr>
+          <tr><td><strong>Geometric Mean</strong></td><td>다기간 누적 수익률 (복리) ★</td><td>"compounded / multi-period return"</td></tr>
+          <tr><td><strong>Harmonic Mean</strong></td><td>분할매수 (Dollar-cost averaging)</td><td>"dollar-cost averaging"</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">Arithmetic ≥ Geometric ≥ Harmonic (항상 성립)</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">산포 (Dispersion)</div>
+    <div class="g2">
+      <div class="card">
+        <div class="ct">핵심 산포 측도</div>
+        <ul class="pts">
+          <li><strong>Range</strong> = max − min</li>
+          <li><strong>MAD</strong> = Σ|Xᵢ − X̄| / n</li>
+          <li><strong>s²</strong> = Σ(Xᵢ − X̄)² / (n−1) ← Bessel's correction</li>
+          <li><strong>CV</strong> = s / X̄ ← 단위당 리스크 "risk per unit of expected return"</li>
+          <li><strong>Target semideviation</strong> → downside risk만 측정 "below target"</li>
+        </ul>
+        <div class="fm">S_target = √[ Σ(Xᵢ−B)² / (n−1) ]  for Xᵢ ≤ B</div>
+      </div>
+      <div class="card">
+        <div class="ct">Outlier 처리</div>
+        <ul class="pts">
+          <li><strong>Trimmed mean (절사평균)</strong> → 양 극단 일정 % 제거 (discard)</li>
+          <li><strong>Winsorized mean</strong> → 극단값 대체 (substitute)</li>
+        </ul>
+        <div class="kp">Trimmed = 버림 / Winsorized = 바꿈</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Skewness &amp; Kurtosis ★</div>
+    <div class="g2">
+      <div class="card c-blue">
+        <div class="ct">Skewness (비대칭도)</div>
+        <ul class="pts">
+          <li><strong>Positive skew</strong>: Mode &lt; Median &lt; Mean (오른쪽 꼬리)</li>
+          <li><strong>Negative skew</strong>: Mean &lt; Median &lt; Mode (왼쪽 꼬리) → 리스크 관리 중요</li>
+          <li>Symmetric: Mean = Median = Mode</li>
+        </ul>
+      </div>
+      <div class="card c-amber">
+        <div class="ct">Kurtosis (첨도)</div>
+        <ul class="pts">
+          <li><strong>Leptokurtic</strong>: excess kurtosis &gt; 0 → fat tails ★</li>
+          <li><strong>Platykurtic</strong>: excess kurtosis &lt; 0 → thin tails</li>
+          <li>Excess kurtosis = kurtosis − 3 (정규분포 기준)</li>
+          <li>실제 자산수익률 = leptokurtic → tail risk 과소평가 위험</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R3 문제 키워드 매핑</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">not affected by extreme values / outliers</span><span class="kw-arr">→</span><span class="kw-val">median 사용</span></div>
+      <div class="kw-item"><span class="kw-key">risk per unit of expected return</span><span class="kw-arr">→</span><span class="kw-val">CV = s / X̄</span></div>
+      <div class="kw-item"><span class="kw-key">downside risk only / below target</span><span class="kw-arr">→</span><span class="kw-val">Target semideviation</span></div>
+      <div class="kw-item"><span class="kw-key">long upper (right) tail</span><span class="kw-arr">→</span><span class="kw-val">positively skewed → Mean &gt; Median &gt; Mode</span></div>
+      <div class="kw-item"><span class="kw-key">long lower (left) tail</span><span class="kw-arr">→</span><span class="kw-val">negatively skewed → Mean &lt; Median &lt; Mode</span></div>
+      <div class="kw-item"><span class="kw-key">fat-tailed / more peaked than normal</span><span class="kw-arr">→</span><span class="kw-val">leptokurtic → excess kurtosis &gt; 0</span></div>
+      <div class="kw-item"><span class="kw-key">compounded / multi-period return</span><span class="kw-arr">→</span><span class="kw-val">geometric mean</span></div>
+      <div class="kw-item"><span class="kw-key">excludes extreme / replaces extreme</span><span class="kw-arr">→</span><span class="kw-val">trimmed mean / winsorized mean</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== R4 ===== -->
+<div id="tab-r4" class="tp">
+  <div class="sec">
+    <div class="st">확률 3종 세트</div>
+    <div class="g3">
+      <div class="card c-blue"><div class="ct">Empirical</div><ul class="pts"><li>historical data, observed frequency</li><li>데이터 기반</li></ul></div>
+      <div class="card c-green"><div class="ct">Subjective</div><ul class="pts"><li>analyst judgment, belief, estimate</li><li>사람 판단</li></ul></div>
+      <div class="card c-amber"><div class="ct">A priori</div><ul class="pts"><li>equally likely, known outcomes</li><li>구조적 동일확률</li></ul></div>
+    </div>
+    <div class="kp-blue">historical → empirical · analyst → subjective · equally likely → a priori</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">핵심 확률 공식</div>
+    <div class="g2">
+      <div class="card">
+        <div class="ct">기본 공식</div>
+        <div class="fm">P(A∪B) = P(A) + P(B) − P(A∩B)  ← OR</div>
+        <div class="fm">P(A∩B) = P(A) × P(B|A)  ← AND</div>
+        <div class="fm">P(A|B) = P(A∩B) / P(B)  ← Conditional</div>
+        <div class="fm">독립: P(A∩B) = P(A)×P(B)  ← P(B|A) = P(B)</div>
+      </div>
+      <div class="card c-purple">
+        <div class="ct">Bayes' Formula ★★</div>
+        <div class="fm">P(A|B) = [ P(B|A) × P(A) ] / P(B)</div>
+        <div class="fm">P(B) = P(B|A)×P(A) + P(B|Aᶜ)×P(Aᶜ)</div>
+        <ul class="pts" style="margin-top:.5rem">
+          <li>분자 = 내가 원하는 경우</li>
+          <li>분모 = 해당 사건이 일어나는 모든 경우</li>
+          <li>"결과 → 원인 역방향" 문제에서 사용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">기댓값 &amp; 분산</div>
+    <div class="card">
+      <div class="fm">E(X) = Σ [ P(xᵢ) × xᵢ ]  ← 시나리오별 확률 가중합</div>
+      <div class="fm">Var(X) = Σ [ P(xᵢ) × (xᵢ − E(X))² ]</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R4 문제 키워드 매핑</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">given that / conditional on</span><span class="kw-arr">→</span><span class="kw-val">conditional probability P(A|B)</span></div>
+      <div class="kw-item"><span class="kw-key">both A and B occur</span><span class="kw-arr">→</span><span class="kw-val">P(A∩B) → AND</span></div>
+      <div class="kw-item"><span class="kw-key">either A or B (or both)</span><span class="kw-arr">→</span><span class="kw-val">P(A∪B) → OR → 더하고 교집합 빼기</span></div>
+      <div class="kw-item"><span class="kw-key">cause / given outcome / given result</span><span class="kw-arr">→</span><span class="kw-val">Bayes (결과 → 원인 역방향)</span></div>
+      <div class="kw-item"><span class="kw-key">independent events</span><span class="kw-arr">→</span><span class="kw-val">P(A∩B) = P(A)×P(B) 확인</span></div>
+      <div class="kw-item"><span class="kw-key">based on past data / historical frequency</span><span class="kw-arr">→</span><span class="kw-val">empirical probability</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== R5 ===== -->
+<div id="tab-r5" class="tp">
+  <div class="sec">
+    <div class="st">포트폴리오 수익률 &amp; 분산</div>
+    <div class="card">
+      <div class="fm">E(Rp) = wA×E(RA) + wB×E(RB)</div>
+      <div class="fm">σ²p = wA²σA² + wB²σB² + 2wAwB·Cov(A,B)</div>
+      <div class="fm">Cov(A,B) = ρ × σA × σB</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:.4rem">순서: Cov 먼저 구하고 → σ²p 계산</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Correlation 효과</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>ρ 값</th><th>효과</th><th>분산</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ρ = +1</strong></td><td>분산효과 없음</td><td>σp = wAσA + wBσB (최대)</td></tr>
+          <tr><td><strong>ρ = 0</strong></td><td>공분산 = 0</td><td>분산만 더함</td></tr>
+          <tr><td><strong>ρ = −1</strong></td><td>완전 상쇄 가능</td><td>분산 최소화 (완전 헤지)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">ρ ↓ → 분산투자 효과 ↑ / "diversification benefit" → ρ &lt; 1 → σp &lt; 가중평균σ</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Roy's Safety-First Criterion (SFR) ★★</div>
+    <div class="card c-purple">
+      <div class="ct">목표: shortfall risk 최소화 → SFR 가장 큰 포트폴리오 선택</div>
+      <div class="fm">SFR = [ E(Rp) − RL ] / σp  ← RL = threshold return (목표수익률)</div>
+      <ul class="pts" style="margin-top:.5rem">
+        <li>SFR = Z-score와 동일 구조</li>
+        <li>SFR 클수록 표준정규분포에서 shortfall 확률(왼쪽 면적) 작아짐</li>
+        <li>"minimize the probability of falling below threshold" → SFR 최대화 선택</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R5 문제 키워드 매핑</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">minimize the probability of falling below threshold</span><span class="kw-arr">→</span><span class="kw-val">Roy's SFR → SFR 최대화</span></div>
+      <div class="kw-item"><span class="kw-key">shortfall risk / threshold return / target return</span><span class="kw-arr">→</span><span class="kw-val">SFR 문제 → RL에 숫자 대입</span></div>
+      <div class="kw-item"><span class="kw-key">correlation = −1 → variance reduced to zero</span><span class="kw-arr">→</span><span class="kw-val">완전 헤지 가능 (ρ=−1)</span></div>
+      <div class="kw-item"><span class="kw-key">diversification benefit</span><span class="kw-arr">→</span><span class="kw-val">ρ &lt; 1 → σp &lt; 가중평균σ</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== R6 ===== -->
+<div id="tab-r6" class="tp">
+  <div class="sec">
+    <div class="st">Normal vs Lognormal Distribution</div>
+    <div class="g2">
+      <div class="card c-blue">
+        <div class="ct">Normal Distribution</div>
+        <ul class="pts">
+          <li>symmetric, −∞ ~ +∞</li>
+          <li><strong>수익률(returns)</strong> 모델</li>
+          <li>음수 가능</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <div class="ct">Lognormal Distribution</div>
+        <ul class="pts">
+          <li>right-skewed, 0 이상만</li>
+          <li><strong>자산가격(prices)</strong> 모델 ★</li>
+          <li>Y ~ Lognormal ⟺ ln(Y) ~ Normal</li>
+          <li>BSM(Black-Scholes) 옵션모델 = lognormal 가정</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kp">가격은 0 아래 불가 → lognormal / 수익률은 음수 가능 → normal</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">시뮬레이션 방법 비교</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>방법</th><th>핵심 특징</th><th>장점</th><th>한계</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Monte Carlo</strong></td><td>분포 가정 후 난수 생성, 반복</td><td>과거에 없던 시나리오 생성 가능</td><td class="dn">GIGO, 분포 가정 오류 위험</td></tr>
+          <tr><td><strong>Historical Simulation</strong></td><td>과거 데이터 그대로 재사용</td><td>가정 불필요, 실제 데이터</td><td class="dn">과거에 없던 상황 반영 불가</td></tr>
+          <tr><td><strong>Bootstrap</strong></td><td>복원추출(with replacement) 반복</td><td>analytical formula 없이 분포 추정</td><td class="dn">computationally demanding</td></tr>
+          <tr><td><strong>Jackknife</strong></td><td>데이터 하나씩 제외하며 반복</td><td>소표본 적합, bias 감소</td><td class="dn">n번 반복 필요</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-red" style="margin-top:.75rem">⚠ GIGO (Garbage In, Garbage Out) → 입력 가정 틀리면 결과도 틀림 — Monte Carlo 최대 단점</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R6 문제 키워드 매핑</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">bounded below by zero / cannot be negative</span><span class="kw-arr">→</span><span class="kw-val">lognormal distribution (자산가격)</span></div>
+      <div class="kw-item"><span class="kw-key">what-if / complex securities / nonnormal returns</span><span class="kw-arr">→</span><span class="kw-val">Monte Carlo의 장점</span></div>
+      <div class="kw-item"><span class="kw-key">only statistical estimates / not exact</span><span class="kw-arr">→</span><span class="kw-val">Monte Carlo / Bootstrap의 단점</span></div>
+      <div class="kw-item"><span class="kw-key">sampling with replacement / repeatedly draw</span><span class="kw-arr">→</span><span class="kw-val">Bootstrap resampling</span></div>
+      <div class="kw-item"><span class="kw-key">leaving out one observation at a time</span><span class="kw-arr">→</span><span class="kw-val">Jackknife</span></div>
+      <div class="kw-item"><span class="kw-key">inputs are not limited to historical range</span><span class="kw-arr">→</span><span class="kw-val">Monte Carlo (vs Historical)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== R7 ===== -->
+<div id="tab-r7" class="tp">
+  <div class="sec">
+    <div class="st">표본추출 방법</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th colspan="2">Probability Sampling (선택 확률 존재)</th><th colspan="2">Nonprobability Sampling (선택 확률 불명확)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Simple random</strong></td><td>모든 항목 동일 확률</td><td><strong>Convenience</strong></td><td>접근 쉬운 데이터만 → sampling error 큼</td></tr>
+          <tr><td><strong>Stratified random ★</strong></td><td>subgroup(strata) 구분 → <strong>모든 층</strong>에서 추출</td><td><strong>Judgmental</strong></td><td>연구자 판단 → bias 위험</td></tr>
+          <tr><td><strong>Cluster</strong></td><td>cluster 전체 단위 → <strong>일부 cluster만</strong> 선택</td><td colspan="2"></td></tr>
+          <tr><td><strong>Systematic</strong></td><td>n번째마다 선택 (every nth member)</td><td colspan="2"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">Stratified: 모든 층에서 / Cluster: 일부만 선택 — 혼동 주의</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">CLT &amp; Standard Error</div>
+    <div class="g2">
+      <div class="card c-blue">
+        <div class="ct">Central Limit Theorem (CLT) ★</div>
+        <ul class="pts">
+          <li>n ≥ 30이면 모집단 분포 무관하게 표본평균 → 정규분포</li>
+          <li>E(X̄) = μ</li>
+          <li>Var(X̄) = σ²/n → SE = σ/√n</li>
+        </ul>
+        <div class="kp">⚠ CLT는 z 사용 조건이 아님 — σ unknown이면 n이 커도 t 사용</div>
+      </div>
+      <div class="card">
+        <div class="ct">Standard Error</div>
+        <div class="fm">σ 알 때: SE = σ/√n</div>
+        <div class="fm">σ 모를 때 (보통): s_x̄ = s/√n</div>
+        <ul class="pts" style="margin-top:.4rem">
+          <li>n ↑ → SE ↓ → 추정 더 정확</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Confidence Interval ★★</div>
+    <div class="card">
+      <div class="fm">CI = X̄ ± z*(σ/√n)  or  X̄ ± t*(s/√n)</div>
+      <div class="g2" style="margin-top:.75rem">
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">임계값 (Two-tailed 기준)</div>
+          <div class="fm">90% CI: z = 1.645</div>
+          <div class="fm">95% CI: z = 1.96</div>
+          <div class="fm">99% CI: z = 2.576</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:.4rem">t vs z 선택</div>
+          <ul class="pts">
+            <li><strong>t 사용 (기본 ★)</strong>: σ unknown → 거의 항상, df = n−1</li>
+            <li><strong>z 사용</strong>: σ known (드문 경우)</li>
+            <li>n≥30은 z 조건이 아님</li>
+          </ul>
+        </div>
+      </div>
+      <div class="kp" style="margin-top:.75rem">confidence ↑ → wider / n ↑ → narrower</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Sampling Bias 종류 ★</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Bias</th><th>정의</th><th>해결책</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Data snooping</strong></td><td>같은 데이터 반복 → overfitting</td><td class="up">out-of-sample로 해결</td></tr>
+          <tr><td><strong>Survivorship bias</strong></td><td>살아남은 데이터만 → 성과 과대평가</td><td class="up">폐지 펀드도 포함해야</td></tr>
+          <tr><td><strong>Look-ahead bias</strong></td><td>당시 없던 미래 정보 사용 → 결과 왜곡</td><td class="na">사용 시점 데이터만</td></tr>
+          <tr><td><strong>Time-period bias</strong></td><td>특정 기간만 선택 → 일반화 불가</td><td class="na">충분한 기간 포함</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R7 문제 키워드 매핑</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">at the X% level of significance</span><span class="kw-arr">→</span><span class="kw-val">α = X% 로 설정</span></div>
+      <div class="kw-item"><span class="kw-key">statistically significant</span><span class="kw-arr">→</span><span class="kw-val">reject H₀</span></div>
+      <div class="kw-item"><span class="kw-key">reject at 5% but not at 1%</span><span class="kw-arr">→</span><span class="kw-val">p값이 1%~5% 사이</span></div>
+      <div class="kw-item"><span class="kw-key">population std dev is unknown</span><span class="kw-arr">→</span><span class="kw-val">t-test 사용 (s로 추정)</span></div>
+      <div class="kw-item"><span class="kw-key">paired / before and after / same subjects</span><span class="kw-arr">→</span><span class="kw-val">paired t-test (dependent)</span></div>
+      <div class="kw-item"><span class="kw-key">two independent samples / equal variances</span><span class="kw-arr">→</span><span class="kw-val">pooled t-test, df = n₁+n₂−2</span></div>
+      <div class="kw-item"><span class="kw-key">test whether variance equals / has changed</span><span class="kw-arr">→</span><span class="kw-val">χ²-test</span></div>
+      <div class="kw-item"><span class="kw-key">compare variability of two groups</span><span class="kw-arr">→</span><span class="kw-val">F-test (분산 비교)</span></div>
+      <div class="kw-item"><span class="kw-key">regardless of the population distribution</span><span class="kw-arr">→</span><span class="kw-val">CLT 적용 (n≥30)</span></div>
+      <div class="kw-item"><span class="kw-key">every nth member / systematic</span><span class="kw-arr">→</span><span class="kw-val">systematic random sampling</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== R8 ===== -->
+<div id="tab-r8" class="tp">
+  <div class="sec">
+    <div class="st">회귀모델 기본</div>
+    <div class="g2">
+      <div class="card">
+        <div class="ct">모델 구조</div>
+        <div class="fm">Yᵢ = b₀ + b₁Xᵢ + εᵢ</div>
+        <ul class="pts" style="margin-top:.5rem">
+          <li><strong>b₁ (slope)</strong> → X 1단위 증가 시 Y의 변화량</li>
+          <li><strong>b₀ (intercept)</strong> → X = 0일 때 Y값</li>
+          <li><strong>ε (error term)</strong> → 모델이 설명 못하는 부분</li>
+          <li>b̂₁ = Cov(X,Y) / Var(X)</li>
+          <li>b̂₀ = Ȳ − b̂₁X̄</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="ct">OLS &amp; Variation 분해</div>
+        <div class="fm">SST = SSR + SSE</div>
+        <ul class="pts" style="margin-top:.4rem">
+          <li><strong>SST</strong> = Σ(Yᵢ − Ȳ)² ← total variation</li>
+          <li><strong>SSR</strong> = Σ(Ŷᵢ − Ȳ)² ← explained (모델이 설명)</li>
+          <li><strong>SSE</strong> = Σ(Yᵢ − Ŷᵢ)² ← unexplained (잔차)</li>
+          <li><strong>R²</strong> = SSR / SST</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R² &amp; 상관계수 관계 <span class="new-badge">보완</span></div>
+    <div class="card c-red">
+      <div class="ct">Simple regression: R² = r² (상관계수의 제곱)</div>
+      <div class="fm">r = ±√R²  ← 부호는 반드시 b₁(slope)과 일치</div>
+      <ul class="pts" style="margin-top:.5rem">
+        <li>R²에서 역으로 r을 구할 때 단순히 √R²만 하면 <strong>틀릴 수 있음</strong></li>
+        <li>b₁ &gt; 0 이면 → r = +√R²</li>
+        <li>b₁ &lt; 0 이면 → r = −√R² (부호 반드시 체크)</li>
+      </ul>
+      <div class="kp" style="margin-top:.6rem">⚠ 계산문제에서 R² 주고 r 구하라 하면 → slope 부호 확인 먼저</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">ANOVA Table ★★★</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Source</th><th>SS</th><th>df</th><th>MS</th><th>F</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Regression</strong></td><td>SSR</td><td>k=1</td><td>MSR = SSR/1</td><td rowspan="2" style="vertical-align:middle"><strong>F = MSR/MSE</strong></td></tr>
+          <tr><td><strong>Error</strong></td><td>SSE</td><td>n−2</td><td>MSE = SSE/(n−2)</td></tr>
+          <tr><td><strong>Total</strong></td><td>SST</td><td>n−1</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">SEE = √MSE ← residual 표준편차, 낮을수록 fit 좋음 / Simple regression: t² = F (동일한 검정)</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">LINE 가설 &amp; 위반 효과 <span class="new-badge">보완</span></div>
+    <div class="card">
+      <div class="ct">LINE 가설</div>
+      <ul class="pts">
+        <li><strong>L</strong>inear — 선형 관계</li>
+        <li><strong>I</strong>ndependent — 잔차 독립</li>
+        <li><strong>N</strong>ormal — 잔차 정규분포</li>
+        <li><strong>E</strong>qual variance — 등분산 (homoskedasticity)</li>
+      </ul>
+    </div>
+    <div class="card c-red" style="margin-top:.75rem">
+      <div class="ct">⚠ 가설 위반 시 왜곡 메커니즘 (시험 자주 출제)</div>
+      <div class="tw" style="margin-top:.5rem">
+        <table>
+          <thead><tr><th>위반 유형</th><th>위반 가설</th><th>SE 왜곡</th><th>t-statistic 왜곡</th><th>결과</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Heteroskedasticity</strong><br><span style="font-size:11px;color:var(--text3)">잔차 분산 불일정</span></td>
+              <td>E 위반</td>
+              <td class="dn">과소계상 (Underestimate)</td>
+              <td class="warn">과대계상 (Overestimate)</td>
+              <td>괜히 유의미 → Type I Error ↑</td>
+            </tr>
+            <tr>
+              <td><strong>Serial Correlation</strong><br><span style="font-size:11px;color:var(--text3)">잔차 자기상관</span></td>
+              <td>I 위반</td>
+              <td class="dn">과소계상 (Underestimate)</td>
+              <td class="warn">과대계상 (Overestimate)</td>
+              <td>괜히 유의미 → Type I Error ↑</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fm-red" style="margin-top:.6rem">SE ↓ → t = b̂₁ / SE ↑ → critical value 초과 가능 → 잘못된 Reject H₀</div>
+      <div class="kp" style="margin-top:.5rem">연쇄 암기: 위반 → SE 과소 → t 과대 → Type I Error ↑ (괜히 유의미하다고 판단)</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R8 문제 키워드 매핑</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">predict / explain Y using X</span><span class="kw-arr">→</span><span class="kw-val">regression 문제</span></div>
+      <div class="kw-item"><span class="kw-key">expected change in Y for one-unit change in X</span><span class="kw-arr">→</span><span class="kw-val">slope coefficient b₁</span></div>
+      <div class="kw-item"><span class="kw-key">significant coefficient / variable is useful</span><span class="kw-arr">→</span><span class="kw-val">reject H₀: b₁=0 → t-test, df=n−2</span></div>
+      <div class="kw-item"><span class="kw-key">overall significance of the model</span><span class="kw-arr">→</span><span class="kw-val">F-test (ANOVA) = MSR/MSE</span></div>
+      <div class="kw-item"><span class="kw-key">explained variation / explanatory power</span><span class="kw-arr">→</span><span class="kw-val">R² = SSR/SST</span></div>
+      <div class="kw-item"><span class="kw-key">simple regression: R² = ?</span><span class="kw-arr">→</span><span class="kw-val">R² = r² (부호는 b₁과 일치)</span></div>
+      <div class="kw-item"><span class="kw-key">variance of residuals is not constant</span><span class="kw-arr">→</span><span class="kw-val">Heteroskedasticity → E 위반</span></div>
+      <div class="kw-item"><span class="kw-key">residuals are correlated / seasonal pattern</span><span class="kw-arr">→</span><span class="kw-val">Serial correlation → I 위반</span></div>
+      <div class="kw-item"><span class="kw-key">SE underestimated / t overstated</span><span class="kw-arr">→</span><span class="kw-val">Heteroskedasticity or Serial Correlation</span></div>
+      <div class="kw-item"><span class="kw-key">standard deviation of residuals / model fit</span><span class="kw-arr">→</span><span class="kw-val">SEE = √MSE (낮을수록 좋음)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== R9 ===== -->
+<div id="tab-r9" class="tp">
+  <div class="sec">
+    <div class="st">Pearson vs Spearman</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>항목</th><th>Pearson (Parametric)</th><th>Spearman (Non-Parametric)</th></tr></thead>
+        <tbody>
+          <tr><td>데이터</td><td>연속형, 정규분포 가정</td><td>순위형(ordinal) or 정규분포 불확실</td></tr>
+          <tr><td>Outlier</td><td class="dn">영향 받음</td><td class="up">영향 적음 ★</td></tr>
+          <tr><td>관계 측정</td><td>선형관계만</td><td>단조관계(monotonic) 측정 가능</td></tr>
+          <tr><td>검정통계량</td><td>t = r√(n−2)/√(1−r²)</td><td>동일 공식 (rₛ 사용)</td></tr>
+          <tr><td>df</td><td>n−2</td><td>n−2</td></tr>
+          <tr><td>사용 시기</td><td>정규분포 확인됨</td><td>비정규 / 순위 데이터 / outlier 있을 때</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">공식</div>
+    <div class="g2">
+      <div class="card c-blue">
+        <div class="ct">Pearson Correlation t-test</div>
+        <div class="fm">t = r√(n−2) / √(1−r²)  df = n−2</div>
+        <ul class="pts" style="margin-top:.4rem">
+          <li>H₀: ρ = 0 (상관관계 없음)</li>
+          <li>Simple regression t-test(b₁)와 동일 구조</li>
+          <li>t² = F</li>
+        </ul>
+      </div>
+      <div class="card c-purple">
+        <div class="ct">Spearman Rank Correlation</div>
+        <div class="fm">rₛ = 1 − 6Σdᵢ² / n(n²−1)  ← dᵢ = 순위 차이</div>
+        <div class="fm">t = rₛ√(n−2) / √(1−rₛ²)  df = n−2</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Chi-square Test of Independence (범주형) ★</div>
+    <div class="card c-teal">
+      <div class="ct">두 범주형 변수가 독립인지 검정</div>
+      <div class="fm">χ² = ΣΣ (Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ</div>
+      <div class="fm">Eᵢⱼ = (행합 × 열합) / 전체</div>
+      <div class="fm">df = (r−1)(c−1)  ← r=행수, c=열수</div>
+      <ul class="pts" style="margin-top:.5rem">
+        <li>H₀: 두 변수는 독립</li>
+        <li>H₁: 두 변수는 연관있음</li>
+        <li>χ² 크면 → reject H₀ → 연관 있음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">R9 문제 키워드 매핑</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">test whether two variables are correlated</span><span class="kw-arr">→</span><span class="kw-val">Pearson t-test, df = n−2</span></div>
+      <div class="kw-item"><span class="kw-key">non-parametric / does not assume normal</span><span class="kw-arr">→</span><span class="kw-val">Spearman rank correlation</span></div>
+      <div class="kw-item"><span class="kw-key">ranked data / ordinal / outliers present</span><span class="kw-arr">→</span><span class="kw-val">Spearman (순위 기반)</span></div>
+      <div class="kw-item"><span class="kw-key">two categorical variables / independence</span><span class="kw-arr">→</span><span class="kw-val">Chi-square test (contingency table)</span></div>
+      <div class="kw-item"><span class="kw-key">two-way table / observed vs expected</span><span class="kw-arr">→</span><span class="kw-val">Chi-square, df = (r−1)(c−1)</span></div>
+      <div class="kw-item"><span class="kw-key">correlation = 0 does not mean no relationship</span><span class="kw-arr">→</span><span class="kw-val">비선형 관계 가능 (Pearson은 linear만)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 초압축 키워드 ===== -->
+<div id="tab-keyword" class="tp">
+  <div class="sec">
+    <div class="st">초압축 핵심 — 문제 읽자마자 반응 (R3~R9)</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">p ≤ α / test stat > critical</span><span class="kw-arr">→</span><span class="kw-val">reject H₀</span></div>
+      <div class="kw-item"><span class="kw-key">mean / correlation</span><span class="kw-arr">→</span><span class="kw-val">t-test</span></div>
+      <div class="kw-item"><span class="kw-key">statistically significant</span><span class="kw-arr">→</span><span class="kw-val">reject H₀</span></div>
+      <div class="kw-item"><span class="kw-key">variance (단일)</span><span class="kw-arr">→</span><span class="kw-val">χ²-test</span></div>
+      <div class="kw-item"><span class="kw-key">μ₀ CI 안 → fail / CI 밖</span><span class="kw-arr">→</span><span class="kw-val">reject</span></div>
+      <div class="kw-item"><span class="kw-key">variance 비교 (두 그룹)</span><span class="kw-arr">→</span><span class="kw-val">F-test</span></div>
+      <div class="kw-item"><span class="kw-key">confidence ↑</span><span class="kw-arr">→</span><span class="kw-val">interval wider</span></div>
+      <div class="kw-item"><span class="kw-key">historical data</span><span class="kw-arr">→</span><span class="kw-val">empirical prob.</span></div>
+      <div class="kw-item"><span class="kw-key">power = ?</span><span class="kw-arr">→</span><span class="kw-val">1 − β</span></div>
+      <div class="kw-item"><span class="kw-key">analyst judgment</span><span class="kw-arr">→</span><span class="kw-val">subjective prob.</span></div>
+      <div class="kw-item"><span class="kw-key">GIGO / MC 최대 단점</span><span class="kw-arr">→</span><span class="kw-val">입력 가정 오류</span></div>
+      <div class="kw-item"><span class="kw-key">equally likely</span><span class="kw-arr">→</span><span class="kw-val">a priori prob.</span></div>
+      <div class="kw-item"><span class="kw-key">asset price / bounded below 0</span><span class="kw-arr">→</span><span class="kw-val">lognormal</span></div>
+      <div class="kw-item"><span class="kw-key">with replacement</span><span class="kw-arr">→</span><span class="kw-val">bootstrap</span></div>
+      <div class="kw-item"><span class="kw-key">downside risk only</span><span class="kw-arr">→</span><span class="kw-val">target semideviation</span></div>
+      <div class="kw-item"><span class="kw-key">risk per unit return</span><span class="kw-arr">→</span><span class="kw-val">CV</span></div>
+      <div class="kw-item"><span class="kw-key">not affected by outliers</span><span class="kw-arr">→</span><span class="kw-val">median</span></div>
+      <div class="kw-item"><span class="kw-key">minimize shortfall</span><span class="kw-arr">→</span><span class="kw-val">Roy's SFR 최대화</span></div>
+      <div class="kw-item"><span class="kw-key">multi-period / compounded</span><span class="kw-arr">→</span><span class="kw-val">geometric mean</span></div>
+      <div class="kw-item"><span class="kw-key">dollar-cost averaging</span><span class="kw-arr">→</span><span class="kw-val">harmonic mean</span></div>
+      <div class="kw-item"><span class="kw-key">data snooping / same data 반복</span><span class="kw-arr">→</span><span class="kw-val">overfitting → out-of-sample</span></div>
+      <div class="kw-item"><span class="kw-key">survivorship bias</span><span class="kw-arr">→</span><span class="kw-val">폐지 펀드 포함해야</span></div>
+      <div class="kw-item"><span class="kw-key">predict Y using X</span><span class="kw-arr">→</span><span class="kw-val">regression / b₁</span></div>
+      <div class="kw-item"><span class="kw-key">explained variation</span><span class="kw-arr">→</span><span class="kw-val">R² = SSR/SST</span></div>
+      <div class="kw-item"><span class="kw-key">overall model significance</span><span class="kw-arr">→</span><span class="kw-val">F-test (MSR/MSE)</span></div>
+      <div class="kw-item"><span class="kw-key">coefficient significant</span><span class="kw-arr">→</span><span class="kw-val">t-test, df=n−2</span></div>
+      <div class="kw-item"><span class="kw-key">non-parametric / ranked data</span><span class="kw-arr">→</span><span class="kw-val">Spearman rₛ</span></div>
+      <div class="kw-item"><span class="kw-key">categorical / two-way table</span><span class="kw-arr">→</span><span class="kw-val">Chi-square, df=(r−1)(c−1)</span></div>
+      <div class="kw-item"><span class="kw-key">heteroskedastic</span><span class="kw-arr">→</span><span class="kw-val">등분산 위반 (E) → SE↓ → t↑ → Type I ↑</span></div>
+      <div class="kw-item"><span class="kw-key">serial correlation / seasonality</span><span class="kw-arr">→</span><span class="kw-val">독립 위반 (I) → SE↓ → t↑ → Type I ↑</span></div>
+      <div class="kw-item"><span class="kw-key">simple regression: r = ?</span><span class="kw-arr">→</span><span class="kw-val">r = ±√R² (부호는 b₁과 일치)</span></div>
+      <div class="kw-item"><span class="kw-key">leaving out one observation</span><span class="kw-arr">→</span><span class="kw-val">Jackknife</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">계산 함정 포인트</div>
+    <div class="g2">
+      <div class="card c-red">
+        <div class="ct">공식 함정</div>
+        <ul class="pts">
+          <li>n≥30 이어도 σ unknown이면 → <strong>t-test</strong> (z 아님)</li>
+          <li>r = ±√R² → <strong>b₁ 부호 확인</strong> 필수</li>
+          <li>Geometric mean → 복리 수익률 (arithmetic mean 아님)</li>
+          <li>Spearman df → <strong>n−2</strong> (Pearson과 동일)</li>
+          <li>Chi-square df → <strong>(r−1)(c−1)</strong> (n−1 아님)</li>
+        </ul>
+      </div>
+      <div class="card c-amber">
+        <div class="ct">해석 함정</div>
+        <ul class="pts">
+          <li>Heteroskedasticity/Serial Correlation → SE <strong>과소</strong>계상 → t <strong>과대</strong>계상</li>
+          <li>Correlation = 0 → 선형관계 없음 (비선형은 가능)</li>
+          <li>Power ↑ = 좋은 것 (Type II Error ↓)</li>
+          <li>α ↓ → Type I ↓ BUT Type II ↑ (trade-off)</li>
+          <li>CLT는 z 사용 조건이 아님</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kp-blue" style="margin-top:.75rem">Quant는 계산 문제가 아니라 "단어 → 개념 매칭 게임"이다</div>
+  </div>
+</div>
+
+<div class="footer">CFA Level 1 Quant R3–R9 완전 정리 레퍼런스</div>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
