@@ -13,6 +13,7 @@
   --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
   --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
   --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
 }
 @media(prefers-color-scheme:dark){:root{
   --bg:#1c1c1a;--card:#252523;--text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
@@ -21,6 +22,7 @@
   --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
   --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
   --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
 }}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1.5rem 4rem}
 .wrap{max-width:600px;margin:0 auto}
@@ -36,6 +38,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ic-green{background:var(--green-bg)}
 .ic-amber{background:var(--amber-bg)}
 .ic-purple{background:var(--purple-bg)}
+.ic-teal{background:var(--teal-bg)}
 .card-title{font-size:15px;font-weight:500;color:var(--text)}
 .card-desc{font-size:12px;color:var(--text2);margin-left:44px}
 .card-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;margin-left:44px}
@@ -44,6 +47,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-green{background:var(--green-bg);color:var(--green-t);border:0.5px solid var(--green-bd)}
 .tag-amber{background:var(--amber-bg);color:var(--amber-t);border:0.5px solid var(--amber-bd)}
 .tag-purple{background:var(--purple-bg);color:var(--purple-t);border:0.5px solid var(--purple-bd)}
+.tag-teal{background:var(--teal-bg);color:var(--teal-t);border:0.5px solid var(--teal-bd)}
 .footer{margin-top:3rem;font-size:11px;color:var(--text3);text-align:center}
 </style>
 </head>
@@ -93,6 +97,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span class="tag tag-amber">PPE</span>
       <span class="tag tag-amber">IA</span>
       <span class="tag tag-amber">IFRS vs GAAP</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_lease.html">
+    <div class="card-top">
+      <div class="card-icon ic-teal">🏢</div>
+      <div class="card-title">Lease 완전 정리</div>
+    </div>
+    <div class="card-desc">Finance vs Operating · Lessee/Lessor T계정 · IFRS vs GAAP · 슈웨이저 검증 완료</div>
+    <div class="card-tags">
+      <span class="tag tag-teal">Lessee</span>
+      <span class="tag tag-teal">Lessor</span>
+      <span class="tag tag-teal">T계정</span>
+      <span class="tag tag-teal">IFRS vs GAAP</span>
     </div>
   </a>
 
