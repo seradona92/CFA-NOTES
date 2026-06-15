@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | LOS 34 — Lease · Pension · Share-Based</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — LOS 34 완전 정리</h1>
+  <p>CFA Level 1 · Lease + Pension + Share-Based Comp · 슈웨이저 기준 · T계정 중심 · Disclosure 제외</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('개요',this)">개요 &amp; 구분법</button>
+  <button class="nb" onclick="show('lessee',this)">Lessee</button>
+  <button class="nb" onclick="show('lessor',this)">Lessor</button>
+  <button class="nb" onclick="show('비교',this)">Finance vs Operating</button>
+  <button class="nb" onclick="show('ifrs',this)">IFRS vs GAAP</button>
+  <button class="nb" onclick="show('pension',this)">Pension</button>
+  <button class="nb" onclick="show('sbc',this)">Share-Based</button>
+  <button class="nb" onclick="show('keyword',this)">키워드</button>
+  <button class="nb" onclick="show('quiz',this)">Quiz</button>
+</div>
+
+<!-- 개요 -->
+<div id="tab-개요" class="tp active">
+<div class="sec">
+  <div class="st">리스 계약 3대 요건</div>
+  <div class="card c-blue">
+    <div class="ct">계약이 Lease로 인정되려면 모두 충족</div>
+    <ul class="pts">
+      <li><strong>1.</strong> 특정 자산(specific asset) 명시</li>
+      <li><strong>2.</strong> 리스 기간 동안 자산의 경제적 효익을 실질적으로 전부 lessee에게 제공</li>
+      <li><strong>3.</strong> 리스 기간 동안 자산의 사용 방법 결정권을 lessee에게 부여</li>
+    </ul>
+    <div class="kp-blue" style="margin-top:.6rem">리스 분류는 lessee/lessor 동일하게 적용</div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">Finance Lease 5가지 기준 (하나라도 해당 → Finance)</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>#</th><th>기준</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Ownership transfer</td><td>리스 종료 후 소유권 이전</td></tr>
+        <tr><td><strong>2</strong></td><td>Bargain purchase option (expected to exercise)</td><td>염가매수선택권 — 행사 가능성 높음</td></tr>
+        <tr><td><strong>3</strong></td><td>Most of useful life</td><td>내용연수의 <strong>75% 이상</strong> 사용</td></tr>
+        <tr><td><strong>4</strong></td><td>PV of payments ≥ asset FV</td><td>리스료 현가 ≥ 공정가치의 <strong>90%</strong></td></tr>
+        <tr><td><strong>5</strong></td><td>Specialized / no other use</td><td>해당 lessee 외 사용 불가 특수 자산</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp">5가지 중 하나도 해당 없으면 → Operating Lease</div>
+</div>
+<div class="sec">
+  <div class="st">기본 개념 비교</div>
+  <div class="g2">
+    <div class="card c-blue">
+      <div class="ct">Finance Lease</div>
+      <ul class="pts">
+        <li>위험·효익이 lessee에게 이전</li>
+        <li>자산: <strong>lessee</strong> BS에 인식 (ROU)</li>
+        <li>감가상각: lessee 부담</li>
+        <li>Payment = 원금 + 이자</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <div class="ct">Operating Lease</div>
+      <ul class="pts">
+        <li>위험·효익이 lessor에게 유지</li>
+        <li>자산: <strong>lessor</strong> BS에 유지</li>
+        <li>감가상각: lessor 부담</li>
+        <li>Payment = 임대료</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">리스의 장점 (Why Lease?)</div>
+  <div class="g3">
+    <div class="card"><div class="ct">초기 현금 절약</div><ul class="pts"><li>구매보다 초기 지출 적음</li></ul></div>
+    <div class="card"><div class="ct">저비용 금융</div><ul class="pts"><li>자산이 담보 역할 → 낮은 implicit rate 가능</li></ul></div>
+    <div class="card"><div class="ct">구식화 위험 감소</div><ul class="pts"><li>종료 후 반납 → 가치 하락 위험 → <strong>lessor 부담</strong></li></ul></div>
+  </div>
+  <div class="kp-blue" style="margin-top:.5rem">⚠ <strong>Guaranteed residual value</strong>가 있으면 구식화 위험이 다시 lessee로 이전</div>
+</div>
+<div class="sec">
+  <div class="st">중요 개념</div>
+  <div class="g2">
+    <div class="card c-purple">
+      <div class="ct">ROU Asset 분류 ⭐</div>
+      <ul class="pts">
+        <li><strong>Intangible asset으로 분류</strong> (PP&amp;E 아님!)</li>
+        <li>리스 기간에 걸쳐 상각</li>
+        <li>시험 최빈 함정</li>
+      </ul>
+    </div>
+    <div class="card c-amber">
+      <div class="ct">Implicit Interest Rate</div>
+      <ul class="pts">
+        <li>Lessor의 IRR</li>
+        <li>PV(payments) + PV(residual) = 자산 FV가 되는 rate</li>
+        <li>Lessee가 할인율로 사용</li>
+      </ul>
+    </div>
+  </div>
+  <div class="kp-blue">CFA Level 1 가정: 모든 lease payment는 <strong>in arrears (기말 지급)</strong></div>
+</div>
+</div>
+
+<!-- lessee -->
+<div id="tab-lessee" class="tp">
+<div class="sec">
+  <div class="kp-red" style="margin-bottom:1rem">⚠ GAAP Operating Lease도 현행(ASC 842) BS에 ROU + Lease Liability 인식. 상각·IS·CF 처리만 Finance와 다름.</div>
+  <div class="mtx-legend">
+    <span><i style="background:var(--blue-t)"></i> 차변 Dr (자산·비용 ↑)</span>
+    <span><i style="background:var(--red-t)"></i> 대변 Cr (부채·자본·수익 ↑)</span>
+    <span class="m-mu">a = 이자분 · b = 원금분</span>
+  </div>
+
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-gr">Operating Lease (GAAP)</div>
+  <div class="mtx">
+    <div class="mtx-hd corner"></div><div class="mtx-hd">BS</div><div class="mtx-hd">IS</div><div class="mtx-hd">CF</div>
+
+    <div class="mtx-rl">Inception</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">ROU ↑</span><span class="mln m-mu">= PV</span></div><div class="cside"><span class="mln m-cr">Lease Liab ↑</span><span class="mln m-mu">= PV</span></div></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+
+    <div class="mtx-rl">Payment</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">Lease Liab ↓ (b)</span><span class="mln m-dr">ROU ↓ (b)</span></div><div class="cside"><span class="mln m-cr">Cash ↓ (a+b)</span></div></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-am">Lease Exp</span><span class="mln m-mu">= Int+Amort<br>= payment</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-dr">CFO 전액 (a+b)</span><span class="mln m-mu">Finance 대비 초기 CFO ↓</span></div></div>
+
+    <div class="mtx-rl last">Amort</div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-mu">Payment에 동시 처리</span></div></div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-mu">(별도 없음)</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+  </div>
+  <div class="m-note">Operating: ROU = Lease Liability (기본 예제에서 일치 — 선급·초기직접원가 조정 없을 때). 상각 = 원금상환액으로 동시 처리.</div>
+  </div>
+
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-bl">Finance Lease (IFRS &amp; GAAP)</div>
+  <div class="mtx">
+    <div class="mtx-hd corner"></div><div class="mtx-hd">BS</div><div class="mtx-hd">IS</div><div class="mtx-hd">CF</div>
+
+    <div class="mtx-rl">Inception</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">ROU ↑</span><span class="mln m-mu">PV·무형</span></div><div class="cside"><span class="mln m-cr">Lease Liab ↑</span><span class="mln m-mu">= PV</span></div></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+
+    <div class="mtx-rl">Payment</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">Lease Liab ↓ (b)</span><span class="mln m-mu">원금상환</span></div><div class="cside"><span class="mln m-cr">Cash ↓ (a+b)</span></div></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-am">Int Exp (a)</span><span class="mln m-mu">= Beg.Liab × r<br>별도 표시</span></div></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-dr">CFO (a) 이자</span><span class="mln m-dr">CFF (b) 원금</span><span class="mln m-mu">IFRS: 이자 CFO/CFF</span></div></div>
+
+    <div class="mtx-rl last">Amort</div>
+    <div class="mtx-c last"><div class="tT split"><div class="dside"><span class="mln m-dr">Amort Exp</span></div><div class="cside"><span class="mln m-cr">ROU ↓</span></div></div></div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-am">Amort Exp</span><span class="mln m-mu">= PV ÷ n<br>Int과 별도</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-mu">— (비현금)</span></div></div>
+  </div>
+  <div class="m-note">Finance: ROU ≠ Lease Liability 중간 기간 (정액상각 vs 원금감소 속도 차이). 초기 ROU &lt; Liab. 이자·상각 IS에 별도 표시.</div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">슈웨이저 예제: 4년, 연 10,000, 이자율 5%</div>
+  <div class="card c-blue">
+    <div class="ct">N=4, I/Y=5, PMT=−10,000, FV=0 → PV = 35,460 (= ROU = Lease Liab 초기값)</div>
+    <div class="tw" style="margin-top:.5rem">
+      <table>
+        <thead><tr><th>Year</th><th>Beg. Liab</th><th>Interest(×5%)</th><th>Payment</th><th>Principal</th><th>End. Liab</th><th>ROU (Finance)</th><th>ROU (Operating)</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>35,460</td><td>35,460</td><td>35,460</td></tr>
+          <tr><td>1</td><td>35,460</td><td>1,773</td><td>10,000</td><td>8,227</td><td>27,233</td><td>26,595</td><td class="warn">27,233</td></tr>
+          <tr><td>2</td><td>27,233</td><td>1,362</td><td>10,000</td><td>8,638</td><td>18,595</td><td>17,730</td><td class="warn">18,595</td></tr>
+          <tr><td>3</td><td>18,595</td><td>930</td><td>10,000</td><td>9,070</td><td>9,525</td><td>8,865</td><td class="warn">9,525</td></tr>
+          <tr><td>4</td><td>9,525</td><td>475</td><td>10,000</td><td>9,525</td><td>0</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="pts" style="margin-top:.5rem">
+      <li>Finance ROU 상각 = 35,460 ÷ 4 = <strong>8,865 (정액, 매년 동일)</strong></li>
+      <li>Operating ROU 상각 = 원금상환액 → <strong>ROU = Liab 항상 일치</strong></li>
+      <li>Finance: <strong>ROU &lt; Liab</strong> 중간 기간</li>
+    </ul>
+  </div>
+  <div class="st" style="margin-top:1.5rem">IS 비용 비교</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th rowspan="2">Year</th><th colspan="3" class="tc">Finance Lease</th><th class="tc">Operating</th></tr><tr><th>Interest</th><th>Amortization</th><th>Total</th><th>Lease Exp</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>1,773</td><td>8,865</td><td class="dn">10,638</td><td>10,000</td></tr>
+        <tr><td>2</td><td>1,362</td><td>8,865</td><td class="dn">10,227</td><td>10,000</td></tr>
+        <tr><td>3</td><td>930</td><td>8,865</td><td class="up">9,795</td><td>10,000</td></tr>
+        <tr><td>4</td><td>475</td><td>8,865</td><td class="up">9,340</td><td>10,000</td></tr>
+        <tr><td><strong>Total</strong></td><td>4,540</td><td>35,460</td><td><strong>40,000</strong></td><td><strong>40,000</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">단기 / 저가치 예외</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>기준</th><th>IFRS</th><th>GAAP</th></tr></thead>
+      <tbody>
+        <tr><td>단기 (≤12개월)</td><td>ROU/Liab 없음 → Rent Exp (정액)</td><td>ROU/Liab 없음 → Rent Exp (정액)</td></tr>
+        <tr><td>저가치 (≤$5,000)</td><td class="up">예외 적용</td><td class="na">해당 없음</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- lessor -->
+<div id="tab-lessor" class="tp">
+<div class="sec">
+  <div class="mtx-legend">
+    <span><i style="background:var(--blue-t)"></i> 차변 Dr</span>
+    <span><i style="background:var(--red-t)"></i> 대변 Cr</span>
+    <span class="m-mu">a = 이자분 · b = 원금분</span>
+  </div>
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-gr">Operating Lease (Lessor)</div>
+  <div class="mtx">
+    <div class="mtx-hd corner"></div><div class="mtx-hd">BS</div><div class="mtx-hd">IS</div><div class="mtx-hd">CF</div>
+
+    <div class="mtx-rl">Inception</div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-mu">PP&amp;E 유지<br>(처리 없음)</span></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+
+    <div class="mtx-rl">Payment</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">Cash ↑</span></div><div class="cside"><span class="mln m-cr">Lease Rev ↑</span></div></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-cr">Lease Revenue ↑</span></div></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-dr">CFO 전액</span></div></div>
+
+    <div class="mtx-rl last">Depreciation</div>
+    <div class="mtx-c last"><div class="tT split"><div class="dside"><span class="mln m-dr">Dep Exp</span></div><div class="cside"><span class="mln m-cr">PP&amp;E ↓</span></div></div></div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-dr">Dep Expense</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-mu">— (비현금)</span></div></div>
+  </div>
+  <div class="m-note">Operating Lessor: 자산을 BS에 그대로 두고 감가상각. 임대료는 정액 수익 인식.</div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">Finance Lease (Lessor) — 두 가지 유형</div>
+  <div class="g2">
+    <div class="card c-purple"><div class="ct">Sales-type (제조사·딜러)</div><ul class="pts"><li>Inception에 <strong>Gross Profit 즉시 인식</strong></li><li>Revenue = PV of payments</li><li>COGS = BV − PV(residual)</li><li>이후 매기 이자수익만</li></ul></div>
+    <div class="card c-teal"><div class="ct">Direct Financing (금융회사)</div><ul class="pts"><li>Inception에 G/L <strong>인식 없음 (이연)</strong></li><li>이자수익으로만 인식</li></ul></div>
+  </div>
+</div>
+<div class="sec">
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-bl">Finance Lease — Sales-type (Lessor)</div>
+  <div class="mtx">
+    <div class="mtx-hd corner"></div><div class="mtx-hd">BS</div><div class="mtx-hd">IS</div><div class="mtx-hd">CF</div>
+
+    <div class="mtx-rl">Inception</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">Lease Rec ↑</span><span class="mln m-mu">Net Inv</span></div><div class="cside"><span class="mln m-cr">Inventory ↓</span><span class="mln m-mu">BV 제거</span></div></div></div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">COGS</span></div><div class="cside"><span class="mln m-cr">Sales Rev</span></div></div><span class="mln m-mu" style="display:block;text-align:center;margin-top:3px">→ GP 즉시</span></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+
+    <div class="mtx-rl last">Payment</div>
+    <div class="mtx-c last"><div class="tT split"><div class="dside"><span class="mln m-dr">Cash ↑ (a+b)</span></div><div class="cside"><span class="mln m-cr">Lease Rec ↓ (b)</span><span class="mln m-cr">Int Income (a)</span></div></div></div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-cr">Interest Income (a)</span><span class="mln m-mu">= Beg.Rec × r</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-dr">CFO 전액 (a+b)</span></div></div>
+  </div>
+  <div class="m-note">Sales-type: Inception에 GP 즉시 인식 (Rev = PV 리스료, COGS = BV − PV잔존). 이후 매기 이자수익만.</div>
+  </div>
+  <div class="kp-blue">⭐ Lessor: Finance/Operating 모두 CF 전액 CFO — Lessee Finance(원금 CFF)와 다름!</div>
+</div>
+<div class="sec">
+  <div class="st">슈웨이저 예제: Sales-type Finance Lease (Lessor)</div>
+  <div class="card">
+    <div class="ct">조건: 연 10,000 × 4년, r=5%, 잔존가치 2,000, 자산 BV 30,000</div>
+    <ul class="pts" style="margin-bottom:.5rem">
+      <li>PV of payments = 35,460</li>
+      <li>PV of residual = 2,000 / 1.05⁴ = <strong>1,645</strong></li>
+      <li>Net Investment = 35,460 + 1,645 = <strong>37,105</strong> (= 자산 FV)</li>
+    </ul>
+    <div class="fm">GP at Inception = Revenue(35,460) − COGS(30,000−1,645) = <strong>7,105</strong></div>
+    <div class="tw" style="margin-top:.5rem">
+      <table>
+        <thead><tr><th>Year</th><th>Beg.Rec</th><th>Int.Income(×5%)</th><th>Payment</th><th>Principal</th><th>End.Rec</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>37,105</td></tr>
+          <tr><td>1</td><td>37,105</td><td>1,855</td><td>10,000</td><td>8,145</td><td>28,960</td></tr>
+          <tr><td>2</td><td>28,960</td><td>1,448</td><td>10,000</td><td>8,552</td><td>20,408</td></tr>
+          <tr><td>3</td><td>20,408</td><td>1,020</td><td>10,000</td><td>8,980</td><td>11,428</td></tr>
+          <tr><td>4</td><td>11,428</td><td>572</td><td>10,000</td><td>9,428</td><td>2,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp" style="margin-top:.5rem">⭐ Year 1 IS = GP(7,105) + Int(1,855) = <strong>8,960</strong></div>
+  </div>
+  <div class="st" style="margin-top:1.5rem">슈웨이저 예제: Operating Lease (Lessor)</div>
+  <div class="card c-green">
+    <div class="ct">Dep = (30,000−2,000)÷4 = 7,000/year</div>
+    <div class="tw" style="margin-top:.5rem">
+      <table>
+        <thead><tr><th>Year</th><th>Net PP&amp;E</th><th>Dep Exp</th><th>Lease Rev</th><th>Net IS</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>30,000</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>1</td><td>23,000</td><td>7,000</td><td>10,000</td><td>3,000</td></tr>
+          <tr><td>2</td><td>16,000</td><td>7,000</td><td>10,000</td><td>3,000</td></tr>
+          <tr><td>3</td><td>9,000</td><td>7,000</td><td>10,000</td><td>3,000</td></tr>
+          <tr><td>4</td><td>2,000</td><td>7,000</td><td>10,000</td><td>3,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="tw" style="margin-top:.75rem">
+    <table>
+      <thead><tr><th>항목</th><th>Finance (Sales-type)</th><th>Operating</th></tr></thead>
+      <tbody>
+        <tr><td>BS</td><td>Lease Receivable</td><td>PP&amp;E 유지</td></tr>
+        <tr><td>IS Year 1</td><td class="up">8,960 (GP+이자)</td><td>3,000 (Rev−Dep)</td></tr>
+        <tr><td>IS 총합</td><td class="tc" colspan="2">12,000 동일</td></tr>
+        <tr><td>CF</td><td class="tc" colspan="2">전액 CFO (동일)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp">총 IS·CF 동일 — 시점별 배분만 다름</div>
+</div>
+</div>
+
+<!-- 비교 -->
+<div id="tab-비교" class="tp">
+<div class="sec">
+  <div class="st">Lessee — Finance vs Operating 비교표</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>Finance Lease</th><th>Operating (GAAP)</th><th>이유</th></tr></thead>
+      <tbody>
+        <tr><td>BS Assets (ROU)</td><td class="dn">Lower</td><td class="up">Higher</td><td>Operating: ROU=Liab으로 천천히 감소</td></tr>
+        <tr><td>BS Liabilities</td><td class="tc">Same</td><td class="tc">Same</td><td>Lease Liab 처리 동일</td></tr>
+        <tr><td>NI (초기)</td><td class="dn">Lower</td><td class="up">Higher</td><td>Finance 초기: Int+Amort &gt; Lease Exp</td></tr>
+        <tr><td>NI (후기)</td><td class="up">Higher</td><td class="dn">Lower</td><td>이자↓로 Finance 총비용 감소</td></tr>
+        <tr><td>EBIT</td><td class="up">Higher</td><td class="dn">Lower</td><td>이자비용이 EBIT 아래에서 차감</td></tr>
+        <tr><td>Interest Expense</td><td class="up">Higher</td><td class="dn">Lower</td><td>Finance만 이자비용 별도 인식</td></tr>
+        <tr><td>CFO</td><td class="up">Higher</td><td class="dn">Lower</td><td>Finance: 원금→CFF로 빠짐</td></tr>
+        <tr><td>CFF</td><td class="dn">Lower</td><td class="up">Higher</td><td>Operating: 전액 CFO</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp">총 비용 동일. L/O 잔액은 Finance/Operating 완전 동일.</div>
+</div>
+<div class="sec">
+  <div class="st">주요 Ratio 영향</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Ratio</th><th>Finance vs Operating</th><th>이유</th></tr></thead>
+      <tbody>
+        <tr><td>D/E</td><td class="tc">Same</td><td>Lease Liability 동일</td></tr>
+        <tr><td>Asset Turnover</td><td class="up">Finance Higher</td><td>ROU 작아서 총자산 분모↓</td></tr>
+        <tr><td>EBIT Margin</td><td class="up">Finance Higher</td><td>이자가 EBIT 아래</td></tr>
+        <tr><td>Interest Coverage</td><td class="dn">Finance Lower</td><td>이자비용 더 높게 인식</td></tr>
+        <tr><td>ROA/ROE (초기)</td><td class="dn">Finance Lower</td><td>초기 NI 낮음</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ifrs vs gaap -->
+<div id="tab-ifrs" class="tp">
+<div class="sec">
+  <div class="st">Lessee — IFRS vs GAAP 핵심 차이</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>IFRS (Single Model)</th><th>U.S. GAAP (Dual Model)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Operating Lease 처리</strong></td><td class="up">Finance와 동일 (단기/저가치만 예외)</td><td class="warn">Finance와 다른 방식 (Lease Exp 한 줄)</td></tr>
+        <tr><td><strong>ROU 인식</strong></td><td>모든 리스 (단기/저가치 제외)</td><td>모든 리스 (단기 제외)</td></tr>
+        <tr><td><strong>Operating ROU 상각</strong></td><td>정액상각 (Finance처럼)</td><td>Liab 잔액과 동일 → ROU = Liab</td></tr>
+        <tr><td><strong>IS (Operating)</strong></td><td>Interest + Amort 별도</td><td>Lease Expense 합산 (= payment)</td></tr>
+        <tr><td><strong>CF — 이자 (Finance)</strong></td><td class="up">CFO or CFF 선택 가능</td><td>CFO만</td></tr>
+        <tr><td><strong>CF — 원금 (Finance)</strong></td><td>CFF</td><td>CFF</td></tr>
+        <tr><td><strong>CF — Operating</strong></td><td>Finance처럼</td><td class="up">전액 CFO</td></tr>
+        <tr><td><strong>단기 예외</strong></td><td>≤12개월 or ≤$5,000 → Rent Exp</td><td>≤12개월 → Rent Exp</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp">IFRS: Operating Lease 개념 사실상 폐기 (부채 off-BS 방지 목적)</div>
+</div>
+<div class="sec">
+  <div class="st">요약</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">IFRS — Single Model</div><ul class="pts"><li>Operating/Finance → 모두 Finance처럼</li><li>단기(≤12개월) or 저가치(≤$5,000) → Rent Exp</li></ul></div>
+    <div class="card c-green"><div class="ct">GAAP — Dual Model</div><ul class="pts"><li>Finance: IFRS와 동일</li><li>Operating: ROU=Liab, Lease Exp 한 줄, 전액 CFO</li><li>단기(≤12개월) → Rent Exp</li></ul></div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">Lessor — IFRS vs GAAP</div>
+  <div class="card c-teal"><div class="ct">거의 동일</div><ul class="pts"><li>Finance: 자산 제거 + Lease Receivable</li><li>Operating: 자산 유지 + D&amp;A + Rent Income</li><li>제조사/딜러 → Sales-type (GP at inception)</li><li>금융회사 → Direct financing (G/L 이연)</li><li>CF: 전액 CFO (Finance/Operating 모두, IFRS/GAAP 동일)</li></ul></div>
+</div>
+</div>
+
+<!-- pension -->
+<div id="tab-pension" class="tp">
+<div class="sec">
+  <div class="st">DC vs DB — 핵심 차이</div>
+  <div class="g2">
+    <div class="card c-green"><div class="ct">Defined Contribution (DC)</div><ul class="pts"><li>회사가 <strong>기여액</strong> 확정</li><li>운용 위험 → <strong>직원</strong> 부담</li><li>Pension Exp = Cash Contribution</li><li>기여 후 BS 의무 없음</li></ul></div>
+    <div class="card c-amber"><div class="ct">Defined Benefit (DB)</div><ul class="pts"><li>회사가 <strong>급여(benefit)</strong> 확정</li><li>운용 위험 → <strong>회사</strong> 부담</li><li>회계처리 복잡 (보험계리사)</li><li>BS에 Net Pension Asset/Liability 인식</li></ul></div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">DC — 분개</div>
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-gr">Defined Contribution (DC) — 매기 Contribution</div>
+  <div class="mtx" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="mtx-hd">분개 (IS+BS)</div><div class="mtx-hd">BS 잔액</div><div class="mtx-hd">CF</div>
+    <div class="mtx-c last"><div class="tT split"><div class="dside"><span class="mln m-dr">Pension Exp</span><span class="mln m-mu">(비용)</span></div><div class="cside"><span class="mln m-cr">Cash ↓</span></div></div></div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-mu">없음</span><span class="mln m-mu">(기여 후 의무 종료)</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-dr">CFO</span></div></div>
+  </div>
+  <div class="m-note">Pension Exp = 기여액. 기여 완료 시 BS 잔액 없음.</div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">DB — Funded Status</div>
+  <div class="fm">Funded Status = Plan Asset (P/A) − Projected Benefit Obligation (PBO)
+
+Overfunded  (P/A &gt; PBO) → Net Pension Asset  (BS 자산)
+Underfunded (P/A &lt; PBO) → Net Pension Liability (BS 부채)</div>
+  <div class="card c-amber" style="margin-top:.6rem"><div class="ct">PBO (Projected Benefit Obligation)</div><ul class="pts"><li>현재까지 적립된 의무를 <strong>예상 최종급여</strong> 기준으로 PV화</li><li>가정: 할인율, 임금상승률, 이직률, 사망률, 퇴직연령</li></ul></div>
+</div>
+<div class="sec">
+  <div class="st">DB — 분개 (매기 변동)</div>
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-am">Defined Benefit (DB)</div>
+  <div class="mtx" style="grid-template-columns:1fr 1fr">
+    <div class="mtx-hd">매기 비용·기여</div><div class="mtx-hd">Benefit 지급</div>
+    <div class="mtx-c last"><div class="tT split"><div class="dside"><span class="mln m-dr">Pension Exp (IS)</span><span class="mln m-mu">Svc + Net Int</span><span class="mln m-dr">OCI (재측정)</span></div><div class="cside"><span class="mln m-cr">Cash (기여)</span><span class="mln m-cr">Net Pension Liab ↑</span></div></div></div>
+    <div class="mtx-c cf last"><div class="tT split"><div class="dside"><span class="mln m-dr">PBO ↓</span></div><div class="cside"><span class="mln m-cr">Plan Asset ↓</span></div></div><span class="mln m-mu" style="display:block;text-align:center;margin-top:3px">→ Funded Status 불변</span></div>
+  </div>
+  <div class="m-note">Benefit 지급 시 PBO와 Plan Asset이 같이 감소 → Funded Status 영향 없음.</div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">DB — IS vs OCI: IFRS vs GAAP</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구성요소</th><th>IFRS</th><th>GAAP</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Service Cost (당기)</strong></td><td class="up">IS</td><td class="up">IS</td></tr>
+        <tr><td><strong>Past Service Cost</strong></td><td class="up">IS (즉시 전액)</td><td class="warn">OCI → 서비스기간 상각</td></tr>
+        <tr><td><strong>Net Interest</strong></td><td class="up">IS (Interest cost − Expected Return 통합)</td><td class="up">IS (Interest cost — 별도 항목)</td></tr>
+        <tr><td><strong>Expected Return on Plan Assets</strong></td><td class="na">개념 없음 (Net Interest에 통합)</td><td class="up">IS에서 차감</td></tr>
+        <tr><td><strong>재측정 (Actuarial G/L 등)</strong></td><td class="warn">OCI (영구, 재분류 없음)</td><td class="warn">OCI → Corridor or 즉시 인식</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">분석가: DB Net Pension Liability → 부채로 포함 (차입금처럼 취급)</div>
+  <div class="card c-amber" style="margin-top:.6rem">
+    <div class="ct">⚠ Net Interest 계산 — 분모 함정</div>
+    <div class="fm">Net Interest = (Beginning PBO − Beginning Plan Assets) × discount rate
+              = Beginning Funded Status × discount rate</div>
+    <ul class="pts" style="margin-top:.4rem">
+      <li>PBO &gt; PA (underfunded) → <strong>Net Interest Expense</strong> (비용, NI 차감)</li>
+      <li>PBO &lt; PA (overfunded) → <strong>Net Interest Income</strong> (수익, NI 가산)</li>
+      <li class="warn">PBO에만 곱하면 오답! 반드시 순액(Funded Status)에 할인율 적용</li>
+    </ul>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">핵심 정리</div>
+  <div class="card c-red"><div class="ct">⚠ 자주 헷갈리는 것</div><ul class="pts"><li><strong>DC:</strong> Pension Exp = 기여액. BS 잔액 없음.</li><li><strong>DB:</strong> Pension Exp ≠ 기여액. Funded Status가 BS에 남음.</li><li><strong>DC "No Obligation"</strong> — 기여 후 회사 의무 끝</li><li>IFRS: Past Service Cost → IS 즉시 / GAAP: OCI</li></ul></div>
+</div>
+</div>
+
+<!-- share-based -->
+<div id="tab-sbc" class="tp">
+<div class="sec">
+  <div class="st">핵심 원칙 (IFRS·GAAP 공통)</div>
+  <div class="card c-blue"><div class="ct">Grant date에 FV 확정 → Vesting period 정액 IS 비용 인식</div><ul class="pts"><li>Grant date 이후 주가 변동 → 비용에 무관 (FV 고정)</li><li>비용 인식해도 Equity 총액 불변 (RE↓ = APIC↑ 상쇄)</li><li class="warn">Option은 '주가' 아님 → BSM/Binomial로 산출한 <strong>옵션 자체의 FV</strong> (당일 주가로 인식하면 오답)</li></ul></div>
+  <div class="g2" style="margin-top:.75rem">
+    <div class="card c-blue"><div class="ct">Stock Grants / RSU</div><ul class="pts"><li>주식 직접 부여</li><li>FV = Grant date 주가</li><li>Vesting period 정액 배분</li></ul></div>
+    <div class="card c-amber"><div class="ct">Stock Options</div><ul class="pts"><li>행사가격에 주식 살 권리</li><li>FV = BSM or Binomial 모델</li><li>Vesting period 정액 배분</li></ul></div>
+  </div>
+</div>
+<div class="sec">
+  <div class="mtx-legend">
+    <span><i style="background:var(--blue-t)"></i> 차변 Dr</span>
+    <span><i style="background:var(--red-t)"></i> 대변 Cr</span>
+  </div>
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-bl">Stock Grant / RSU (3년 Vesting)</div>
+  <div class="mtx">
+    <div class="mtx-hd corner"></div><div class="mtx-hd">분개 (IS+BS)</div><div class="mtx-hd">Equity</div><div class="mtx-hd">CF</div>
+
+    <div class="mtx-rl">매년<br>Vesting</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">Comp Exp</span><span class="mln m-mu">FV ÷ n</span></div><div class="cside"><span class="mln m-cr">APIC / Reserve</span><span class="mln m-mu">FV ÷ n</span></div></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-mu">RE ↓ · APIC ↑</span><span class="mln m-mu">→ 총액 불변</span></div></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-mu">— (비현금)</span></div></div>
+
+    <div class="mtx-rl last">Vesting<br>Date</div>
+    <div class="mtx-c last"><div class="tT split"><div class="dside"><span class="mln m-dr">APIC (Reserve)</span><span class="mln m-mu">누적 FV</span></div><div class="cside"><span class="mln m-cr">Common Stock (par)</span><span class="mln m-cr">APIC (FV−par)</span></div></div></div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-mu">재분류만</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
+  </div>
+  <div class="m-note">Reserve → Common Stock + APIC 재분류. Vesting date에 IS 추가 비용 없음.</div>
+  </div>
+</div>
+<div class="sec">
+  <div class="mtx-wrap">
+  <div class="mtx-cap t-am">Stock Options</div>
+  <div class="mtx">
+    <div class="mtx-hd corner"></div><div class="mtx-hd">분개 (IS+BS)</div><div class="mtx-hd">비고</div><div class="mtx-hd">CF</div>
+
+    <div class="mtx-rl">매년<br>Vesting</div>
+    <div class="mtx-c"><div class="tT split"><div class="dside"><span class="mln m-dr">Comp Exp</span><span class="mln m-mu">Opt FV ÷ n</span></div><div class="cside"><span class="mln m-cr">APIC</span><span class="mln m-mu">Opt FV ÷ n</span></div></div></div>
+    <div class="mtx-c"><div class="tT mid"><span class="mln m-mu">FV = BSM/Binomial</span><span class="mln m-mu">주가·행사가·만기·변동성·금리</span></div></div>
+    <div class="mtx-c cf"><div class="tT mid"><span class="mln m-mu">— (비현금)</span></div></div>
+
+    <div class="mtx-rl last">Exercise<br>Date</div>
+    <div class="mtx-c last"><div class="tT split"><div class="dside"><span class="mln m-dr">Cash ↑ (행사가)</span><span class="mln m-dr">APIC (누적 FV)</span></div><div class="cside"><span class="mln m-cr">Common Stock (par)</span><span class="mln m-cr">APIC (잔액)</span></div></div></div>
+    <div class="mtx-c last"><div class="tT mid"><span class="mln m-mu">만료 시 APIC 잔존</span><span class="mln m-mu">(반환 없음)</span></div></div>
+    <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-dr">CFF ↑</span><span class="mln m-mu">행사가</span></div></div>
+  </div>
+  <div class="m-note">Vesting 단계는 Stock Grant와 동일. Exercise 시에만 현금 유입(CFF). 옵션 만료해도 APIC 그대로.</div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">비교표</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>Stock Grant</th><th>Stock Option</th></tr></thead>
+      <tbody>
+        <tr><td>FV 측정</td><td>Grant date 주가</td><td>BSM / Binomial</td></tr>
+        <tr><td>IS 비용</td><td>FV ÷ service period (정액)</td><td>FV ÷ vesting period (정액)</td></tr>
+        <tr><td>Exercise 시 현금</td><td>없음</td><td>있음 (→ CFF)</td></tr>
+        <tr><td>희석 효과</td><td>신주 발행 → 희석</td><td>신주 발행 → 희석</td></tr>
+        <tr><td>Option 만료 시</td><td>—</td><td>APIC에 그대로 (반환 없음)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red" style="margin-top:.5rem">⚠ Grant date 후 주가 변동 → 비용 무관 &nbsp;|&nbsp; 비용 인식해도 Equity 총액 불변</div>
+</div>
+</div>
+
+<!-- keyword -->
+<div id="tab-keyword" class="tp">
+<div class="sec">
+  <div class="st">시험 키워드 → 바로 떠올릴 것</div>
+  <div class="kw-grid">
+    <div class="kw"><span class="kk">ROU asset is classified as...</span><span class="ka">→</span><span class="kv">Intangible asset ⭐ (PP&E 아님)</span></div>
+    <div class="kw"><span class="kk">ownership transfers</span><span class="ka">→</span><span class="kv">Finance Lease (기준 1)</span></div>
+    <div class="kw"><span class="kk">bargain purchase option / expected</span><span class="ka">→</span><span class="kv">Finance Lease (기준 2)</span></div>
+    <div class="kw"><span class="kk">75% of useful life</span><span class="ka">→</span><span class="kv">Finance Lease (기준 3)</span></div>
+    <div class="kw"><span class="kk">PV ≥ 90% of fair value</span><span class="ka">→</span><span class="kv">Finance Lease (기준 4)</span></div>
+    <div class="kw"><span class="kk">specialized / no other use</span><span class="ka">→</span><span class="kv">Finance Lease (기준 5)</span></div>
+    <div class="kw"><span class="kk">implicit interest rate</span><span class="ka">→</span><span class="kv">Lessor의 IRR (PV = 자산 FV)</span></div>
+    <div class="kw"><span class="kk">guaranteed residual value</span><span class="ka">→</span><span class="kv">Obsolescence risk → lessee 부담</span></div>
+    <div class="kw"><span class="kk">payments in arrears</span><span class="ka">→</span><span class="kv">CFA L1 기본 가정 (기말 지급)</span></div>
+    <div class="kw"><span class="kk">lessee higher EBIT</span><span class="ka">→</span><span class="kv">Finance (이자가 EBIT 아래)</span></div>
+    <div class="kw"><span class="kk">lessee higher CFO</span><span class="ka">→</span><span class="kv">Finance (원금→CFF)</span></div>
+    <div class="kw"><span class="kk">higher CFF outflow (lessee)</span><span class="ka">→</span><span class="kv">Finance (Operating은 전액 CFO)</span></div>
+    <div class="kw"><span class="kk">early years higher expense</span><span class="ka">→</span><span class="kv">Finance (Int+Amort 합계 큼)</span></div>
+    <div class="kw"><span class="kk">ROU = Lease Liability each period</span><span class="ka">→</span><span class="kv">GAAP Operating Lease</span></div>
+    <div class="kw"><span class="kk">ROU straight-line amortization</span><span class="ka">→</span><span class="kv">Finance Lease</span></div>
+    <div class="kw"><span class="kk">single lease expense on IS</span><span class="ka">→</span><span class="kv">GAAP Operating Lease</span></div>
+    <div class="kw"><span class="kk">interest + amortization separately</span><span class="ka">→</span><span class="kv">Finance Lease</span></div>
+    <div class="kw"><span class="kk">lessor removes asset from BS</span><span class="ka">→</span><span class="kv">Finance Lease (Lessor)</span></div>
+    <div class="kw"><span class="kk">lessor keeps + depreciates</span><span class="ka">→</span><span class="kv">Operating Lease (Lessor)</span></div>
+    <div class="kw"><span class="kk">manufacturer / dealer lessor</span><span class="ka">→</span><span class="kv">Sales-type → GP at inception</span></div>
+    <div class="kw"><span class="kk">financing company lessor</span><span class="ka">→</span><span class="kv">Direct financing → G/L 이연</span></div>
+    <div class="kw"><span class="kk">IFRS interest payment CF</span><span class="ka">→</span><span class="kv">CFO or CFF 선택 가능</span></div>
+    <div class="kw"><span class="kk">short-term &lt;12 months</span><span class="ka">→</span><span class="kv">Rent Expense (IFRS/GAAP 모두)</span></div>
+    <div class="kw"><span class="kk">low-value ≤$5,000</span><span class="ka">→</span><span class="kv">IFRS만 예외</span></div>
+    <div class="kw"><span class="kk">DC — no obligation</span><span class="ka">→</span><span class="kv">기여 후 끝. BS 잔액 없음.</span></div>
+    <div class="kw"><span class="kk">DB — funded status</span><span class="ka">→</span><span class="kv">P/A − PBO (양수=자산, 음수=부채)</span></div>
+    <div class="kw"><span class="kk">IFRS past service cost</span><span class="ka">→</span><span class="kv">IS 즉시 (GAAP: OCI→상각)</span></div>
+    <div class="kw"><span class="kk">actuarial G/L — IFRS</span><span class="ka">→</span><span class="kv">OCI 영구 (재분류 없음)</span></div>
+    <div class="kw"><span class="kk">stock option FV after grant date</span><span class="ka">→</span><span class="kv">주가 변동 무관, FV 고정</span></div>
+    <div class="kw"><span class="kk">SBC equity total impact</span><span class="ka">→</span><span class="kv">불변 (RE↓ = APIC↑)</span></div>
+    <div class="kw"><span class="kk">option expires unexercised</span><span class="ka">→</span><span class="kv">APIC에 그대로 남음 (반환X)</span></div>
+  </div>
+</div>
+<div class="sec">
+  <div class="st">시험 함정 Top Picks</div>
+  <div class="g2">
+    <div class="card c-red"><div class="ct">계산 함정</div><ul class="pts"><li>Finance EBIT <strong>Higher</strong> (이자가 EBIT 아래)</li><li>Finance CFO <strong>Higher</strong> (원금이 CFF)</li><li>L/O 잔액: Finance/Operating <strong>완전 동일</strong></li><li>총 비용: Finance/Operating <strong>동일</strong></li><li>Lessor CFO: Finance/Operating <strong>모두 전액 CFO</strong></li><li>Sales-type Year 1 IS = GP + 이자 합산</li></ul></div>
+    <div class="card c-amber"><div class="ct">개념 함정</div><ul class="pts"><li><strong>ROU = Intangible</strong> (PP&amp;E 아님) ⭐</li><li>GAAP Operating도 BS에 ROU+Liab 인식 (현행)</li><li>GAAP Operating ROU = Liab (정액상각 아님)</li><li>IFRS: Operating 자체가 없음</li><li>Guaranteed residual → 위험 lessee로 이전</li><li>DB: Pension Exp ≠ 기여액</li><li>SBC: Grant date 후 주가 변동 → 비용 무관</li></ul></div>
+  </div>
+</div>
+</div>
+
+<!-- quiz -->
+<div id="tab-quiz" class="tp">
+<div class="sec">
+  <div class="st">LOS 34 — Quiz</div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q1</span>Lessee (GAAP). 초기 IS 비용이 더 큰 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. Finance Lease</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. Operating Lease</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 동일</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>Finance 초기: Int(크다)+Amort = 합계 큼. Operating: Lease Exp = payment (매년 동일). 총합은 같음.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q2</span>Lessee (GAAP). CFO가 더 높은 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. Finance Lease</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. Operating Lease</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 동일</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>Finance: 원금→CFF, 이자→CFO. Operating: 전액 CFO. Finance CFO &gt; Operating CFO.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q3</span>Sales-type Finance Lease (Lessor). 연 10,000×4년, r=5%, BV=30,000, 잔존=2,000. Year 1 IS 총인식액?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 3,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 7,105</button>
+      <button class="opt" onclick="ans(this,'correct')">C. 8,960</button>
+      <button class="opt" onclick="ans(this,'wrong')">D. 10,000</button>
+    </div>
+    <div class="qe"><strong>정답: C</strong><br>GP = 35,460−(30,000−1,645) = 7,105<br>Int Year1 = 37,105×5% = 1,855<br>Year1 IS = 7,105 + 1,855 = <strong>8,960</strong></div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q4</span>DB연금, IFRS. OCI로만 인식되는 항목은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. Service Cost</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. Past Service Cost</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Net Interest</button>
+      <button class="opt" onclick="ans(this,'correct')">D. 재측정 (Actuarial G/L + 실제 vs 기대수익 차이)</button>
+    </div>
+    <div class="qe"><strong>정답: D</strong><br>IFRS IS = Service Cost + Past Service Cost + Net Interest<br>OCI = Remeasurements만 (영구, 재분류 없음)<br>GAAP: Past Service Cost + Actuarial G/L → OCI</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q5</span>Stock option: FV=$3, vesting 3년, 1,000주. 매년 IS 비용?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. $3,000 즉시</button>
+      <button class="opt" onclick="ans(this,'correct')">B. $1,000/year</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Vesting date에 $3,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">D. Exercise date 주가−행사가</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>총 비용 = $3×1,000 = $3,000. 3년 정액 = $1,000/year.<br>Grant date 이후 주가 변동 → 비용 무관 (FV 고정).</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q6</span>ROU Asset의 재무제표 분류는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. PP&amp;E</button>
+      <button class="opt" onclick="ans(this,'correct')">B. Intangible Asset</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Financial Asset</button>
+      <button class="opt" onclick="ans(this,'wrong')">D. Investment Property</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>ROU Asset = Intangible Asset. PP&E 아님. 최빈 함정.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q7</span>DC형 vs DB형. 기여 $500 후 BS에 남는 잔액 차이는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 둘 다 없음</button>
+      <button class="opt" onclick="ans(this,'correct')">B. DC는 없고, DB는 Funded Status만큼 남음</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 둘 다 $500 부채</button>
+      <button class="opt" onclick="ans(this,'wrong')">D. DC는 부채, DB는 자산</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>DC: 기여 후 끝. BS 잔액 없음.<br>DB: Funded Status (P/A−PBO)가 BS에 남음. 기여액과 무관.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q8</span>다음 중 IFRS에서만 해당되는 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 단기 리스(≤12개월) → Rent Expense</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 저가치 리스(≤$5,000) → Rent Expense</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Finance Lease lessee → ROU + Lease Liab</button>
+      <button class="opt" onclick="ans(this,'wrong')">D. Sales-type Finance Lease → GP at inception</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>저가치(≤$5,000) 예외는 IFRS만. GAAP에는 없음.<br>단기(≤12개월) 예외는 IFRS/GAAP 모두 적용.</div>
+  </div>
+
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>
