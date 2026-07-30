@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | R30-31 — Statements of Cash Flows</title>
+<style>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — Cash Flow 완전 정리</h1>
+  <p>CFA Level 1 · Reading 30–31 · 직접·간접법 · IFRS vs GAAP · FCFF/FCFE · 슈웨이저 2025 검증</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('str',this)">구조 &amp; 분류</button>
+  <button class="nb" onclick="show('ifrs',this)">IFRS vs GAAP</button>
+  <button class="nb" onclick="show('direct',this)">직접법</button>
+  <button class="nb" onclick="show('indirect',this)">간접법</button>
+  <button class="nb" onclick="show('cfi',this)">CFI &amp; CFF</button>
+  <button class="nb" onclick="show('fcf',this)">FCFF · FCFE</button>
+  <button class="nb" onclick="show('anal',this)">CF 분석</button>
+  <button class="nb" onclick="show('keyword',this)">키워드</button>
+  <button class="nb" onclick="show('quiz',this)">Quiz</button>
+</div>
+
+<!-- ===================== 구조 ===================== -->
+<div id="tab-str" class="tp active">
+<div class="sec">
+  <div class="st">세 가지 활동 구분</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구분</th><th>내용</th><th>연결되는 BS 항목</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CFO</strong> (영업)</td><td>본업에서 발생하는 현금 — 매출·매입·급여·이자·세금</td><td>유동자산 / 유동부채</td></tr>
+        <tr><td><strong>CFI</strong> (투자)</td><td>장기자산 취득·처분, 투자자산 매매</td><td>비유동자산 (PP&amp;E, 투자)</td></tr>
+        <tr><td><strong>CFF</strong> (재무)</td><td>자본조달·상환 — 차입, 사채, 증자, 자사주, 배당지급</td><td>비유동부채 / 자본</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ CFO + CFI + CFF = <strong>현금의 순증감</strong> = 기말 Cash − 기초 Cash</div>
+</div>
+
+<div class="sec">
+  <div class="st">부호 규칙 ★ — 간접법의 뼈대</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">영업 관련 자산 (AR, 재고, 선급)</div><ul class="pts">
+      <li>자산 <strong>증가</strong> → 현금 <strong>유출</strong> (−)</li>
+      <li>자산 <strong>감소</strong> → 현금 <strong>유입</strong> (+)</li>
+      <li><strong>반대 방향</strong>으로 움직인다</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">영업 관련 부채 (AP, 미지급, 선수)</div><ul class="pts">
+      <li>부채 <strong>증가</strong> → 현금 <strong>유입</strong> (+)</li>
+      <li>부채 <strong>감소</strong> → 현금 <strong>유출</strong> (−)</li>
+      <li><strong>같은 방향</strong>으로 움직인다</li>
+    </ul></div>
+  </div>
+  <div class="tn">외울 것: <strong>자산은 반대, 부채는 그대로.</strong> 재고가 줄었다 = 팔았다 = 현금 들어옴(+).</div>
+</div>
+
+<div class="sec">
+  <div class="st">비현금거래 (Non-Cash Transactions)</div>
+  <ul class="pts">
+    <li>현금이 오가지 않는 거래 → <strong>현금흐름표에 표시 안 함</strong></li>
+    <li>다만 중요하면 <strong>주석에 공시</strong></li>
+    <li>예: 현물출자, 출자전환(debt-equity swap), 전환사채의 주식 전환, 리스로 자산 취득, 주식배당</li>
+  </ul>
+  <div class="kp-red">⚠ "비현금거래는 CF에 영향 없다"는 말문제 단골 — 하지만 <strong>공시는 필요</strong>하다는 점도 같이 나온다</div>
+</div>
+
+<div class="sec">
+  <div class="st">직접법 vs 간접법</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>직접법 (Direct)</th><th>간접법 (Indirect)</th></tr></thead>
+      <tbody>
+        <tr><td>방식</td><td>현금 유입·유출 항목을 직접 나열</td><td>NI에서 출발해 조정</td></tr>
+        <tr><td>적용 범위</td><td class="na">CFO만 다름</td><td class="na">CFO만 다름</td></tr>
+        <tr><td>CFI · CFF</td><td colspan="2" class="up">두 방법 <strong>동일</strong></td></tr>
+        <tr><td>CFO 결과값</td><td colspan="2" class="up">두 방법 <strong>동일</strong></td></tr>
+        <tr><td>기준서 선호</td><td class="up">IFRS·GAAP 모두 <strong>권장</strong></td><td>실무에서 대부분 사용</td></tr>
+        <tr><td>장점</td><td>현금 원천별 정보 풍부 → 예측 유용</td><td>NI와 CFO 차이(발생액) 파악 용이</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">GAAP은 직접법 사용 시 간접법 조정표를 주석에 함께 공시하도록 요구 → 실무는 대부분 간접법.</div>
+</div>
+</div>
+
+<!-- ===================== IFRS vs GAAP ===================== -->
+<div id="tab-ifrs" class="tp">
+<div class="sec">
+  <div class="st">이자·배당·세금 분류 ★★ — 최빈 출제</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>U.S. GAAP</th><th>IFRS</th></tr></thead>
+      <tbody>
+        <tr><td><strong>이자 수취</strong> (Interest received)</td><td class="up">CFO</td><td>CFO <em>or</em> CFI</td></tr>
+        <tr><td><strong>배당 수취</strong> (Dividends received)</td><td class="up">CFO</td><td>CFO <em>or</em> CFI</td></tr>
+        <tr><td><strong>이자 지급</strong> (Interest paid)</td><td class="up">CFO</td><td>CFO <em>or</em> CFF</td></tr>
+        <tr><td><strong>배당 지급</strong> (Dividends paid)</td><td class="na">CFF</td><td>CFO <em>or</em> CFF</td></tr>
+        <tr><td><strong>법인세 납부</strong> (Taxes paid)</td><td class="up">CFO (전액)</td><td>원칙 CFO, 단 투자·재무 거래에 귀속되면 해당 구분</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 암기 축: <strong>GAAP은 배당 지급만 CFF, 나머지 다 CFO.</strong> IFRS는 전부 선택 가능(단 수취=CFO/CFI, 지급=CFO/CFF)</div>
+  <div class="kp-red">⚠ 배당 <strong>수취</strong>(CFO)와 배당 <strong>지급</strong>(CFF)을 바꿔놓는 문제가 자주 나온다 — GAAP 기준</div>
+</div>
+
+<div class="sec">
+  <div class="st">세금 분류 예시 (IFRS 차이)</div>
+  <div class="card c-amber">
+    <div class="ct">투자 목적 토지를 $1,000,000에 매각, 관련 세금 $160,000</div>
+    <ul class="pts">
+      <li><strong>U.S. GAAP</strong>: CFI 유입 $1,000,000 / CFO 유출 $160,000 (세금은 무조건 CFO)</li>
+      <li><strong>IFRS</strong>: CFI 순유입 $840,000 으로 보고 가능 (투자거래에 귀속)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">기타 분류 주의</div>
+  <ul class="pts">
+    <li><strong>자기주식 매입·처분</strong> → CFF</li>
+    <li><strong>단기매매증권(FVPL)</strong> 매매 → CFO <em>(영업 목적 보유)</em></li>
+    <li><strong>투자목적 증권</strong> 매매 → CFI</li>
+    <li><strong>사채 발행/상환</strong> → CFF (발행가 기준, 이자는 별도)</li>
+    <li>은행 <strong>당좌차월</strong>은 IFRS에서 현금성자산 차감으로 볼 수 있음</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 직접법 ===================== -->
+<div id="tab-direct" class="tp">
+<div class="sec">
+  <div class="st">직접법 CFO — 항목별 공식 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>공식</th></tr></thead>
+      <tbody>
+        <tr><td>고객으로부터 수취</td><td>Sales − ΔAR <em>(+선수금 증가)</em></td></tr>
+        <tr><td>공급자에게 지급</td><td>− COGS − Δ재고 + ΔAP</td></tr>
+        <tr><td>종업원에게 지급</td><td>− 급여비용 + Δ미지급급여</td></tr>
+        <tr><td>이자 지급</td><td>− 이자비용 + Δ미지급이자</td></tr>
+        <tr><td>법인세 납부</td><td>− 법인세비용 + Δ미지급법인세 + ΔDTL</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">부호 규칙 그대로: 자산(AR·재고)은 반대, 부채(AP·미지급)는 그대로.</div>
+</div>
+
+<div class="sec">
+  <div class="st">슈웨이저 통합 예제 — 자료</div>
+  <div class="card c-blue">
+    <div class="ct">20X7 Income Statement</div>
+    <div class="fm">Sales                          100,000
+COGS                           (40,000)
+Wages                           (5,000)
+Depreciation                    (7,000)
+Interest                        (1,000)
+Income from continuing ops      47,000
+Gain from sale of land          10,000
+Pretax income                   57,000
+Provision for taxes            (20,000)
+Net income                      37,000
+Common dividends declared        8,500</div>
+  </div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>Balance Sheet</th><th>20X7</th><th>20X6</th><th>Δ</th></tr></thead>
+      <tbody>
+        <tr><td>Cash</td><td>33,000</td><td>9,500</td><td class="up">+23,500</td></tr>
+        <tr><td>Accounts receivable</td><td>10,000</td><td>9,000</td><td>+1,000</td></tr>
+        <tr><td>Inventory</td><td>5,000</td><td>7,000</td><td>−2,000</td></tr>
+        <tr><td>Land</td><td>35,000</td><td>40,000</td><td>−5,000</td></tr>
+        <tr><td>Gross PP&amp;E</td><td>85,000</td><td>60,000</td><td>+25,000</td></tr>
+        <tr><td>Accumulated depreciation</td><td>(16,000)</td><td>(9,000)</td><td>+7,000</td></tr>
+        <tr><td>Goodwill</td><td>10,000</td><td>10,000</td><td>0</td></tr>
+        <tr><td>Accounts payable</td><td>9,000</td><td>5,000</td><td>+4,000</td></tr>
+        <tr><td>Wages payable</td><td>4,500</td><td>8,000</td><td>−3,500</td></tr>
+        <tr><td>Interest payable</td><td>3,500</td><td>3,000</td><td>+500</td></tr>
+        <tr><td>Taxes payable</td><td>5,000</td><td>4,000</td><td>+1,000</td></tr>
+        <tr><td>Dividends payable</td><td>6,000</td><td>1,000</td><td>+5,000</td></tr>
+        <tr><td>Bonds</td><td>15,000</td><td>10,000</td><td>+5,000</td></tr>
+        <tr><td>Deferred tax liability</td><td>20,000</td><td>15,000</td><td>+5,000</td></tr>
+        <tr><td>Common stock</td><td>40,000</td><td>50,000</td><td>−10,000</td></tr>
+        <tr><td>Retained earnings</td><td>59,000</td><td>30,500</td><td>+28,500</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">직접법 CFO 풀이</div>
+  <div class="fm">1) 고객 수취    = 100,000 − 1,000 (AR↑)                    =  99,000
+2) 공급자 지급  = (40,000) + 2,000 (재고↓) + 4,000 (AP↑)     = (34,000)
+3) 급여 지급    = (5,000) − 3,500 (미지급급여↓)              =  (8,500)
+4) 이자 지급    = (1,000) + 500 (미지급이자↑)                =    (500)
+5) 세금 납부    = (20,000) + 1,000 (미지급세금↑) + 5,000 (DTL↑) = (14,000)
+                                                    CFO =  42,000</div>
+  <ul class="pts">
+    <li><strong>감가상각비는 등장하지 않음</strong> — 현금 유출이 아니므로 직접법에선 아예 제외</li>
+    <li><strong>토지처분이익도 제외</strong> — 영업이 아니라 투자활동</li>
+    <li class="warn">DTL 증가 = 세금을 덜 낸 것 → 현금 유입(+)</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 간접법 ===================== -->
+<div id="tab-indirect" class="tp">
+<div class="sec">
+  <div class="st">간접법 3단계 ★</div>
+  <div class="fm">CFO = Net Income
+    + 비현금비용 (감가상각, 무형자산상각, 손상차손)
+    ± 투자·재무 관련 손익 제거 (처분이익 −, 처분손실 +)
+    ± 영업관련 자산·부채 증감 (자산은 반대, 부채는 그대로)</div>
+  <div class="kp-blue">⭐ 순서: ① NI에서 시작 → ② 비현금·비영업 항목 걸러내기 → ③ 운전자본 증감 반영</div>
+</div>
+
+<div class="sec">
+  <div class="st">간접법 CFO 풀이 (위 예제 동일 자료)</div>
+  <div class="fm">Net income                              37,000
+  + Depreciation (비현금)                 7,000
+  − Gain from sale of land (투자활동)   (10,000)
+  − AR 증가                              (1,000)
+  + 재고 감소                              2,000
+  + AP 증가                                4,000
+  − 미지급급여 감소                       (3,500)
+  + 미지급이자 증가                          500
+  + 미지급세금 증가                        1,000
+  + DTL 증가                               5,000
+                                CFO =    42,000</div>
+  <div class="kp-green">✓ 직접법 결과(42,000)와 <strong>정확히 일치</strong> — 방법만 다르고 값은 같다</div>
+</div>
+
+<div class="sec">
+  <div class="st">간접법 → 직접법 전환</div>
+  <ul class="pts">
+    <li>IS의 각 수익·비용 항목에 <strong>대응되는 BS 계정의 증감</strong>을 붙여 현금 기준으로 환산</li>
+    <li>Sales → ±ΔAR = 고객 수취액</li>
+    <li>COGS → ±Δ재고, ±ΔAP = 공급자 지급액</li>
+    <li>비현금 항목(감가상각)은 <strong>어디에도 배정하지 않고 제거</strong></li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="sec">
+  <div class="st">풀이 절차 — 간접법 CFO</div>
+  <div class="card c-blue">
+    <div class="dm" style="margin-bottom:.3rem"><strong>신호</strong>: net income이 주어짐 · BS 두 기간 비교 · depreciation / gain on sale 언급</div>
+    <ul class="pts">
+      <li>① <strong>NI</strong>에서 출발</li>
+      <li>② <strong>비현금 비용</strong> 가산 — 감가상각·상각·손상·주식보상</li>
+      <li>③ <strong>비영업 손익 제거</strong> — 처분<strong>이익 차감</strong> / 처분<strong>손실 가산</strong></li>
+      <li>④ <strong>영업 자산</strong> 증감 — 증가는 차감, 감소는 가산 <span class="dn">(반대)</span></li>
+      <li>⑤ <strong>영업 부채</strong> 증감 — 증가는 가산, 감소는 차감 <span class="dn">(그대로)</span></li>
+      <li class="warn">DTL 증가는 ⑤에 포함 — 실제로 안 낸 세금이므로 가산</li>
+      <li>⑥ 검산: CFO + CFI + CFF = 기말현금 − 기초현금</li>
+    </ul>
+  </div>
+</div>
+
+<div class="st">자주 틀리는 조정 항목</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>간접법 조정</th><th>이유</th></tr></thead>
+      <tbody>
+        <tr><td>감가상각비·상각비</td><td class="up">+ 가산</td><td>비현금 비용</td></tr>
+        <tr><td>유형자산 <strong>처분이익</strong></td><td class="na">− 차감</td><td>NI에 포함됐지만 <strong>CFI</strong> 항목</td></tr>
+        <tr><td>유형자산 <strong>처분손실</strong></td><td class="up">+ 가산</td><td>동일 논리 (역방향)</td></tr>
+        <tr><td>손상차손 (Impairment)</td><td class="up">+ 가산</td><td>비현금 비용</td></tr>
+        <tr><td>DTL 증가</td><td class="up">+ 가산</td><td>실제 납부 안 한 세금</td></tr>
+        <tr><td>주식보상비용 (SBC)</td><td class="up">+ 가산</td><td>비현금 비용</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 처분<strong>이익</strong>을 차감하는 이유: 매각 대금 <strong>전액</strong>이 이미 CFI에 들어가므로, NI에 남아 있으면 이중계상된다</div>
+</div>
+</div>
+
+<!-- ===================== CFI & CFF ===================== -->
+<div id="tab-cfi" class="tp">
+<div class="sec">
+  <div class="st">CFI 계산 — 위 예제</div>
+  <div class="card c-blue">
+    <div class="ct">① 토지 매각 대금</div>
+    <div class="fm">장부가 감소 5,000 (Land 40,000 → 35,000)
++ 처분이익 10,000
+= 매각 대금 15,000  (CFI 유입)</div>
+  </div>
+  <div class="card c-amber" style="margin-top:.6rem">
+    <div class="ct">② PP&amp;E 취득</div>
+    <div class="fm">Gross PP&E 60,000 → 85,000  →  취득 25,000 (CFI 유출)
+
+검증: 감가상각누계액 9,000 → 16,000 = +7,000
+      IS의 감가상각비 7,000과 일치  →  처분한 PP&E 없음</div>
+  </div>
+  <div class="fm" style="margin-top:.6rem">CFI = 15,000 − 25,000 = (10,000)</div>
+  <div class="kp-blue">⭐ 감가상각누계액 증가액 = IS 감가상각비 → <strong>PP&amp;E 처분 없음</strong>을 확인하는 기법. 불일치하면 처분이 있었다는 뜻.</div>
+</div>
+
+<div class="sec">
+  <div class="st">CFF 계산 — 위 예제</div>
+  <div class="fm">① 사채 발행     Bonds 10,000 → 15,000        =  +5,000
+② 배당 지급     선언 8,500, 미지급배당 1,000→6,000
+                실제 지급 = 8,500 − 5,000       =  (3,500)
+③ 자본 감소     Common stock 50,000 → 40,000    = (10,000)
+                                          CFF = (8,500)</div>
+  <div class="card c-purple" style="margin-top:.6rem"><div class="ct">배당 지급액 2단계 공식 ★</div>
+    <div class="fm">배당 지급액 = 선언 배당 − Δ미지급배당
+선언 배당   = 기초 RE + NI − 기말 RE</div>
+    <div class="tn">검증: 30,500 + 37,000 − 59,000 = 8,500 ✓</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">전체 검증</div>
+  <div class="fm">CFO 42,000 + CFI (10,000) + CFF (8,500) = 23,500
+Cash 증감 = 33,000 − 9,500 = 23,500  ✓</div>
+  <div class="kp-green">✓ 세 활동의 합이 현금 증감과 일치해야 한다 — 계산 문제에서 <strong>검산 도구</strong>로 활용</div>
+</div>
+</div>
+
+<!-- ===================== FCF ===================== -->
+<div id="tab-fcf" class="tp">
+<div class="sec">
+  <div class="st">FCFF (Free Cash Flow to the Firm)</div>
+  <div class="kp-blue">채권자 + 주주 <strong>모두에게</strong> 귀속되는 현금 — 자본구조와 무관</div>
+  <div class="fm">FCFF = CFO + Interest × (1 − tax rate) − FCInv
+
+FCFF = NI + NCC + Interest × (1 − tax rate) − FCInv − WCInv</div>
+  <ul class="pts">
+    <li><strong>NCC</strong> = non-cash charges (감가상각·상각)</li>
+    <li><strong>FCInv</strong> = 고정자산 투자 (CapEx)</li>
+    <li><strong>WCInv</strong> = 운전자본 투자</li>
+    <li class="warn">이자를 다시 더하는 이유: CFO에서 이미 차감됐지만 FCFF는 <strong>채권자 몫도 포함</strong>하므로 (세후로) 복원</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">FCFE (Free Cash Flow to Equity)</div>
+  <div class="kp-blue">주주에게만 귀속되는 현금 — 채권자 몫 제외 후</div>
+  <div class="fm">FCFE = CFO − FCInv + Net Borrowing
+
+Net Borrowing = 차입·사채 발행 − 상환</div>
+  <ul class="pts">
+    <li>이자를 더하지 않음 — 이미 채권자에게 지급된 몫</li>
+    <li>순차입이 (+)면 주주에게 남는 현금이 늘어남</li>
+  </ul>
+  <div class="tn">IFRS에서 이자 지급을 CFF로 분류했다면 CFO 출발값이 달라지므로 조정 필요.</div>
+</div>
+
+<div class="sec">
+  <div class="st">두 지표 비교</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>FCFF</th><th>FCFE</th></tr></thead>
+      <tbody>
+        <tr><td>귀속 대상</td><td>채권자 + 주주</td><td>주주만</td></tr>
+        <tr><td>이자 처리</td><td class="up">세후 이자 <strong>가산</strong></td><td class="na">가산 안 함</td></tr>
+        <tr><td>차입 반영</td><td>반영 안 함</td><td class="up">Net Borrowing <strong>가산</strong></td></tr>
+        <tr><td>할인율</td><td>WACC</td><td>Cost of Equity</td></tr>
+        <tr><td>평가 결과</td><td>기업가치 (Firm Value)</td><td>자기자본가치 (Equity Value)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 분석 ===================== -->
+<div id="tab-anal" class="tp">
+<div class="sec">
+  <div class="st">Life Cycle 패턴 ★ — 말문제 단골</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>Start-up</th><th>Growth</th><th>Mature</th><th>Decline</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CFO</strong></td><td class="na">(−)</td><td class="up">(+)</td><td class="up">(+) 최대</td><td>(+) 감소</td></tr>
+        <tr><td><strong>CFI</strong></td><td class="na">(−)</td><td class="na">(−)</td><td class="na">(−) 축소</td><td class="up">(+) 자산 매각</td></tr>
+        <tr><td><strong>CFF</strong></td><td class="up">(+) 투자 유치</td><td class="up">(+)</td><td class="na">(−) 상환·배당</td><td class="na">(−)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 건전한 성숙기업: <strong>CFO (+) 크게, CFI (−), CFF (−)</strong> — 벌어서 투자하고 갚는 구조</div>
+</div>
+
+<div class="sec">
+  <div class="st">CFO의 질(Quality) 평가</div>
+  <div class="card c-red"><div class="ct">⚠ 경고 신호</div><ul class="pts">
+    <li class="warn">CFO 증가의 원인이 <strong>운전자본 감소</strong>(재고·매출채권 압축, 매입채무 지연)라면 <strong>지속 불가능</strong></li>
+    <li class="warn">NI ≫ CFO 상태가 지속되면 <strong>공격적 매출 인식</strong> 가능성 (발생액 과다)</li>
+    <li class="warn">CFO가 CapEx를 못 덮으면 외부자금 의존 → 재무 취약</li>
+    <li>매출채권 회전일수 급증 + CFO 정체 → 채널스터핑 의심</li>
+  </ul></div>
+  <div class="tn">여신심사 관점: CFO/총부채, CFO/이자 를 EBITDA 지표와 <strong>교차 검증</strong>하면 회계적 착시를 걸러낼 수 있다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">Common-Size Cash Flow</div>
+  <div class="kp-blue">기준 = <strong>Sales Revenue</strong> (IS와 동일, BS는 Total Asset)</div>
+  <div class="tn">또는 각 유입·유출 항목을 총유입/총유출 대비 %로 표시하는 방식도 사용.</div>
+</div>
+
+<div class="sec">
+  <div class="st">CF 비율 — NI·EBIT를 CFO로 바꾸면 끝 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>비율</th><th>공식</th><th>대응 개념</th></tr></thead>
+      <tbody>
+        <tr><td>Cash Flow to Revenue</td><td>CFO ÷ Revenue</td><td>Net Profit Margin</td></tr>
+        <tr><td>Cash Return on Assets</td><td>CFO ÷ 평균 총자산</td><td>ROA</td></tr>
+        <tr><td>Cash Return on Equity</td><td>CFO ÷ 평균 자기자본</td><td>ROE</td></tr>
+        <tr><td>Cash to Income</td><td>CFO ÷ 영업이익</td><td>이익의 현금화 정도</td></tr>
+        <tr><td>Cash Flow per Share</td><td>(CFO − 우선주배당) ÷ WASO</td><td>EPS</td></tr>
+        <tr><td>Debt Coverage</td><td>CFO ÷ 총부채</td><td>상환능력</td></tr>
+        <tr><td>Interest Coverage</td><td>(CFO + 이자지급 + 세금지급) ÷ 이자지급</td><td>이자보상배율</td></tr>
+        <tr><td>Reinvestment</td><td>CFO ÷ 장기자산 취득 현금</td><td>재투자 여력</td></tr>
+        <tr><td>Dividend Payment</td><td>CFO ÷ 배당 지급</td><td>배당 지속성</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">이자보상배율에서 이자·세금을 <strong>다시 더하는</strong> 이유: CFO 계산 시 이미 차감됐기 때문(GAAP 기준).</div>
+</div>
+</div>
+
+<!-- ===================== 키워드 ===================== -->
+<div id="tab-keyword" class="tp">
+<div class="sec">
+  <div class="st">시험 키워드 → 바로 떠올릴 것</div>
+  <div class="kw-grid">
+    <div class="kw"><span class="kk">dividends paid (U.S. GAAP)</span><span class="ka">→</span><span class="kv">CFF ⭐</span></div>
+    <div class="kw"><span class="kk">dividends received (U.S. GAAP)</span><span class="ka">→</span><span class="kv">CFO</span></div>
+    <div class="kw"><span class="kk">interest paid (U.S. GAAP)</span><span class="ka">→</span><span class="kv">CFO</span></div>
+    <div class="kw"><span class="kk">interest paid (IFRS)</span><span class="ka">→</span><span class="kv">CFO or CFF</span></div>
+    <div class="kw"><span class="kk">taxes paid (U.S. GAAP)</span><span class="ka">→</span><span class="kv">전액 CFO</span></div>
+    <div class="kw"><span class="kk">issuing bonds</span><span class="ka">→</span><span class="kv">CFF</span></div>
+    <div class="kw"><span class="kk">sale of land / division</span><span class="ka">→</span><span class="kv">CFI</span></div>
+    <div class="kw"><span class="kk">increase in depreciation</span><span class="ka">→</span><span class="kv">CFI 영향 없음 (비현금)</span></div>
+    <div class="kw"><span class="kk">gain on sale of asset (간접법)</span><span class="ka">→</span><span class="kv">CFO에서 차감 ⭐</span></div>
+    <div class="kw"><span class="kk">inventory decreased</span><span class="ka">→</span><span class="kv">CFO 가산 (+)</span></div>
+    <div class="kw"><span class="kk">accounts payable increased</span><span class="ka">→</span><span class="kv">CFO 가산 (+)</span></div>
+    <div class="kw"><span class="kk">accounts receivable increased</span><span class="ka">→</span><span class="kv">CFO 차감 (−)</span></div>
+    <div class="kw"><span class="kk">non-cash transaction</span><span class="ka">→</span><span class="kv">CF 표시 X, 주석 공시 O</span></div>
+    <div class="kw"><span class="kk">direct vs indirect</span><span class="ka">→</span><span class="kv">CFO 금액 동일, CFI·CFF 동일</span></div>
+    <div class="kw"><span class="kk">FCFF from CFO</span><span class="ka">→</span><span class="kv">CFO + Int(1−t) − FCInv</span></div>
+    <div class="kw"><span class="kk">FCFE from CFO</span><span class="ka">→</span><span class="kv">CFO − FCInv + Net Borrowing</span></div>
+    <div class="kw"><span class="kk">common-size cash flow</span><span class="ka">→</span><span class="kv">기준 = Revenue</span></div>
+    <div class="kw"><span class="kk">CFO 증가가 WC 감소 때문</span><span class="ka">→</span><span class="kv">지속 불가능 (품질 낮음)</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">시험 함정 Top Picks</div>
+  <div class="card c-red"><div class="ct">⚠ 자주 틀리는 것</div><ul class="pts">
+    <li class="warn">GAAP: 배당 <strong>지급</strong>만 CFF — 이자 지급은 <strong>CFO</strong></li>
+    <li class="warn">간접법에서 처분<strong>이익</strong>은 <strong>차감</strong> (대금 전액이 CFI에 있으므로)</li>
+    <li class="warn">감가상각비 증가는 CFI가 아니라 <strong>CFO 조정</strong> 항목 (비현금)</li>
+    <li class="warn">직접법·간접법은 <strong>CFO만</strong> 다르고 금액은 동일</li>
+    <li class="warn">비현금거래는 CF에 안 나오지만 <strong>주석 공시 대상</strong></li>
+    <li class="warn">FCFF에는 세후 이자를 더하지만 FCFE에는 <strong>더하지 않음</strong></li>
+  </ul></div>
+</div>
+</div>
+
+<!-- ===================== Quiz ===================== -->
+<div id="tab-quiz" class="tp">
+<div class="sec">
+  <div class="st">Reading 30–31 — Quiz</div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q1</span>U.S. GAAP에서 재무활동 현금흐름(CFF)으로 분류되지 <strong>않는</strong> 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 사채 발행 대금 수취</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 배당금 지급</button>
+      <button class="opt" onclick="ans(this,'correct')">C. 차입금 이자 지급</button>
+    </div>
+    <div class="qe"><strong>정답: C</strong><br>U.S. GAAP에서 <strong>이자 지급은 CFO</strong>. 배당 지급만 CFF. IFRS라면 이자 지급을 CFO 또는 CFF로 선택 가능.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q2</span>간접법으로 CFO를 구할 때 유형자산 처분이익의 처리는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 가산한다</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 차감한다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 조정하지 않는다</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>처분이익은 NI에 포함돼 있으나 매각 대금 <strong>전액이 CFI</strong>에 계상되므로, CFO에서 빼지 않으면 이중계상된다. 처분<strong>손실</strong>은 반대로 가산.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q3</span>감가상각비가 증가하면 투자활동 현금흐름(CFI)은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 감소한다</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 증가한다</button>
+      <button class="opt" onclick="ans(this,'correct')">C. 변화 없다</button>
+    </div>
+    <div class="qe"><strong>정답: C</strong><br>감가상각은 <strong>비현금</strong> 항목 — 현금이 오가지 않으므로 CFI에 영향 없음. 간접법 CFO에서 가산 조정될 뿐이다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q4</span>기초 RE 30,500, 당기 NI 37,000, 기말 RE 59,000, 미지급배당 1,000 → 6,000. 실제 배당 지급액은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 8,500</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 3,500</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 13,500</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>선언 배당 = 30,500 + 37,000 − 59,000 = 8,500<br>지급액 = 8,500 − (6,000 − 1,000) = <strong>3,500</strong><br>선언액과 지급액을 구분하는 것이 핵심.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q5</span>재고자산이 감소하고 매입채무가 증가했다. CFO에 미치는 영향은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 둘 다 CFO 증가</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 둘 다 CFO 감소</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 재고는 증가, 매입채무는 감소 효과</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br><strong>자산은 반대, 부채는 그대로.</strong> 재고 감소(자산↓) → 현금 유입(+). 매입채무 증가(부채↑) → 현금 유입(+).</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q6</span>IFRS에서 이자비용의 현금흐름 분류로 옳은 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. CFO 또는 CFF</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. CFO만 가능</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. CFF만 가능</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>IFRS는 <strong>지급</strong>(이자·배당)을 CFO 또는 CFF로, <strong>수취</strong>(이자·배당)를 CFO 또는 CFI로 선택 가능. U.S. GAAP은 이자 지급 = CFO 고정.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q7</span>CFO 42,000, 이자지급 1,000, 세율 30%, CapEx 25,000일 때 FCFF는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 18,000</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 17,700</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 16,300</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>FCFF = CFO + Int×(1−t) − FCInv<br>= 42,000 + 1,000×0.7 − 25,000 = 42,000 + 700 − 25,000 = <strong>17,700</strong></div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q8</span>CFO가 크게 증가했는데 원인이 매입채무 지급 지연과 재고 축소였다. 가장 적절한 해석은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 영업 효율이 개선되어 긍정적</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 운전자본 축소에 의한 것으로 지속 가능성이 낮다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 매출 증가를 의미한다</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>운전자본 압축은 <strong>일회성</strong>이다. 재고는 무한히 줄일 수 없고 매입채무 지연은 신용도를 훼손한다. CFO의 <strong>질(quality)</strong>이 낮다고 평가한다.</div>
+  </div>
+  <div class="qb">
+    <div class="qq"><span class="qn">C1</span><strong>[계산]</strong> NI 50,000 · 감가상각 8,000 · 토지처분이익 6,000 · AR +3,000 · 재고 −4,000 · AP +2,000. CFO는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 49,000</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 55,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 61,000</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>50,000 + 8,000(감가) − 6,000(처분이익) − 3,000(AR↑) + 4,000(재고↓) + 2,000(AP↑) = <strong>55,000</strong><br>처분이익 차감과 자산·부채 부호가 핵심.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">C2</span><strong>[계산]</strong> 매출 200,000 · AR 기초 15,000 → 기말 22,000. 고객으로부터 수취한 현금은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 193,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 207,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 200,000</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>200,000 − 7,000(AR 증가) = <strong>193,000</strong><br>매출채권이 늘었다 = 못 받은 돈이 늘었다 → 현금 유입 감소.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">C3</span><strong>[계산]</strong> CFO 80,000 · CapEx 30,000 · 차입 20,000 · 차입금 상환 5,000 · 이자지급 4,000(세율 25%). FCFE는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 65,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 68,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 53,000</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>FCFE = CFO − FCInv + Net Borrowing = 80,000 − 30,000 + (20,000 − 5,000) = <strong>65,000</strong><br>⚠ FCFE는 <strong>이자를 가산하지 않는다</strong> — 세후 이자 가산은 FCFF.</div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>

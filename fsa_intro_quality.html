@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | R27·36·38 — Intro · Reporting Quality · Modeling</title>
+<style>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — 개요 · Reporting Quality · 모델링</h1>
+  <p>CFA Level 1 · Reading 27 · 36 · 38 · 감사의견 · 품질 스펙트럼 · Porter 5 Forces · 행동편향 · 슈웨이저 2025 검증</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('fsa',this)">FSA 개요</button>
+  <button class="nb" onclick="show('audit',this)">감사보고서</button>
+  <button class="nb" onclick="show('filing',this)">공시 서류</button>
+  <button class="nb" onclick="show('gaap',this)">IFRS vs GAAP</button>
+  <button class="nb" onclick="show('quality',this)">Reporting Quality</button>
+  <button class="nb" onclick="show('fraud',this)">분식 · 경고신호</button>
+  <button class="nb" onclick="show('model',this)">재무모델링</button>
+  <button class="nb" onclick="show('keyword',this)">키워드</button>
+  <button class="nb" onclick="show('quiz',this)">Quiz</button>
+</div>
+
+<!-- ===================== FSA 개요 ===================== -->
+<div id="tab-fsa" class="tp active">
+<div class="sec">
+  <div class="st">재무제표 분석의 목적</div>
+  <div class="kp-blue">재무정보를 이용해 <strong>경제적 의사결정</strong>에 유용한 판단을 내리는 것 — 과거 성과 평가 + 미래 예측</div>
+  <ul class="pts">
+    <li><strong>채권자</strong>: 원리금 상환 능력 (이자·현금흐름 중심)</li>
+    <li><strong>주주</strong>: 성장성·수익성 (이익·배당 중심)</li>
+    <li><strong>정부·규제기관</strong>: 과세·감독</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">재무제표 5종 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>재무제표</th><th>내용</th><th>개념</th></tr></thead>
+      <tbody>
+        <tr><td><strong>BS</strong> (재무상태표)</td><td>특정 시점의 자산·부채·자본</td><td class="up"><strong>Stock</strong> (저량)</td></tr>
+        <tr><td><strong>IS</strong> (손익계산서)</td><td>기간의 수익·비용·이익</td><td>Flow (유량)</td></tr>
+        <tr><td><strong>CIS</strong> (포괄손익계산서)</td><td>NI + OCI</td><td>Flow</td></tr>
+        <tr><td><strong>SE</strong> (자본변동표)</td><td>자본 각 항목의 증감</td><td>Flow</td></tr>
+        <tr><td><strong>CF</strong> (현금흐름표)</td><td>영업·투자·재무 현금흐름</td><td>Flow</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">IS와 CIS는 하나로 합쳐서(combined) 또는 나눠서(separate) 표시할 수 있다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">재무제표 외 정보원</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>자료</th><th>내용</th><th>감사 대상?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>주석</strong> (Footnotes)</td><td>회계정책, 추정, 세부 내역</td><td class="up">O</td></tr>
+        <tr><td><strong>MD&amp;A</strong></td><td>경영진의 사업·전망 논의</td><td class="na">X</td></tr>
+        <tr><td><strong>감사보고서</strong></td><td>회계법인의 의견</td><td>—</td></tr>
+        <tr><td><strong>Proxy Statement</strong></td><td>주주총회 안건 — 이사 선임, 보상, 스톡옵션</td><td class="na">X</td></tr>
+        <tr><td><strong>Earnings Guidance</strong></td><td>경영진의 실적 전망</td><td class="na">X</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 감사는 <strong>재무제표 본문 + 주석</strong>만 대상. MD&amp;A는 감사 대상이 아니다 — 단골 출제</div>
+</div>
+
+<div class="sec">
+  <div class="st">재무분석 프로세스 6단계</div>
+  <div class="fm">1) 목적과 맥락 정의     — 무엇을 위한 분석인가
+2) 자료 수집           — 재무제표, 주석, 산업·거시 데이터
+3) 자료 처리           — 조정, 비율 계산, 공통형 재작성
+4) 분석 및 해석        — 결과 해석
+5) 결론 및 권고 전달   — 보고서 작성
+6) 사후 관리           — 주기적 재검토</div>
+</div>
+</div>
+
+<!-- ===================== 감사 ===================== -->
+<div id="tab-audit" class="tp">
+<div class="sec">
+  <div class="st">감사의견 4종 ★★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>의견</th><th>충분·적합한 증거</th><th>중요한 왜곡표시</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td class="up"><strong>Unqualified</strong> (적정)</td><td>충분함</td><td>없음</td><td>기준에 따라 적정하게 표시</td></tr>
+        <tr><td><strong>Qualified</strong> (한정)</td><td>일부 부족<br><em>or</em></td><td>일부 존재</td><td>특정 항목 <strong>제외하면</strong> 적정</td></tr>
+        <tr><td class="na"><strong>Adverse</strong> (부적정)</td><td>충분함</td><td class="na"><strong>심각함</strong></td><td>재무제표가 <strong>왜곡</strong>되어 있음</td></tr>
+        <tr><td class="na"><strong>Disclaimer</strong> (의견거절)</td><td class="na"><strong>심각히 부족</strong></td><td>판단 불가</td><td>의견을 <strong>표명하지 않음</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 구분 축: <strong>증거가 부족</strong>하면 한정 → 의견거절. <strong>왜곡이 있으면</strong> 한정 → 부적정.</div>
+</div>
+
+<div class="sec">
+  <div class="st">적정의견의 오해 ★</div>
+  <div class="card c-red"><div class="ct">⚠ Unqualified가 뜻하지 <strong>않는</strong> 것</div><ul class="pts">
+    <li class="warn">재무상태·경영성과가 <strong>우수하다</strong>는 뜻이 아니다 — 회계처리에 문제가 없다는 것뿐</li>
+    <li class="warn"><strong>절대적 확신</strong>(absolute assurance)이 아니라 <strong>합리적 확신</strong>(reasonable assurance)</li>
+    <li class="warn">재무제표 작성 책임은 <strong>경영진</strong>, 감사인은 <strong>의견</strong>에 대해서만 책임</li>
+    <li class="warn">부정(fraud)을 모두 적발한다는 보장이 아니다</li>
+  </ul></div>
+  <div class="tn">"중요한 왜곡표시가 없다"의 기준은 <strong>Material</strong> — 이용자의 의사결정을 바꿀 정도의 금액이다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">강조사항 · 기타사항 (Explanatory Paragraph)</div>
+  <ul class="pts">
+    <li>적정의견을 주면서도 <strong>추가로 환기</strong>하는 문단</li>
+    <li><strong>Going concern doubt</strong> (계속기업 불확실성) — 가장 중요한 신호</li>
+    <li>중요한 불확실성, 회계정책 변경, 후속사건 등</li>
+  </ul>
+  <div class="kp-red">⚠ 계속기업 의문이 붙은 적정의견은 <strong>재무 위험의 강력한 경고</strong> — 여신심사에서 즉시 확인 대상</div>
+</div>
+
+<div class="sec">
+  <div class="st">내부통제 · 핵심감사사항</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">Internal Control (내부통제)</div><ul class="pts">
+      <li>재무제표가 생성되는 <strong>과정</strong>에 대한 통제</li>
+      <li>미국: <strong>Sarbanes-Oxley</strong>법에서 요구</li>
+      <li>재무제표 감사 + 내부통제 감사 = <strong>Integrated Audit</strong> (이중 의견)</li>
+      <li>책임은 <strong>경영진</strong>에게 있다</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">KAM / CAM</div><ul class="pts">
+      <li>Key(IFRS) / Critical(PCAOB) Audit Matters</li>
+      <li>감사에서 <strong>가장 중요했던 사항</strong>을 공시</li>
+      <li>어디에 회계 이슈가 있었는지 이용자에게 알림</li>
+      <li>의견을 바꾸지는 않음</li>
+    </ul></div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 공시 ===================== -->
+<div id="tab-filing" class="tp">
+<div class="sec">
+  <div class="st">SEC 주요 서류 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>서류</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><strong>10-K</strong></td><td>연차보고서 (사업보고서) — 감사받은 재무제표 포함</td></tr>
+        <tr><td><strong>10-Q</strong></td><td>분기보고서 — 통상 감사받지 않음(검토)</td></tr>
+        <tr><td><strong>8-K</strong></td><td>수시공시 — 투자자가 알아야 할 <strong>중요 사건</strong> 발생 시</td></tr>
+        <tr><td><strong>S-1</strong></td><td>증권신고서 — <strong>IPO</strong> 시 제출</td></tr>
+        <tr><td><strong>DEF-14A</strong></td><td>Proxy Statement — 주총 안건</td></tr>
+        <tr><td><strong>20-F / 40-F</strong></td><td>외국기업의 연차보고서</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ <strong>EDGAR</strong> — SEC의 전자공시 시스템 (한국의 DART에 해당)</div>
+</div>
+
+<div class="sec">
+  <div class="st">부문별 공시 (Segment Reporting)</div>
+  <ul class="pts">
+    <li><strong>Business segment</strong>: 사업 부문별 정보</li>
+    <li><strong>Geographic segment</strong>: 지역별 정보</li>
+    <li>기준: 매출·자산·이익 중 하나라도 <strong>10% 이상</strong>이면 보고 대상</li>
+  </ul>
+  <div class="tn">부문 정보는 어느 사업이 실제로 돈을 버는지 파악하는 핵심 자료 — 연결 숫자만으로는 안 보인다.</div>
+</div>
+</div>
+
+<!-- ===================== IFRS vs GAAP ===================== -->
+<div id="tab-gaap" class="tp">
+<div class="sec">
+  <div class="st">두 체계의 근본 차이 ★</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">U.S. GAAP — Rule-based</div><ul class="pts">
+      <li>제정: <strong>FASB</strong></li>
+      <li>규칙이 <strong>명확하고 상세</strong>하게 제시</li>
+      <li>규정 준수 여부가 명확</li>
+      <li>감독: <strong>SEC</strong></li>
+    </ul></div>
+    <div class="card c-green"><div class="ct">IFRS — Principle-based</div><ul class="pts">
+      <li>제정: <strong>IASB</strong></li>
+      <li><strong>원칙만</strong> 제시, 판단은 기업에</li>
+      <li>회계정책의 <strong>자율성 높음</strong></li>
+      <li>감독: 각국 규제기관 (영국 FCA 등)</li>
+    </ul></div>
+  </div>
+  <div class="kp-blue">⭐ <strong>IOSCO</strong> — 각국 증권 감독기관의 국제 협의체 (자체 규제 권한은 없음)</div>
+</div>
+
+<div class="sec">
+  <div class="st">주요 차이 요약 (FSA 전반)</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>U.S. GAAP</th><th>IFRS</th></tr></thead>
+      <tbody>
+        <tr><td>재고 평가</td><td>FIFO, LIFO, 가중평균</td><td class="na"><strong>LIFO 금지</strong></td></tr>
+        <tr><td>재고 평가손실 환입</td><td class="na">불가</td><td class="up">가능 (원가 한도)</td></tr>
+        <tr><td>개발비</td><td>비용</td><td class="up">요건 충족 시 자본화</td></tr>
+        <tr><td>유형자산 재평가</td><td class="na">불가 (원가모형만)</td><td class="up">가능 (재평가모형)</td></tr>
+        <tr><td>이자 지급 (CF)</td><td>CFO</td><td>CFO or CFF</td></tr>
+        <tr><td>배당 지급 (CF)</td><td>CFF</td><td>CFO or CFF</td></tr>
+        <tr><td>BS 표시</td><td>분류식 일반적</td><td>유동성 배열 허용</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ===================== Quality ===================== -->
+<div id="tab-quality" class="tp">
+<div class="sec">
+  <div class="st">두 가지 품질 개념 ★★</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">Financial Reporting Quality (보고의 품질)</div><ul class="pts">
+      <li><strong>GAAP 준수</strong> 여부</li>
+      <li><strong>편의(bias) 없음</strong> — 경제적 실질을 충실히 표현</li>
+      <li>의사결정에 유용한가</li>
+      <li>→ <strong>"숫자를 믿을 수 있는가"</strong></li>
+    </ul></div>
+    <div class="card c-green"><div class="ct">Earnings (Results) Quality (이익의 품질)</div><ul class="pts">
+      <li><strong>지속 가능</strong>한 이익인가 (sustainable)</li>
+      <li>충분한 <strong>투자수익</strong>을 제공하는 수준인가</li>
+      <li>일회성인가 (환율, 자산매각)</li>
+      <li>→ <strong>"이익이 좋은 이익인가"</strong></li>
+    </ul></div>
+  </div>
+  <div class="kp-red">⚠ 순서가 중요: <strong>보고 품질이 먼저 확보되어야</strong> 이익 품질을 논할 수 있다. 숫자 자체를 못 믿으면 지속성 평가는 무의미.</div>
+  <div class="tn">보고 품질이 높으면서 이익 품질이 낮은 조합은 <strong>가능</strong>하다 (정직하게 보고했는데 이익이 형편없는 경우). 그 반대는 성립하지 않는다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">품질 스펙트럼 — 최상에서 최악까지 ★★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>등급</th><th>상태</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td class="up"><strong>1 (최상)</strong></td><td>GAAP 준수 + 의사결정 유용 + 지속가능한 이익</td><td>이상적 — 높은 보고품질 &amp; 높은 이익품질</td></tr>
+        <tr><td>2</td><td>GAAP 준수 + 의사결정 유용, 그러나 <strong>이익 지속성 낮음</strong></td><td>보고는 정직하나 실적이 약함</td></tr>
+        <tr><td>3</td><td>GAAP 준수, 그러나 <strong>편의적 선택</strong> (biased choices)</td><td>기준 안에서 유리한 방향으로 선택</td></tr>
+        <tr><td>4</td><td>GAAP 준수, 그러나 <strong>이익 조정</strong> (earnings management)</td><td>의도적으로 실적을 만들어냄</td></tr>
+        <tr><td class="na">5</td><td><strong>GAAP 위반</strong> (departures from GAAP)</td><td>기준 미준수 — 신뢰 불가</td></tr>
+        <tr><td class="na"><strong>6 (최악)</strong></td><td><strong>가공 거래</strong> (fictitious transactions)</td><td>없는 거래를 만들어냄 — 이익 품질 평가 자체가 불가능</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 스펙트럼 하단으로 갈수록 <strong>보고 품질</strong>이 무너지고, 5·6단계에서는 이익 품질을 <strong>평가할 수조차 없다</strong></div>
+</div>
+
+<div class="sec">
+  <div class="st">보수적 회계 vs 공격적 회계 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>선택</th><th>Aggressive (이익 부풀림)</th><th>Conservative (이익 축소)</th></tr></thead>
+      <tbody>
+        <tr><td>지출 처리</td><td class="na">Capitalizing (자본화)</td><td class="up">Expensing (비용화)</td></tr>
+        <tr><td>내용연수</td><td class="na">길게</td><td class="up">짧게</td></tr>
+        <tr><td>잔존가치</td><td class="na">높게</td><td class="up">낮게</td></tr>
+        <tr><td>감가상각 방법</td><td class="na">정액법</td><td class="up">가속상각</td></tr>
+        <tr><td>손상 인식</td><td class="na">늦게</td><td class="up">조기</td></tr>
+        <tr><td>대손상각비</td><td class="na">적게</td><td class="up">많게</td></tr>
+        <tr><td>DTA 평가충당금</td><td class="na">적게</td><td class="up">많게</td></tr>
+        <tr><td>수익 인식</td><td class="na">빨리 (총액)</td><td class="up">늦게 (순액)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ <strong>보수적 회계가 항상 좋은 것은 아니다</strong> — 극단적 보수주의는 <strong>Big Bath</strong>(당기에 다 털고 이후 이익 극대화)로 이어져 역시 왜곡이다. 목표는 <strong>중립(neutral)</strong>이다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">회계 부정의 3요소 (Fraud Triangle)</div>
+  <div class="g3">
+    <div class="card c-red"><div class="ct">Motivation (동기)</div><ul class="pts">
+      <li>실적 목표 압박</li>
+      <li>보상·스톡옵션 연계</li>
+      <li>부채약정(covenant) 위반 회피</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">Opportunity (기회)</div><ul class="pts">
+      <li>내부통제 취약</li>
+      <li>이사회·감사위원회 감시 부실</li>
+      <li>회계기준의 재량 여지</li>
+    </ul></div>
+    <div class="card c-purple"><div class="ct">Rationalization (합리화)</div><ul class="pts">
+      <li>"일시적일 뿐 나중에 만회한다"</li>
+      <li>"업계 관행이다"</li>
+      <li>경영진의 태도·윤리 문화</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">보고 품질을 규율하는 장치</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>장치</th><th>역할</th><th>한계</th></tr></thead>
+      <tbody>
+        <tr><td><strong>규제기관</strong> (SEC 등)</td><td>등록·공시 요구, 제재</td><td>사후적 적발, 자원 제약</td></tr>
+        <tr><td><strong>감사인</strong></td><td>독립적 의견 표명</td><td>합리적 확신일 뿐, <strong>보수는 기업이 지급</strong> → 독립성 위협</td></tr>
+        <tr><td><strong>사적 계약</strong> (Private contracting)</td><td>대출약정·투자계약의 재무 조건</td><td>계약 당사자에게만 효력</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 분식 ===================== -->
+<div id="tab-fraud" class="tp">
+<div class="sec">
+  <div class="st">매출 관련 분식 수법 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>수법</th><th>내용</th><th>탐지 신호</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Channel Stuffing</strong><br>(밀어내기)</td><td>기말에 유통망에 물량을 강제로 밀어넣어 매출 인식</td><td>기말 매출 급증 + <strong>매출채권 회전일수 급증</strong>, 익기 반품 급증</td></tr>
+        <tr><td><strong>Bill-and-Hold</strong></td><td>인보이스만 끊고 재고는 보관 — 인도 없이 매출 인식</td><td>매출은 늘었는데 <strong>재고가 안 줄어듦</strong></td></tr>
+        <tr><td><strong>총액 인식</strong> (Gross vs Net)</td><td>대리인인데 거래 총액을 매출로</td><td>매출 규모 대비 <strong>마진율이 비정상적으로 낮음</strong></td></tr>
+        <tr><td><strong>수익 조기 인식</strong></td><td>수행의무 미완료 상태에서 인식</td><td>NI ≫ CFO 지속</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 공통 탐지 원리: <strong>매출은 늘었는데 현금이 안 들어온다</strong> → 매출채권·재고 회전율과 CFO를 교차 확인</div>
+</div>
+
+<div class="sec">
+  <div class="st">표시(Presentation) 선택을 통한 왜곡</div>
+  <ul class="pts">
+    <li><strong>Non-GAAP 지표</strong> 강조 — "조정 EBITDA", "핵심 이익" 등에서 불리한 항목만 제외</li>
+    <li>경상적으로 반복되는 비용을 <strong>일회성으로 분류</strong></li>
+    <li>비용을 영업 외로 재분류해 <strong>영업이익 부풀리기</strong></li>
+    <li>부문 구분을 바꿔 부진 사업을 <strong>가리기</strong></li>
+  </ul>
+  <div class="kp-red">⚠ 규정상 non-GAAP 지표를 쓰면 <strong>GAAP 지표와의 조정표</strong>를 함께 공시해야 한다 — 그 조정표에 실체가 있다</div>
+</div>
+
+<div class="sec">
+  <div class="st">경고 신호 체크리스트</div>
+  <div class="card c-red"><div class="ct">⚠ Red Flags</div><ul class="pts">
+    <li class="warn"><strong>NI ≫ CFO</strong> 상태가 여러 기간 지속 (발생액 과다)</li>
+    <li class="warn">매출채권·재고 증가율이 <strong>매출 증가율을 크게 상회</strong></li>
+    <li class="warn">회계정책·추정을 <strong>이익에 유리하게</strong> 반복 변경</li>
+    <li class="warn">감사인 <strong>교체</strong>가 잦거나 의견에 강조사항</li>
+    <li class="warn">경쟁사 대비 <strong>비정상적으로 높은 마진</strong>이 설명되지 않음</li>
+    <li class="warn">기말에 몰린 대규모 거래, 특수관계자 거래 급증</li>
+    <li class="warn">경영진 보상이 <strong>단기 실적</strong>에 과도하게 연동</li>
+  </ul></div>
+</div>
+</div>
+
+<!-- ===================== 모델링 ===================== -->
+<div id="tab-model" class="tp">
+<div class="sec">
+  <div class="st">매출 예측 — 세 가지 접근 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>방식</th><th>출발점</th><th>방법</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Top-Down</strong></td><td>거시 → 산업 → 기업</td><td>GDP 대비 성장률, 산업 규모 × <strong>시장점유율</strong></td></tr>
+        <tr><td><strong>Bottom-Up</strong></td><td>개별 단위 → 합산</td><td>제품별·매장별·지역별 예측 후 합산<br>(신규 출점, 동일점포 매출)</td></tr>
+        <tr><td><strong>Hybrid</strong></td><td>두 방식 병행</td><td>상호 <strong>교차 검증</strong> — 실무에서 가장 흔함</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">Hybrid가 선호되는 이유: 상향식은 거시 현실성을 놓치기 쉽고, 하향식은 기업 고유 요인을 놓치기 쉽다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">Porter's Five Forces — 경쟁 지위 판단 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Force</th><th>내용</th><th>강하면</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. 공급자 교섭력</strong></td><td>원재료·부품 공급자의 힘</td><td class="na">원가 압박 → 마진 ↓</td></tr>
+        <tr><td><strong>2. 구매자 교섭력</strong></td><td>고객의 가격 협상력</td><td class="na">가격 인하 압박 → 마진 ↓</td></tr>
+        <tr><td><strong>3. 신규 진입 위협</strong></td><td>진입장벽의 높이</td><td class="na">경쟁 심화 → 마진 ↓</td></tr>
+        <tr><td><strong>4. 대체재 위협</strong></td><td>다른 방식으로 대체 가능한가</td><td class="na">가격결정력 ↓</td></tr>
+        <tr><td><strong>5. 산업 내 경쟁강도</strong></td><td>기존 경쟁자 간 다툼</td><td class="na">가격경쟁 → 마진 ↓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 다섯 힘이 <strong>약할수록</strong> 기업은 <strong>가격결정력(pricing power)</strong>을 갖고 높은 마진을 유지 → 예측 마진의 근거가 된다</div>
+</div>
+
+<div class="sec">
+  <div class="st">인플레이션 · 디플레이션의 영향</div>
+  <ul class="pts">
+    <li>비용 상승분을 <strong>가격에 전가할 수 있는가</strong>가 마진을 결정 → 가격결정력이 핵심</li>
+    <li>전가 가능 → 매출·마진 유지 / 전가 불가 → <strong>마진 압축</strong></li>
+    <li>가격 인상은 <strong>수요 감소</strong>를 부를 수 있어 물량 효과를 함께 봐야 함</li>
+    <li>재고 원가흐름 가정(FIFO/LIFO)에 따라 인플레이션기 <strong>매출총이익이 달라짐</strong></li>
+  </ul>
+  <div class="tn">인플레이션기에는 FIFO가 오래된 싼 원가를 COGS로 태워 <strong>매출총이익이 커 보인다</strong> — 지속 불가능한 보유이익(holding gain)이다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">예측 기간(Forecast Horizon) 선택</div>
+  <ul class="pts">
+    <li><strong>투자 보유 기간</strong>에 맞추는 것이 기본</li>
+    <li><strong>경기순환</strong> 기업은 순환의 고점·저점 효과가 상쇄되도록 <strong>충분히 길게</strong> 설정</li>
+    <li>일시적 요인이 정상화될 때까지 포함해야 함</li>
+    <li>너무 길면 <strong>추정 불확실성</strong>이 커져 효용이 떨어짐</li>
+    <li>실무에서는 소속 기관·리서치 관행에 따라 정해지기도 함</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">애널리스트의 행동편향 5종 ★★ — 문장형 출제</div>
+  <div class="kp-blue">⭐ 여기서는 <strong>투자자</strong>가 아니라 <strong>예측하는 애널리스트</strong>의 편향을 다룬다 (투자자 편향은 Portfolio Management에서 재등장)</div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>편향</th><th>내용</th><th>완화 방법</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Overconfidence</strong><br>(과신)</td><td>자기 분석을 과신 → 예측오차를 과소평가, <strong>신뢰구간이 지나치게 좁아짐</strong>. 남과 다른 예측을 하는 애널리스트일수록 취약</td><td>예측을 공유하고 비판을 구함 · 과거 예측오차 복기 · <strong>시나리오 분석</strong>으로 범위 제시</td></tr>
+        <tr><td><strong>2. Illusion of Control</strong><br>(통제 착각)</td><td>통제할 수 없는 것까지 통제 가능하다고 착각. 두 형태: <strong>"전문가" 의견으로 정당화</strong>, <strong>모델을 불필요하게 복잡화</strong> (갱신해야 할 가정을 숨김)</td><td>설명력이 검증된 변수만 사용 · 관련 있는 관점만 외부 자문</td></tr>
+        <tr><td><strong>3. Conservatism</strong><br>(= <strong>Anchoring</strong>, 보수·고착)</td><td>새 정보가 와도 기존 예측을 <strong>조금만</strong> 수정. 주로 <strong>부정적 정보 반영을 꺼림</strong> (긍정 정보 반영도 지연될 수 있음)</td><td>예측오차의 주기적 평가 · 가정 수정이 쉬운 <strong>단순한 모델</strong> 사용</td></tr>
+        <tr><td><strong>4. Representativeness</strong><br>(대표성)</td><td>익숙한 분류에 기대어 판단. 대표 형태가 <strong>base-rate neglect</strong> — 모집단의 기저율을 무시하고 개별 정보에 집중<br><span class="dn">기업 고유요인 집중 = inside view / 산업 기저율 = outside view</span></td><td><strong>inside view와 outside view를 모두</strong> 고려</td></tr>
+        <tr><td><strong>5. Confirmation</strong><br>(확증)</td><td>자기 견해를 <strong>지지하는 정보만</strong> 찾고 반박 정보는 무시. 같은 견해의 동료하고만 논의하는 형태</td><td><strong>반대 견해</strong> 리서치를 챙겨 봄 · 이해관계 없는 동료의 시각 · <strong>경영진 발언을 액면 그대로 받지 않기</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 헷갈리는 쌍: <strong>Conservatism = Anchoring</strong>(기존 예측 고착), <strong>Representativeness</strong>(분류에 기댐 → base-rate neglect). 이름만 바꿔 오답 보기로 나온다.</div>
+  <div class="tn">경영진은 회사를 긍정적으로 묘사하는 경향이 있으므로, 우호적 전망을 가진 애널리스트일수록 확증편향을 경계해야 한다는 서술이 그대로 출제된다.</div>
+</div>
+</div>
+
+<!-- ===================== 키워드 ===================== -->
+<div id="tab-keyword" class="tp">
+<div class="sec">
+  <div class="st">시험 키워드 → 바로 떠올릴 것</div>
+  <div class="kw-grid">
+    <div class="kw"><span class="kk">MD&amp;A</span><span class="ka">→</span><span class="kv">감사 대상 아님 ⭐</span></div>
+    <div class="kw"><span class="kk">unqualified opinion</span><span class="ka">→</span><span class="kv">적정 — 성과 우수 의미 아님</span></div>
+    <div class="kw"><span class="kk">adverse opinion</span><span class="ka">→</span><span class="kv">왜곡이 심각 (증거는 충분)</span></div>
+    <div class="kw"><span class="kk">disclaimer of opinion</span><span class="ka">→</span><span class="kv">증거 부족 → 의견 표명 X</span></div>
+    <div class="kw"><span class="kk">reasonable assurance</span><span class="ka">→</span><span class="kv">절대적 확신 아님</span></div>
+    <div class="kw"><span class="kk">going concern doubt</span><span class="ka">→</span><span class="kv">강조사항 — 강력한 경고</span></div>
+    <div class="kw"><span class="kk">internal control 책임</span><span class="ka">→</span><span class="kv">경영진 (감사인 아님)</span></div>
+    <div class="kw"><span class="kk">10-K / 10-Q / 8-K / S-1</span><span class="ka">→</span><span class="kv">연차 / 분기 / 수시 / IPO</span></div>
+    <div class="kw"><span class="kk">segment 보고 기준</span><span class="ka">→</span><span class="kv">매출·자산·이익 중 10% 이상</span></div>
+    <div class="kw"><span class="kk">rule-based vs principle-based</span><span class="ka">→</span><span class="kv">GAAP vs IFRS</span></div>
+    <div class="kw"><span class="kk">high reporting quality, low earnings quality</span><span class="ka">→</span><span class="kv">가능한 조합 ⭐</span></div>
+    <div class="kw"><span class="kk">fictitious transactions</span><span class="ka">→</span><span class="kv">스펙트럼 최하단 — 이익품질 평가 불가</span></div>
+    <div class="kw"><span class="kk">capitalizing vs expensing</span><span class="ka">→</span><span class="kv">자본화 = 공격적</span></div>
+    <div class="kw"><span class="kk">longer useful life</span><span class="ka">→</span><span class="kv">공격적 (감가비 ↓, NI ↑)</span></div>
+    <div class="kw"><span class="kk">big bath</span><span class="ka">→</span><span class="kv">극단적 보수주의도 왜곡</span></div>
+    <div class="kw"><span class="kk">channel stuffing</span><span class="ka">→</span><span class="kv">매출채권 회전일수 급증</span></div>
+    <div class="kw"><span class="kk">bill-and-hold</span><span class="ka">→</span><span class="kv">재고가 줄지 않음</span></div>
+    <div class="kw"><span class="kk">top-down forecasting</span><span class="ka">→</span><span class="kv">GDP·시장점유율 기반</span></div>
+    <div class="kw"><span class="kk">pricing power</span><span class="ka">→</span><span class="kv">인플레 전가 능력 → 마진 방어</span></div>
+    <div class="kw"><span class="kk">anchoring</span><span class="ka">→</span><span class="kv">= Conservatism bias (기존 예측 소폭만 수정) ⭐</span></div>
+    <div class="kw"><span class="kk">base-rate neglect</span><span class="ka">→</span><span class="kv">Representativeness bias의 한 형태</span></div>
+    <div class="kw"><span class="kk">inside view vs outside view</span><span class="ka">→</span><span class="kv">기업 고유요인 vs 산업 기저율 — 둘 다 고려</span></div>
+    <div class="kw"><span class="kk">신뢰구간이 너무 좁다</span><span class="ka">→</span><span class="kv">Overconfidence bias</span></div>
+    <div class="kw"><span class="kk">모델을 불필요하게 복잡화</span><span class="ka">→</span><span class="kv">Illusion of control bias</span></div>
+    <div class="kw"><span class="kk">같은 견해 동료하고만 논의</span><span class="ka">→</span><span class="kv">Confirmation bias</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">시험 함정 Top Picks</div>
+  <div class="card c-red"><div class="ct">⚠ 자주 틀리는 것</div><ul class="pts">
+    <li class="warn">적정의견 = 재무상태 우수 <strong>아님</strong></li>
+    <li class="warn">MD&amp;A와 Proxy는 <strong>감사 대상 아님</strong> (본문 + 주석만)</li>
+    <li class="warn">Adverse는 증거가 충분한데 <strong>왜곡이 심각</strong>, Disclaimer는 <strong>증거 자체가 부족</strong></li>
+    <li class="warn">보고품질 높고 이익품질 낮은 건 가능 — <strong>역은 불가능</strong></li>
+    <li class="warn">보수적 회계도 지나치면 <strong>왜곡</strong> (Big Bath) — 목표는 중립</li>
+    <li class="warn">내부통제 책임은 <strong>경영진</strong></li>
+  </ul></div>
+</div>
+</div>
+
+<!-- ===================== Quiz ===================== -->
+<div id="tab-quiz" class="tp">
+<div class="sec">
+  <div class="st">Reading 27 · 36 · 38 — Quiz</div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q1</span>감사인의 감사 대상에 포함되지 <strong>않는</strong> 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 재무제표 본문</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 재무제표 주석</button>
+      <button class="opt" onclick="ans(this,'correct')">C. MD&amp;A</button>
+    </div>
+    <div class="qe"><strong>정답: C</strong><br>감사는 <strong>재무제표 본문 + 주석</strong>만 대상. MD&amp;A, Proxy Statement, Earnings Guidance는 감사받지 않는다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q2</span>충분한 증거는 확보했으나 중요한 왜곡표시가 심각하게 존재한다. 적절한 의견은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. Disclaimer (의견거절)</button>
+      <button class="opt" onclick="ans(this,'correct')">B. Adverse (부적정)</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Unqualified with explanatory paragraph</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br><strong>증거는 충분한데 왜곡이 심각</strong>하면 Adverse. 반대로 <strong>증거 자체가 부족</strong>해 판단할 수 없으면 Disclaimer. 이 두 개를 바꿔놓는 문제가 흔하다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q3</span>적정의견(Unqualified)에 대한 설명으로 옳은 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 재무상태가 우수함을 보증한다</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 중요한 왜곡표시가 없다는 합리적 확신을 제공한다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 부정이 없음을 절대적으로 보증한다</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>감사는 <strong>reasonable assurance</strong>(합리적 확신)이지 absolute assurance가 아니다. 또한 회계처리의 적정성일 뿐 경영성과의 우수함과는 무관하다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q4</span>다음 중 가장 <strong>공격적(aggressive)</strong>인 회계 선택은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 가속상각 적용</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 지출을 자본화하고 내용연수를 길게 설정</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 대손상각비를 크게 설정</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>자본화 + 긴 내용연수 → 당기 비용 최소화 → <strong>NI 부풀리기</strong>. A와 C는 보수적 선택이다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q5</span>재무보고 품질과 이익 품질의 관계로 옳은 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 보고 품질이 높으면서 이익 품질이 낮을 수 있다</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 이익 품질이 높으면 보고 품질도 항상 높다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 두 개념은 동일하다</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>정직하게 보고했지만 이익이 일회성이거나 낮은 수준일 수 있다. 반대로 <strong>보고 품질이 낮으면 이익 품질 평가 자체가 불가능</strong>하다 — 숫자를 믿을 수 없기 때문.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q6</span>기말 매출이 급증했는데 매출채권 회전일수도 함께 급증했다. 가장 의심되는 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. Channel stuffing (밀어내기)</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. Big bath accounting</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 재고자산 평가손실</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>유통망에 물량을 밀어넣어 매출을 인식하면 <strong>현금은 안 들어오고 매출채권만 쌓인다</strong>. 다음 기 반품 급증도 신호. Bill-and-hold라면 재고가 줄지 않는 형태로 나타난다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q7</span>Porter's Five Forces에서 다섯 가지 힘이 모두 <strong>약한</strong> 산업의 특징은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 가격결정력이 높아 높은 마진 유지 가능</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 경쟁이 심해 마진이 압축된다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 진입장벽이 낮다</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>다섯 힘이 <strong>약할수록</strong> 기업이 유리하다 — 공급자·구매자 교섭력이 낮고 진입장벽이 높으며 대체재와 경쟁이 적으면 <strong>pricing power</strong>를 갖는다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q8</span>경기순환성이 큰 기업의 예측 기간(forecast horizon) 설정으로 적절한 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 최대한 짧게 설정한다</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 순환의 고점·저점 효과가 상쇄되도록 충분히 길게 설정한다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 항상 1년으로 고정한다</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>짧게 잡으면 호황 또는 불황 <strong>한쪽 국면만</strong> 반영돼 정상 수익력을 왜곡한다. 다만 지나치게 길면 추정 불확실성이 커진다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q9</span>새로운 부정적 정보가 나왔는데도 애널리스트가 기존 예측을 소폭만 수정했다. 해당하는 편향은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. Representativeness bias</button>
+      <button class="opt" onclick="ans(this,'correct')">B. Conservatism (anchoring) bias</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Illusion of control bias</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br><strong>Conservatism = Anchoring</strong> — 기존 예측에 고착돼 새 정보를 조금만 반영한다. 특히 <strong>부정적 정보</strong> 반영을 꺼리는 형태로 나타난다. 완화책은 예측오차 복기와 단순한 모델 사용.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q10</span>기업 고유 정보에만 집중하고 해당 산업의 일반적 성공률(기저율)을 무시했다. 이는 무엇인가?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. Base-rate neglect (Representativeness bias)</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. Confirmation bias</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Overconfidence bias</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>기저율을 무시하고 개별 정보에 집중하는 <strong>base-rate neglect</strong>로, Representativeness bias의 대표 형태다. 기업 고유요인 집중이 <strong>inside view</strong>, 산업 기저율 관점이 <strong>outside view</strong>이며 둘 다 고려해야 한다.</div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>

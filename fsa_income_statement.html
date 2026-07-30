@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | R28 — Analyzing Income Statements</title>
+<style>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — Income Statement 완전 정리</h1>
+  <p>CFA Level 1 · Reading 28 · 수익인식 · 비경상항목 · EPS · 슈웨이저 2025 검증</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('rev',this)">수익인식</button>
+  <button class="nb" onclick="show('exp',this)">비용인식</button>
+  <button class="nb" onclick="show('nonrec',this)">비경상·회계변경</button>
+  <button class="nb" onclick="show('eps1',this)">EPS 기본</button>
+  <button class="nb" onclick="show('eps2',this)">EPS 희석</button>
+  <button class="nb" onclick="show('ratio',this)">비율·Common-size</button>
+  <button class="nb" onclick="show('keyword',this)">키워드</button>
+  <button class="nb" onclick="show('quiz',this)">Quiz</button>
+</div>
+
+<!-- ===================== 수익인식 ===================== -->
+<div id="tab-rev" class="tp active">
+<div class="sec">
+  <div class="st">수익인식 5단계 (IFRS 15 = ASC 606, 공통)</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>#</th><th>단계</th><th>핵심</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Identify the contract</td><td>계약 식별 — 상업적 실질, 회수가능성</td></tr>
+        <tr><td><strong>2</strong></td><td>Identify performance obligations</td><td>수행의무를 <strong>구별 가능한 단위</strong>로 분리</td></tr>
+        <tr><td><strong>3</strong></td><td>Determine transaction price</td><td>거래가격 결정 (변동대가·할인 반영)</td></tr>
+        <tr><td><strong>4</strong></td><td>Allocate price to obligations</td><td>개별 판매가격 비율로 배분</td></tr>
+        <tr><td><strong>5</strong></td><td>Recognize when obligation satisfied</td><td><strong>이행 시점</strong>에 수익 인식 (현금 아님)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 핵심: 수익 = 현금 수취 시점이 아니라 <strong>Satisfaction of Performance Obligation</strong> 시점</div>
+</div>
+
+<div class="sec">
+  <div class="st">현금 시점 vs 수익 시점 — 계정 결정</div>
+  <div class="g2">
+    <div class="card c-amber"><div class="ct">현금 먼저 → Unearned Revenue (부채)</div><ul class="pts">
+      <li>돈 받았지만 아직 이행 X</li>
+      <li>ex) 조선업 선수금, 구독료 선납</li>
+      <li>유동성 good, 하지만 부채</li>
+    </ul></div>
+    <div class="card c-blue"><div class="ct">이행 먼저 → Accounts Receivable (자산)</div><ul class="pts">
+      <li>이행했지만 아직 돈 못 받음</li>
+      <li>ex) 외상 매출</li>
+      <li>수익 인식 O, 현금 X</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">인식 시점 — Over Time vs Point in Time</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구분</th><th>조건</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Over time</strong> (기간에 걸쳐)</td><td>고객이 진행 중 통제 / 자산에 대체 용도 없고 대금청구권 있음</td><td>장기 건설, 조선업 → 진행률만큼 매년 인식</td></tr>
+        <tr><td><strong>Point in time</strong> (한 시점)</td><td>위 조건 미충족</td><td>일반 제품 판매 → 인도 시점 일괄</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">10억 건물 10년 시공 → over time이면 연 1억씩. point in time이면 완공 전까지 매출 0.</div>
+</div>
+
+<div class="sec">
+  <div class="st">특수 상황 — 시험 단골</div>
+  <div class="g2">
+    <div class="card c-purple"><div class="ct">Principal vs Agent</div><ul class="pts">
+      <li><strong>Principal</strong>(주체): 재화 통제 → <strong>총액(gross)</strong> 매출</li>
+      <li><strong>Agent</strong>(대리인): 중개만 → <strong>순액(net) = 수수료</strong>만 매출</li>
+      <li class="warn">Agent가 총액 인식하면 매출 과대계상</li>
+    </ul></div>
+    <div class="card c-green"><div class="ct">계약 변경 (Contract revision)</div><ul class="pts">
+      <li>전년도 IS 수정 <strong>안 함</strong></li>
+      <li>변경 시점부터 <strong>prospective</strong> 반영</li>
+      <li>공사금액 변동 → 당해부터 새 금액</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">공시 (Disclosure)</div>
+  <ul class="pts">
+    <li>수익을 <strong>분해(disaggregation)</strong>한 정보 — 제품별·지역별·계약유형별</li>
+    <li>계약 잔액(수취채권, 계약자산, 계약부채)과 변동</li>
+    <li>남은 수행의무 및 인식 예상 시기</li>
+    <li>수익인식에 사용한 <strong>판단과 추정</strong></li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 비용인식 ===================== -->
+<div id="tab-exp" class="tp">
+<div class="sec">
+  <div class="st">Matching Principle</div>
+  <div class="kp-blue">비용은 <strong>관련 수익을 인식하는 기간</strong>에 대응시켜 인식 — 현금 지출 시점 아님</div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>유형</th><th>처리</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>수익과 직접 대응</td><td>수익 인식 시 동시 비용</td><td>COGS</td></tr>
+        <tr><td>기간 배분</td><td>내용연수에 걸쳐 배분</td><td>감가상각, 무형자산 상각</td></tr>
+        <tr><td>즉시 비용</td><td>발생 즉시 IS</td><td>판관비, 광고비, 대부분 R&amp;D(GAAP)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">추정이 개입되는 비용 ★ (Reporting Quality 연결)</div>
+  <div class="g2">
+    <div class="card c-red"><div class="ct">Bad Debt Expense (대손상각비)</div><ul class="pts">
+      <li>매출채권 회수불능 <strong>추정</strong> → Allowance 설정</li>
+      <li>회계는 보수적으로 미리 손실 인식</li>
+      <li>세무는 확정돼야 인정 → <strong>DTA 발생</strong></li>
+      <li class="warn">추정 축소 = 이익 부풀리기 수단</li>
+    </ul></div>
+    <div class="card c-red"><div class="ct">Warranty Expense (품질보증)</div><ul class="pts">
+      <li>판매 시점에 미래 보수비용 <strong>추정</strong> 인식</li>
+      <li>실제 지출은 나중 → <strong>DTA 발생</strong></li>
+      <li class="warn">추정치 조작 가능 영역</li>
+    </ul></div>
+  </div>
+  <div class="kp-red">⚠ 추정 비용(대손·보증·감가상각 가정)은 모두 <strong>경영진 재량</strong> → Earnings Management의 주 통로</div>
+</div>
+
+<div class="sec">
+  <div class="st">감가상각 방법이 IS에 미치는 영향</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>방법</th><th>초기 비용</th><th>초기 NI</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>Straight-Line (정액)</td><td class="na">낮음</td><td class="up">높음</td><td>(원가−잔존) ÷ 내용연수</td></tr>
+        <tr><td>Accelerated / DDB (정률)</td><td class="up">높음</td><td class="na">낮음</td><td>BV × 2/내용연수 <em>(잔존가치 차감 안 함)</em></td></tr>
+        <tr><td>Units-of-Production</td><td colspan="2">생산량 비례</td><td>(원가−잔존) × 생산비율</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="pts">
+    <li>내용연수↑ 또는 잔존가치↑ → 감가비↓ → <strong>NI↑</strong> (공격적 회계)</li>
+    <li class="warn">총 비용은 방법과 무관하게 동일 — <strong>시점 배분</strong>만 다름</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 비경상 ===================== -->
+<div id="tab-nonrec" class="tp">
+<div class="sec">
+  <div class="st">IS 구조 — 비경상항목의 위치 ★</div>
+  <div class="fm">Revenue − COGS = Gross Profit
+− Operating Expense (SG&amp;A, 감가상각)
+= Operating Profit (EBIT)
+− Interest Expense
+= Pretax Income (EBT)          ← Unusual/Infrequent 여기까지 포함 (세전)
+− Tax Expense
+= Income from Continuing Operations (계속영업손익, 세후)
+± Discontinued Operations (net of tax)   ← 세후로 별도 표시
+= Net Income</div>
+  <div class="kp-blue">⭐ 시험 포인트: <strong>Unusual/Infrequent는 계속영업 안(세전)</strong>, <strong>Discontinued는 계속영업 아래(세후)</strong></div>
+</div>
+
+<div class="sec">
+  <div class="st">두 가지 비경상항목</div>
+  <div class="g2">
+    <div class="card c-amber"><div class="ct">Unusual or Infrequent Items</div><ul class="pts">
+      <li>비경상적이거나 드문 항목 (둘 중 하나)</li>
+      <li><strong>계속영업손익에 포함</strong>, 세전 표시</li>
+      <li>ex) PPE 처분손익, 구조조정비, 자산상각</li>
+      <li>분석 시 지속성 판단 → 정상화(normalize)</li>
+    </ul></div>
+    <div class="card c-purple"><div class="ct">Discontinued Operations</div><ul class="pts">
+      <li>물리적·영업적으로 <strong>분리 가능</strong>한 사업의 중단</li>
+      <li><strong>세후(net of tax)</strong>로 계속영업 아래 별도</li>
+      <li>과거 IS도 재작성해 비교 가능하게</li>
+      <li class="warn">미래 예측에서 <strong>제외</strong>해야 할 항목</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">회계변경 3종 — 소급/전진 구분 ★★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구분</th><th>처리</th><th>대표 예시</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Change in Accounting Principle</strong><br>(회계정책 변경)</td><td class="up"><strong>Retrospective</strong><br>과거 재무제표 소급 재작성</td><td>LIFO → FIFO<br>(단, FIFO → LIFO는 전진법)</td></tr>
+        <tr><td><strong>Change in Accounting Estimate</strong><br>(회계추정 변경)</td><td class="na"><strong>Prospective</strong><br>당기부터 적용, 소급 X</td><td>내용연수·잔존가치·감가상각방법 변경, 대손율 변경</td></tr>
+        <tr><td><strong>Prior-Period Error</strong><br>(오류 수정)</td><td class="up"><strong>Retrospective Restatement</strong><br>과거 재무제표 수정 + 주석 공시</td><td>계산 실수, 기준 오적용, 분식 적발</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 감가상각<strong>방법</strong> 변경은 정책이 아니라 <strong>추정 변경(prospective)</strong>으로 처리 — 단골 함정</div>
+  <div class="tn">오류 수정 공시는 회계 품질의 적신호 — Reporting Quality 파트와 연결.</div>
+</div>
+</div>
+
+<!-- ===================== EPS 기본 ===================== -->
+<div id="tab-eps1" class="tp">
+<div class="sec">
+  <div class="st">자본구조 구분</div>
+  <div class="g2">
+    <div class="card c-green"><div class="ct">Simple Capital Structure</div><ul class="pts">
+      <li>희석증권 <strong>없음</strong></li>
+      <li><strong>Basic EPS만</strong> 공시</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">Complex Capital Structure</div><ul class="pts">
+      <li>CB, CPS, 옵션, 워런트 <strong>보유</strong></li>
+      <li><strong>Basic + Diluted 둘 다</strong> 공시</li>
+      <li>희석 경고 신호 제공 목적</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">Basic EPS ★</div>
+  <div class="fm">Basic EPS = (Net Income − Preferred Dividends) ÷ Weighted Average Shares Outstanding</div>
+  <ul class="pts">
+    <li>분자: 보통주 귀속 이익 → <strong>우선주 배당 차감</strong></li>
+    <li>분모: 기말 주식수 아님 → <strong>가중평균(WASO)</strong> (분자가 flow이므로 분모도 flow)</li>
+    <li>자기주식(Treasury Stock)은 <strong>제외</strong> — 유통주식만</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">가중평균 주식수(WASO) 계산 규칙</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>사건</th><th>처리</th><th>가중</th></tr></thead>
+      <tbody>
+        <tr><td>신주 발행 (증자)</td><td>주식수 ↑</td><td>발행일부터 <strong>월수 비례</strong></td></tr>
+        <tr><td>자기주식 매입</td><td>주식수 ↓</td><td>매입일부터 월수 비례</td></tr>
+        <tr><td>자기주식 재발행</td><td>주식수 ↑</td><td>재발행일부터 월수 비례</td></tr>
+        <tr><td><strong>Stock Dividend / Split</strong></td><td>주식수 ↑</td><td class="up"><strong>기초까지 소급</strong> (시간가중 X)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 주식배당·액면분할은 <strong>자원 유입이 없는 단순 분할</strong> → 기초(또는 그 이전 발행분의 발행시점)까지 소급 적용. 월수 가중하지 않는다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">예제 — WASO 계산</div>
+  <div class="card c-blue">
+    <div class="ct">조건</div>
+    <ul class="pts">
+      <li>1/1 기초 10,000주</li>
+      <li>4/1 4,000주 신주 발행</li>
+      <li>7/1 10% 주식배당</li>
+      <li>9/1 자기주식 3,000주 매입</li>
+    </ul>
+    <div class="fm">1/1 기초분:  10,000 × 1.10 × 12/12 = 11,000
+4/1 발행분:   4,000 × 1.10 ×  9/12 =  3,300
+9/1 자사주:  (3,000)        ×  4/12 = (1,000)
+                              WASO = 13,300주</div>
+    <div class="tn">7/1 주식배당 10%는 <strong>그 이전에 존재하던 모든 주식</strong>(기초분 + 4/1 발행분)에 소급 적용 → ×1.10. 9/1 자사주는 주식배당 이후라 조정 없음.</div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== EPS 희석 ===================== -->
+<div id="tab-eps2" class="tp">
+<div class="sec">
+  <div class="st">Diluted EPS — 전체 공식</div>
+  <div class="fm">                 (NI − Pref Div) + 전환우선주 배당 + 전환사채 이자×(1−t)
+Diluted EPS = ─────────────────────────────────────────────────────────
+                 WASO + 전환우선주 주식 + 전환사채 주식 + 옵션 순증주식</div>
+  <div class="kp-blue">⭐ "If-converted" — 기초(또는 발행일)에 전환된 것으로 <strong>가정</strong>. 실제 전환 가능 여부와 무관.</div>
+</div>
+
+<div class="sec">
+  <div class="st">증권별 조정 — 분자/분모 ★★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>증권</th><th>분자 조정</th><th>분모 조정</th><th>방법</th></tr></thead>
+      <tbody>
+        <tr><td><strong>전환우선주 (CPS)</strong></td><td class="up">+ 우선주 배당<br><em>(세효과 없음)</em></td><td>+ 전환 시 주식수</td><td>If-converted</td></tr>
+        <tr><td><strong>전환사채 (CB)</strong></td><td class="up">+ 이자 × (1 − 세율)<br><em>(세후 이자만)</em></td><td>+ 전환 시 주식수</td><td>If-converted</td></tr>
+        <tr><td><strong>옵션 / 워런트</strong></td><td class="na">변화 없음</td><td>+ <strong>순증</strong> 주식수</td><td>Treasury Stock</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ CB만 세효과 반영 — 이자는 손금이라 전환 시 <strong>절세효과도 사라지기</strong> 때문. 우선주 배당은 원래 손금이 아니므로 세조정 없음.</div>
+</div>
+
+<div class="sec">
+  <div class="st">Treasury Stock Method (옵션·워런트) ★</div>
+  <div class="fm">순증 주식수 = 행사주식수 − (행사주식수 × 행사가 ÷ 평균시장가)
+             = 행사주식수 × (평균시장가 − 행사가) ÷ 평균시장가</div>
+  <ul class="pts">
+    <li>행사로 들어온 현금으로 <strong>평균시장가</strong>에 자사주를 되산다고 가정</li>
+    <li class="warn">기말주가 아님 — 반드시 <strong>평균시장가(AMP)</strong> 사용</li>
+    <li><strong>행사가 &lt; 평균시장가</strong> → 희석 (ITM)</li>
+    <li><strong>행사가 &gt; 평균시장가</strong> → 행사 안 함 → <strong>Antidilutive, 제외</strong></li>
+  </ul>
+  <div class="card c-blue" style="margin-top:.6rem">
+    <div class="ct">예제</div>
+    <div class="fm">옵션 100,000주 · 행사가 $15 · 평균시장가 $20
+현금유입 = 100,000 × 15 = $1,500,000
+재매입   = 1,500,000 ÷ 20 = 75,000주
+순증      = 100,000 − 75,000 = 25,000주</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec">
+  <div class="st">풀이 절차 — 지문 신호 → 공식 선택</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">Treasury Stock Method (옵션·워런트)</div>
+      <div class="dm" style="margin-bottom:.3rem"><strong>신호</strong>: options / warrants · exercise price · average market price</div>
+      <ul class="pts">
+        <li>① 행사 시 발행되는 주식수 확인 (n)</li>
+        <li>② 유입 현금 = n × 행사가</li>
+        <li>③ 재매입 주식 = 유입현금 ÷ <strong>평균시장가</strong></li>
+        <li>④ 순증 = n − 재매입 → <strong>분모에만</strong> 가산</li>
+        <li class="warn">행사가 &gt; 평균시장가면 여기서 <strong>중단</strong> (Antidilutive)</li>
+      </ul>
+    </div>
+    <div class="card c-amber"><div class="ct">If-Converted (CB · 전환우선주)</div>
+      <div class="dm" style="margin-bottom:.3rem"><strong>신호</strong>: convertible · conversion ratio · 좌당 n주</div>
+      <ul class="pts">
+        <li>① 전환 시 증가 주식수 계산</li>
+        <li>② 분자 조정: CB는 <strong>이자×(1−t)</strong>, 우선주는 <strong>배당 그대로</strong></li>
+        <li>③ 주당 효과 = 분자조정 ÷ 증가주식수</li>
+        <li>④ Basic EPS와 비교 → <strong>작으면 희석</strong>, 크면 제외</li>
+        <li class="warn">증권이 여러 개면 <strong>각각</strong> ③④ 반복</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="st">희석 여부 판정 — 빠른 방법 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>증권</th><th>주당 효과 계산</th><th>판정</th></tr></thead>
+      <tbody>
+        <tr><td>전환우선주</td><td>우선주 배당 ÷ 전환 주식수</td><td rowspan="2">Basic EPS보다 <strong>작으면 희석</strong><br>크면 <strong>Antidilutive → 제외</strong></td></tr>
+        <tr><td>전환사채</td><td>이자×(1−t) ÷ 전환 주식수</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="pts">
+    <li>희석증권이 여러 개면 <strong>각각 따로</strong> 판정 — 묶어서 판단 X</li>
+    <li>기중 발행된 희석증권은 <strong>보유기간만큼만</strong> 가중</li>
+    <li class="warn">Antidilutive를 포함시키면 오답 — Diluted EPS는 절대 Basic EPS보다 클 수 없다</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">예제 — 전환사채</div>
+  <div class="card c-amber">
+    <div class="fm">보통주 귀속이익 $2,500,000 · 주식 1,000,000주 → Basic EPS = $2.50
+CB: 2,000좌 × $1,000 par, 5%, 좌당 120주 전환, 세율 30%
+
+전환 주식수 = 2,000 × 120 = 240,000주
+세후 이자   = 2,000,000 × 5% × (1 − 0.30) = $70,000
+주당 효과   = 70,000 ÷ 240,000 = $0.29  <  $2.50  → 희석 O
+
+Diluted EPS = (2,500,000 + 70,000) ÷ (1,000,000 + 240,000)
+            = 2,570,000 ÷ 1,240,000 = $2.07</div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 비율 ===================== -->
+<div id="tab-ratio" class="tp">
+<div class="sec">
+  <div class="st">Common-Size Income Statement</div>
+  <div class="kp-blue">기준(100%) = <strong>Revenue (Top-line)</strong> — BS는 Total Asset 기준이니 혼동 주의</div>
+  <ul class="pts">
+    <li>모든 항목을 매출 대비 %로 표시 → 규모가 다른 기업 간 비교 가능</li>
+    <li>시계열로 보면 원가구조 변화가 드러남</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">Income Statement 비율</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>비율</th><th>공식</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td>Gross Profit Margin</td><td>Gross Profit ÷ Revenue</td><td>원가 경쟁력·가격 결정력</td></tr>
+        <tr><td>Operating Profit Margin</td><td>EBIT ÷ Revenue</td><td>본업 수익성</td></tr>
+        <tr><td>Pretax Margin</td><td>EBT ÷ Revenue</td><td>이자 부담 반영</td></tr>
+        <tr><td>Net Profit Margin</td><td>Net Income ÷ Revenue</td><td>최종 수익성</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">마진 하락 시 어느 단계에서 벌어졌는지 추적 — GPM 하락이면 원가/가격, OPM만 하락이면 판관비.</div>
+</div>
+
+<div class="sec">
+  <div class="st">Comprehensive Income (포괄이익)</div>
+  <div class="fm">Comprehensive Income = Net Income + Other Comprehensive Income (OCI)</div>
+  <div class="card c-purple"><div class="ct">OCI 4+1 항목 (암기) ★</div><ul class="pts">
+    <li><strong>0.</strong> 재평가잉여금 (Revaluation surplus) — <em>IFRS만</em></li>
+    <li><strong>1.</strong> 해외사업장 외화환산손익</li>
+    <li><strong>2.</strong> 확정급여제도 재측정손익 (연금)</li>
+    <li><strong>3.</strong> 현금흐름위험회피 파생상품 평가손익</li>
+    <li><strong>4.</strong> FVOCI 금융자산 평가손익 (구 매도가능증권)</li>
+  </ul></div>
+  <div class="kp-blue">주주와의 거래 없이 자본을 증감시키는 항목 → OCI → 누적되어 <strong>AOCI</strong>(BS 자본)</div>
+</div>
+</div>
+
+<!-- ===================== 키워드 ===================== -->
+<div id="tab-keyword" class="tp">
+<div class="sec">
+  <div class="st">시험 키워드 → 바로 떠올릴 것</div>
+  <div class="kw-grid">
+    <div class="kw"><span class="kk">revenue recognized when...</span><span class="ka">→</span><span class="kv">performance obligation satisfied (현금 아님)</span></div>
+    <div class="kw"><span class="kk">cash received before delivery</span><span class="ka">→</span><span class="kv">Unearned Revenue (부채)</span></div>
+    <div class="kw"><span class="kk">acting as an agent</span><span class="ka">→</span><span class="kv">순액(수수료)만 매출</span></div>
+    <div class="kw"><span class="kk">contract revision</span><span class="ka">→</span><span class="kv">Prospective (과거 수정 X)</span></div>
+    <div class="kw"><span class="kk">discontinued operations</span><span class="ka">→</span><span class="kv">net of tax, 계속영업 아래 별도</span></div>
+    <div class="kw"><span class="kk">unusual or infrequent</span><span class="ka">→</span><span class="kv">계속영업 안, 세전</span></div>
+    <div class="kw"><span class="kk">change in accounting principle</span><span class="ka">→</span><span class="kv">Retrospective (LIFO→FIFO)</span></div>
+    <div class="kw"><span class="kk">change in depreciation method</span><span class="ka">→</span><span class="kv">Estimate 변경 → Prospective ⭐</span></div>
+    <div class="kw"><span class="kk">prior-period error</span><span class="ka">→</span><span class="kv">Retrospective Restatement</span></div>
+    <div class="kw"><span class="kk">simple capital structure</span><span class="ka">→</span><span class="kv">Basic EPS만 공시</span></div>
+    <div class="kw"><span class="kk">stock dividend / split</span><span class="ka">→</span><span class="kv">기초까지 소급, 월수가중 X ⭐</span></div>
+    <div class="kw"><span class="kk">convertible bond dilution</span><span class="ka">→</span><span class="kv">분자 +이자×(1−t), 분모 +주식</span></div>
+    <div class="kw"><span class="kk">convertible preferred dilution</span><span class="ka">→</span><span class="kv">분자 +배당(세효과 X), 분모 +주식</span></div>
+    <div class="kw"><span class="kk">options / warrants</span><span class="ka">→</span><span class="kv">Treasury Stock Method, 분자 불변</span></div>
+    <div class="kw"><span class="kk">average market price</span><span class="ka">→</span><span class="kv">TSM은 평균시장가 (기말주가 아님) ⭐</span></div>
+    <div class="kw"><span class="kk">exercise price &gt; market price</span><span class="ka">→</span><span class="kv">Antidilutive → 제외</span></div>
+    <div class="kw"><span class="kk">common-size income statement</span><span class="ka">→</span><span class="kv">기준 = Revenue</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">시험 함정 Top Picks</div>
+  <div class="card c-red"><div class="ct">⚠ 자주 틀리는 것</div><ul class="pts">
+    <li class="warn">감가상각 <strong>방법</strong> 변경 = 추정 변경 = <strong>Prospective</strong> (정책 변경 아님)</li>
+    <li class="warn">TSM에 <strong>기말주가</strong> 쓰면 오답 — 평균시장가</li>
+    <li class="warn">전환우선주 배당은 <strong>세효과 없음</strong> (CB 이자만 ×(1−t))</li>
+    <li class="warn">주식배당·분할은 <strong>월수 가중하지 않고</strong> 소급</li>
+    <li class="warn">Diluted EPS &gt; Basic EPS는 불가능 — Antidilutive 포함했다는 뜻</li>
+    <li class="warn">Discontinued는 <strong>세후</strong>, Unusual은 <strong>세전</strong></li>
+  </ul></div>
+</div>
+</div>
+
+<!-- ===================== Quiz ===================== -->
+<div id="tab-quiz" class="tp">
+<div class="sec">
+  <div class="st">Reading 28 — Quiz</div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q1</span>수익 인식 시점으로 가장 적절한 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 현금을 수취한 시점</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 수행의무를 이행한 시점</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 계약을 체결한 시점</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>수익은 Satisfaction of Performance Obligation 시점에 인식. 현금 수취는 무관 — 먼저 받으면 Unearned Revenue(부채), 나중에 받으면 Receivable(자산).</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q2</span>감가상각 방법을 정액법에서 정률법으로 변경했다. 회계처리는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. Retrospective — 과거 재무제표 재작성</button>
+      <button class="opt" onclick="ans(this,'correct')">B. Prospective — 당기부터 적용</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Retrospective Restatement + 주석 공시</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>감가상각 <strong>방법</strong> 변경은 회계정책이 아니라 <strong>회계추정 변경</strong> → Prospective. LIFO→FIFO 같은 정책 변경만 Retrospective.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q3</span>중단사업손익(Discontinued Operations)의 표시 방법은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 계속영업손익에 포함, 세전</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 계속영업손익 아래 별도, 세후</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. OCI에 표시</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>Discontinued = net of tax로 계속영업 <strong>아래</strong> 별도 표시. Unusual/Infrequent는 계속영업 <strong>안</strong>에 세전 표시.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q4</span>기초 100,000주, 5/1에 30,000주 발행, 7/1에 10% 주식배당. Basic EPS의 WASO는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 110,000주</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 132,000주</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 143,000주</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>100,000×1.10×12/12 = 110,000<br>30,000×1.10×8/12 = 22,000<br>합계 = <strong>132,000주</strong><br>주식배당은 그 이전 모든 주식에 소급(×1.10), 신주는 발행일부터 8개월 가중.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q5</span>보통주 300,000주, 워런트 100,000개(행사가 $50), 평균주가 $55, 기말주가 $60. Diluted EPS의 주식수는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 300,000주</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 309,091주</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 316,667주</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>순증 = 100,000 × (55 − 50) ÷ 55 = <strong>9,091주</strong><br>300,000 + 9,091 = 309,091주<br>⚠ 기말주가 $60이 아니라 <strong>평균주가 $55</strong> 사용.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q6</span>전환사채의 희석효과를 판정할 때 분자에 더하는 금액은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 이자비용 전액</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 이자비용 × (1 − 세율)</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 이자비용 × 세율</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>이자는 손금이므로 전환 시 이자도 사라지지만 <strong>절세효과도 사라진다</strong> → 세후 이자만 가산. 전환우선주 배당은 원래 손금이 아니라 세조정 없음.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q7</span>대리인(Agent) 역할을 하는 기업의 수익 인식은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 거래 총액을 매출로 인식</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 수수료(순액)만 매출로 인식</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 수익을 인식하지 않음</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>Agent는 재화를 통제하지 않으므로 <strong>순액(수수료)</strong>만 인식. Principal이어야 총액 인식. 총액/순액 선택은 매출 규모를 크게 바꿔 Reporting Quality 이슈가 된다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q8</span>Common-size Income Statement의 기준(100%) 항목은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. Revenue</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. Total Assets</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Net Income</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>IS는 <strong>Revenue(Top-line)</strong> 기준, BS는 <strong>Total Assets</strong> 기준, CF는 Revenue 기준. 셋을 혼동시키는 문제가 자주 나온다.</div>
+  </div>
+  <div class="qb">
+    <div class="qq"><span class="qn">C1</span><strong>[계산]</strong> 기초 200,000주, 4/1 60,000주 발행, 10/1 자기주식 24,000주 매입. WASO는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 236,000주</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 239,000주</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 245,000주</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>200,000 × 12/12 = 200,000<br>60,000 × 9/12 = 45,000<br>(24,000) × 3/12 = (6,000)<br>합계 = <strong>239,000주</strong></div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">C2</span><strong>[계산]</strong> NI $900,000, 우선주배당 $60,000, WASO 400,000주. 옵션 60,000개(행사가 $20), 평균주가 $25. Diluted EPS는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. $2.10</button>
+      <button class="opt" onclick="ans(this,'correct')">B. $2.03</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. $2.25</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>Basic = (900,000 − 60,000) ÷ 400,000 = $2.10<br>순증 = 60,000 × (25 − 20) ÷ 25 = <strong>12,000주</strong><br>Diluted = 840,000 ÷ 412,000 = <strong>$2.03</strong><br>옵션은 분자 조정 없음.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">C3</span><strong>[계산]</strong> 보통주귀속이익 $1,800,000, 주식 600,000주. CB 1,000좌(액면 $1,000, 6%, 좌당 40주), 세율 25%. 희석 여부와 Diluted EPS는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 희석됨 — $2.88</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 반희석 — $3.00 유지</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 희석됨 — $3.11</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>Basic = 1,800,000 ÷ 600,000 = $3.00<br>증가 주식 = 1,000 × 40 = 40,000주<br>세후 이자 = 1,000,000 × 6% × 0.75 = $45,000<br>주당 효과 = 45,000 ÷ 40,000 = $1.13 &lt; $3.00 → <strong>희석</strong><br>Diluted = 1,845,000 ÷ 640,000 = <strong>$2.88</strong></div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>

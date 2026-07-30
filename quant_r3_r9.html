@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CFA Quant R3–R9 완전 정리</title>
+<title>CFA Quant R1–R11 완전 정리</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -93,19 +93,21 @@ tr:hover td{background:var(--bg2)}
 <div class="page">
 
 <div class="ph">
-  <h1>CFA Quant R3–R9 완전 정리</h1>
+  <h1>CFA Quant R1–R11 완전 정리</h1>
   <p>Statistical Measures · Probability · Portfolio Math · Simulation · Estimation &amp; Inference · Regression · Independence Tests</p>
 </div>
 
 <div class="nav">
   <button class="nb active" onclick="show('routine',this)">풀이 루틴</button>
+  <button class="nb" onclick="show('r12',this)">R1·2 수익률·TVM</button>
   <button class="nb" onclick="show('r3',this)">R3 통계</button>
   <button class="nb" onclick="show('r4',this)">R4 확률</button>
   <button class="nb" onclick="show('r5',this)">R5 포트폴리오</button>
   <button class="nb" onclick="show('r6',this)">R6 시뮬레이션</button>
-  <button class="nb" onclick="show('r7',this)">R7 추정/검정</button>
-  <button class="nb" onclick="show('r8',this)">R8 회귀분석</button>
+  <button class="nb" onclick="show('r7',this)">R7·8 추정·검정</button>
   <button class="nb" onclick="show('r9',this)">R9 독립성검정</button>
+  <button class="nb" onclick="show('r8',this)">R10 회귀분석</button>
+  <button class="nb" onclick="show('r11',this)">R11 Big Data</button>
   <button class="nb" onclick="show('keyword',this)">초압축 키워드</button>
 </div>
 
@@ -152,7 +154,7 @@ tr:hover td{background:var(--bg2)}
         <div class="ct">Reject H₀ 조건</div>
         <ul class="pts">
           <li>p ≤ α → reject H₀</li>
-          <li>test stat &gt; critical value → reject</li>
+          <li>검정통계량이 <strong>rejection region</strong>에 위치 → reject<br><span class="dn">양측: |test stat| &gt; critical / 좌측 단측: test stat &lt; −critical</span></li>
           <li>μ₀가 CI <strong>밖</strong> → reject</li>
         </ul>
       </div>
@@ -160,7 +162,7 @@ tr:hover td{background:var(--bg2)}
         <div class="ct">Fail to Reject H₀ 조건</div>
         <ul class="pts">
           <li>p &gt; α → fail to reject</li>
-          <li>test stat &lt; critical value → fail</li>
+          <li>검정통계량이 rejection region <strong>밖</strong> → fail<br><span class="dn">양측: |test stat| ≤ critical</span></li>
           <li>μ₀가 CI <strong>안</strong> → fail to reject</li>
         </ul>
       </div>
@@ -174,7 +176,7 @@ tr:hover td{background:var(--bg2)}
         <thead><tr><th>Error</th><th>정의</th><th>기호</th><th>직관</th></tr></thead>
         <tbody>
           <tr><td><strong>Type I</strong></td><td>참인 H₀를 기각</td><td>α</td><td class="warn">괜히 의심</td></tr>
-          <tr><td><strong>Type II</strong></td><td>거짓 H₀를 채택</td><td>β</td><td class="warn">놓침</td></tr>
+          <tr><td><strong>Type II</strong></td><td>거짓 H₀를 <strong>기각하지 못함</strong> <span class="dn">(채택 아님 — H₀는 accept하지 않는다)</span></td><td>β</td><td class="warn">놓침</td></tr>
           <tr><td><strong>Power</strong></td><td>거짓 H₀를 올바르게 기각</td><td>1−β</td><td class="up">정확히 잡음</td></tr>
         </tbody>
       </table>
@@ -184,6 +186,77 @@ tr:hover td{background:var(--bg2)}
 </div>
 
 <!-- ===== R3 ===== -->
+<!-- ===================== R1·2 수익률·TVM ===================== -->
+<div id="tab-r12" class="tp">
+  <div class="sec">
+    <div class="st">수익률의 종류 (R1)</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>수익률</th><th>공식 / 정의</th><th>포인트</th></tr></thead>
+        <tbody>
+          <tr><td><strong>HPR</strong> (보유기간)</td><td>(P₁ − P₀ + D) ÷ P₀</td><td>배당 포함, 기간 무관 총수익</td></tr>
+          <tr><td><strong>Arithmetic Mean</strong></td><td>ΣR ÷ n</td><td>미래 1기간 <strong>기대치</strong>에 적합</td></tr>
+          <tr><td><strong>Geometric Mean</strong></td><td>[Π(1+R)]^(1/n) − 1</td><td>과거 <strong>복리 성과</strong>에 적합 — 변동성 있으면 AM보다 항상 작다</td></tr>
+          <tr><td><strong>Annualized</strong></td><td>(1+R기간)^(c) − 1 <span class="dn">c=기간수/년</span></td><td>18개월이면 지수 12/18</td></tr>
+          <tr><td><strong>Continuously Compounded</strong></td><td>ln(1+HPR) = ln(P₁/P₀)</td><td>R6 lognormal과 연결</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">MWR vs TWR ★★ — R1 최다 출제</div>
+    <div class="g2">
+      <div class="card c-amber">
+        <div class="ct">Money-Weighted (MWR)</div>
+        <ul class="pts">
+          <li>= 포트폴리오 현금흐름의 <strong>IRR</strong></li>
+          <li>입출금 <strong>시점·규모의 영향을 받는다</strong></li>
+          <li>투자자가 현금흐름을 통제할 때 적합</li>
+          <li>계산기 CF → IRR 기능</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <div class="ct">Time-Weighted (TWR)</div>
+        <ul class="pts">
+          <li>기간별 HPR을 <strong>기하 연결</strong>: [(1+R₁)(1+R₂)…]^(1/n) − 1</li>
+          <li>입출금 영향 <strong>제거</strong> → 매니저 평가의 표준</li>
+          <li>현금흐름 발생 시점마다 <strong>구간을 쪼개서</strong> 계산</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kp-red">⚠ 유리한 시점에 큰 돈이 들어오면 <strong>MWR &gt; TWR</strong>, 불리한 시점이면 반대. "펀드매니저 성과 평가" 키워드 → <strong>TWR</strong>.</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">수익률 조정 개념</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">gross vs net return</span><span class="kw-arr">→</span><span class="kw-val">운용보수 차감 전 vs 후</span></div>
+      <div class="kw-item"><span class="kw-key">real return</span><span class="kw-arr">→</span><span class="kw-val">(1+nominal)/(1+inflation) − 1</span></div>
+      <div class="kw-item"><span class="kw-key">leveraged return</span><span class="kw-arr">→</span><span class="kw-val">자기자본 기준 수익률 — 이익·손실 모두 증폭</span></div>
+      <div class="kw-item"><span class="kw-key">after-tax nominal</span><span class="kw-arr">→</span><span class="kw-val">세후 기준 — 세금 먼저, 물가 나중</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">TVM 핵심 (R2)</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>구조</th><th>공식</th><th>포인트</th></tr></thead>
+        <tbody>
+          <tr><td>FV / PV</td><td>FV = PV(1+r)ⁿ</td><td>복리 빈도 m이면 r/m, n×m</td></tr>
+          <tr><td><strong>Perpetuity</strong></td><td>PV = PMT ÷ r</td><td>우선주 가치평가 — <strong>첫 지급 1기간 후</strong> 기준</td></tr>
+          <tr><td>Annuity (ordinary)</td><td>계산기 N·I/Y·PMT</td><td>기말 지급</td></tr>
+          <tr><td><strong>Annuity Due</strong></td><td>ordinary × (1+r)</td><td>기초 지급 — BGN 모드 or ×(1+r)</td></tr>
+          <tr><td>내재 성장률</td><td>g = r − D/P</td><td>Gordon 역산</td></tr>
+          <tr><td>내재 할인율</td><td>가격 ↔ 현금흐름에서 역산</td><td>채권 YTM, 주식 요구수익률</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-blue">⭐ R2는 개념보다 <strong>계산기 숙련</strong> — CF/IRR/NPV, N·I/Y·PV·PMT·FV 5키, BGN 전환을 손에 익힐 것</div>
+  </div>
+</div>
+
 <div id="tab-r3" class="tp">
   <div class="sec">
     <div class="st">중심경향값 (Central Tendency)</div>
@@ -199,7 +272,7 @@ tr:hover td{background:var(--bg2)}
         </tbody>
       </table>
     </div>
-    <div class="kp-blue" style="margin-top:.75rem">Arithmetic ≥ Geometric ≥ Harmonic (항상 성립)</div>
+    <div class="kp-blue" style="margin-top:.75rem">Arithmetic ≥ Geometric ≥ Harmonic — <strong>양수 관측값</strong>에서 성립 (등호는 전 관측값 동일할 때)</div>
   </div>
 
   <div class="sec">
@@ -622,7 +695,7 @@ tr:hover td{background:var(--bg2)}
   </div>
 
   <div class="sec">
-    <div class="st">R8 문제 키워드 매핑</div>
+    <div class="st">R10 문제 키워드 매핑</div>
     <div class="kw-grid">
       <div class="kw-item"><span class="kw-key">predict / explain Y using X</span><span class="kw-arr">→</span><span class="kw-val">regression 문제</span></div>
       <div class="kw-item"><span class="kw-key">expected change in Y for one-unit change in X</span><span class="kw-arr">→</span><span class="kw-val">slope coefficient b₁</span></div>
@@ -706,11 +779,71 @@ tr:hover td{background:var(--bg2)}
 </div>
 
 <!-- ===== 초압축 키워드 ===== -->
+<!-- ===================== R11 Big Data ===================== -->
+<div id="tab-r11" class="tp">
+  <div class="sec">
+    <div class="st">Fintech &amp; Big Data (R11) — 전부 말문제</div>
+    <div class="card c-blue">
+      <div class="ct">Big Data의 3V ★</div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>특성</th><th>의미</th><th>키워드</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Volume</strong></td><td>데이터 양 — GB → TB → PB</td><td>규모</td></tr>
+            <tr><td><strong>Velocity</strong></td><td>전달 속도 — 실시간 = <strong>low latency</strong>, 지연 = high latency</td><td>latency ⭐</td></tr>
+            <tr><td><strong>Variety</strong></td><td>구조화(스프레드시트) → 반구조화(사진·웹코드) → 비구조화(영상)</td><td>구조 정도</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dn" style="margin-top:.4rem">품질(veracity)을 4번째 V로 보기도 — 선택성·결측·표본편의 이슈.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">대체 데이터 (Alternative Data) 원천 3종</div>
+    <ul class="pts">
+      <li><strong>개인</strong> — SNS 게시물, 리뷰, 이메일, 웹 방문기록</li>
+      <li><strong>기업</strong> — 은행 기록, 소매 스캐너 데이터 = <strong>corporate exhaust</strong></li>
+      <li><strong>센서</strong> — RFID, 스마트기기 네트워크 = <strong>Internet of Things (IoT)</strong></li>
+    </ul>
+  </div>
+
+  <div class="sec">
+    <div class="st">머신러닝 구분 ★</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>유형</th><th>데이터</th><th>목적</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Supervised</strong></td><td>입력·출력 <strong>라벨 있음</strong></td><td>입력→출력 관계 학습 (예측)</td></tr>
+          <tr><td><strong>Unsupervised</strong></td><td>라벨 <strong>없음</strong></td><td>데이터 구조·패턴 발견</td></tr>
+          <tr><td><strong>Deep Learning</strong></td><td>신경망 다층 구조</td><td>단순→복잡 단계 학습, supervised·unsupervised 모두 가능<br><span class="dn">이미지·음성 인식</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp-red">⚠ 과적합(overfitting) = 훈련 데이터에 과하게 맞춰 새 데이터 예측력이 떨어지는 것 — ML의 대표 위험</div>
+  </div>
+
+  <div class="sec">
+    <div class="st">금융 적용 분야</div>
+    <div class="kw-grid">
+      <div class="kw-item"><span class="kw-key">text analytics</span><span class="kw-arr">→</span><span class="kw-val">비정형 텍스트 분석 — 실적발표 감성 분석</span></div>
+      <div class="kw-item"><span class="kw-key">NLP</span><span class="kw-arr">→</span><span class="kw-val">컴퓨터의 인간 언어 해석 — 컴플라이언스·감성평가</span></div>
+      <div class="kw-item"><span class="kw-key">robo-advisor</span><span class="kw-arr">→</span><span class="kw-val">알고리즘 기반 자문 — fintech 대표 사례</span></div>
+      <div class="kw-item"><span class="kw-key">algorithmic trading</span><span class="kw-arr">→</span><span class="kw-val">규칙 기반 자동 주문 집행</span></div>
+    </div>
+  </div>
+</div>
+
 <div id="tab-keyword" class="tp">
   <div class="sec">
-    <div class="st">초압축 핵심 — 문제 읽자마자 반응 (R3~R9)</div>
+    <div class="st">초압축 핵심 — 문제 읽자마자 반응 (R1~R11)</div>
     <div class="kw-grid">
-      <div class="kw-item"><span class="kw-key">p ≤ α / test stat > critical</span><span class="kw-arr">→</span><span class="kw-val">reject H₀</span></div>
+            <div class="kw-item"><span class="kw-key">펀드매니저 성과 평가</span><span class="kw-arr">→</span><span class="kw-val">TWR (기하 연결, 현금흐름 영향 제거)</span></div>
+      <div class="kw-item"><span class="kw-key">IRR로 구하는 수익률</span><span class="kw-arr">→</span><span class="kw-val">MWR — 입출금 시점 영향 받음</span></div>
+      <div class="kw-item"><span class="kw-key">low latency</span><span class="kw-arr">→</span><span class="kw-val">실시간 데이터 (Velocity)</span></div>
+      <div class="kw-item"><span class="kw-key">corporate exhaust</span><span class="kw-arr">→</span><span class="kw-val">기업 발생 대체 데이터</span></div>
+      <div class="kw-item"><span class="kw-key">labeled input-output data</span><span class="kw-arr">→</span><span class="kw-val">Supervised learning</span></div>
+      <div class="kw-item"><span class="kw-key">p ≤ α / |test stat| &gt; critical (양측)</span><span class="kw-arr">→</span><span class="kw-val">reject H₀</span></div>
       <div class="kw-item"><span class="kw-key">mean / correlation</span><span class="kw-arr">→</span><span class="kw-val">t-test</span></div>
       <div class="kw-item"><span class="kw-key">statistically significant</span><span class="kw-arr">→</span><span class="kw-val">reject H₀</span></div>
       <div class="kw-item"><span class="kw-key">variance (단일)</span><span class="kw-arr">→</span><span class="kw-val">χ²-test</span></div>
@@ -773,7 +906,7 @@ tr:hover td{background:var(--bg2)}
   </div>
 </div>
 
-<div class="footer">CFA Level 1 Quant R3–R9 완전 정리 레퍼런스</div>
+<div class="footer">CFA Level 1 Quant R1–R11 완전 정리 레퍼런스</div>
 </div>
 
 <script>

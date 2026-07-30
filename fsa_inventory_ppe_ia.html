@@ -206,6 +206,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sec">
     <div class="sec-title">4. LIFO → FIFO Conversion</div>
+    <div class="card c-teal" style="margin-bottom:.75rem">
+      <div class="card-title">풀이 절차 — 지문 신호 → 조정 순서</div>
+      <div class="kp"><strong>신호</strong>: LIFO Reserve 금액 제시 · "if the company had used FIFO" · 세율 제시</div>
+      <ul class="pts">
+        <li>① <strong>Inventory</strong> += LIFO Reserve <span class="dn">(기말 잔액)</span></li>
+        <li>② <strong>COGS</strong> −= LIFO Reserve <strong>증가분</strong> <span class="dn">(기말 − 기초)</span></li>
+        <li>③ 세금 고려 시: <strong>Cash</strong> −= Reserve × t <span class="dn">(FIFO였다면 세금 더 냈을 것)</span></li>
+        <li>④ <strong>Retained Earnings</strong> += Reserve × (1 − t) <span class="dn">(누적 개념 — 기말 잔액 기준)</span></li>
+        <li>⑤ <strong>NI</strong> += Reserve <strong>증가분</strong> × (1 − t) <span class="dn">(당기 개념 — 변동분 기준)</span></li>
+      </ul>
+      <div class="kp"><span class="na">⚠</span> <strong>RE는 누적(잔액), NI는 당기(변동분)</strong> — 이 둘을 같은 숫자로 쓰면 틀린다. BS는 stock, IS는 flow.</div>
+    </div>
     <div class="grid2">
       <div class="card c-blue">
         <div class="card-title">LIFO Reserve 개념</div>
@@ -444,7 +456,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </tbody>
         </table>
       </div>
-      <div class="kp" style="margin-top:.75rem">⚠ Revaluation을 굳이 했다? → 재무구조가 매우 안 좋다는 신호. 대부분 Land만 적용.</div>
+      <div class="kp" style="margin-top:.75rem">분석 관점: 재평가는 자산·자본을 늘려 <strong>레버리지 비율을 낮아 보이게</strong> 한다. 영업성과 개선 없이 자본만 증가한 것은 아닌지 확인할 것. 실무상 감가상각이 없는 <strong>Land</strong>에 적용하는 경우가 많다.<br><span class="dn">※ 재평가를 했다는 사실만으로 재무구조가 나쁘다고 단정할 수는 없다 — 회계정책 선택·산업 관행·정보 적합성 개선 목적도 있다.</span></div>
     </div>
   </div>
 
@@ -463,8 +475,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="card-title">IFRS — 1 Step</div>
         <ul class="pts">
           <li>Loss = BV − Recoverable Amount</li>
-          <li>Recoverable Amount = max(NRV, Value in Use)</li>
+          <li>Recoverable Amount = max(<strong>FV − 처분부대원가</strong>, Value in Use)</li>
           <li>Value in Use = PV of Future CF</li>
+          <li><span class="na">⚠</span> 재고의 <strong>NRV</strong>와 혼동 금지 — 장기자산은 <strong>fair value less costs to sell</strong></li>
         </ul>
         <div class="kp">Recovery (write-up) 허용 — 손상 없었을 경우 정상 감가 후 BV까지 (취득원가 아님)</div>
       </div>
@@ -473,6 +486,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card-title">BS / IS 영향</div>
       <ul class="pts">
         <li>PPE ↓ / Impairment Loss ↑ (IS) / RE ↓ / NI ↓</li>
+      </ul>
+    </div>
+    <div class="card c-red" style="margin-top:.75rem">
+      <div class="card-title">⭐ Held for Use vs Held for Sale — 환입 규칙이 다르다</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>자산 상태</th><th>IFRS</th><th>U.S. GAAP</th></tr>
+          <tr><td><strong>Held for Use</strong><br>(계속 사용)</td><td class="up">환입 <strong>허용</strong><br><span class="dn">(손상 없었을 경우 BV 한도)</span></td><td class="dn">환입 <strong>불허</strong></td></tr>
+          <tr><td><strong>Held for Sale</strong><br>(매각예정)</td><td class="up">환입 <strong>허용</strong></td><td class="up">환입 <strong>허용</strong><br><span class="dn">(최초 손상액 한도)</span></td></tr>
+        </table>
+      </div>
+      <ul class="pts">
+        <li><span class="na">⚠</span> "U.S. GAAP은 손상 환입 불허"는 <strong>Held for Use에만</strong> 맞다 — 매각예정자산은 GAAP도 환입 허용</li>
+        <li>단, 환입 후 장부금액은 <strong>최초 손상 전 금액을 초과할 수 없다</strong> (양 기준 공통)</li>
+        <li><strong>Goodwill</strong>은 IFRS·GAAP 모두 환입 불허 — 예외 없음</li>
       </ul>
     </div>
   </div>
@@ -606,7 +634,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <tbody>
             <tr><td>Cost Model</td><td class="up">허용</td><td class="up">허용</td></tr>
             <tr><td>Revaluation Model</td><td class="up">허용 (active market 있을 때)</td><td class="dn">불허</td></tr>
-            <tr><td>Impairment Recovery</td><td class="up">허용 (Goodwill 제외)</td><td class="dn">불허</td></tr>
+            <tr><td>Impairment Recovery<br><span class="dn">(Goodwill 제외)</span></td><td class="up">허용</td><td class="dn">Held for use: <strong>불허</strong><br>Held for sale: <strong>허용</strong></td></tr>
           </tbody>
         </table>
       </div>
@@ -645,7 +673,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <tr><td>Revaluation Model</td><td class="up">허용</td><td class="dn">불허 (Cost Model only)</td></tr>
             <tr><td>Revaluation Gain</td><td>OCI → AOCI</td><td class="na">해당 없음</td></tr>
             <tr><td>Impairment (단계)</td><td>1 Step (Recoverable Amount)</td><td>2 Steps (Recovery Test → Loss)</td></tr>
-            <tr><td>Impairment Recovery</td><td class="up">허용</td><td class="dn">불허</td></tr>
+            <tr><td>Impairment Recovery</td><td class="up">허용</td><td class="dn">Held for use: <strong>불허</strong><br>Held for sale: <strong>허용</strong></td></tr>
             <tr><td>Component Depreciation</td><td class="up">필수</td><td>허용 but 잘 안 씀</td></tr>
             <tr><td>Investment Property</td><td>별도 계정 (FV Model 가능)</td><td>PPE로 처리</td></tr>
             <tr><td>Interest Capitalization</td><td>필수</td><td>필수</td></tr>
@@ -665,7 +693,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <tr><td>Research Cost</td><td class="dn">Expense</td><td class="dn">Expense</td></tr>
             <tr><td>Development Cost</td><td class="up">조건 충족 시 Capitalize</td><td class="dn">Expense</td></tr>
             <tr><td>Revaluation Model</td><td class="up">허용 (active market)</td><td class="dn">불허</td></tr>
-            <tr><td>Impairment Recovery</td><td class="up">허용 (Goodwill 제외)</td><td class="dn">불허</td></tr>
+            <tr><td>Impairment Recovery<br><span class="dn">(Goodwill 제외)</span></td><td class="up">허용</td><td class="dn">Held for use: <strong>불허</strong><br>Held for sale: <strong>허용</strong></td></tr>
             <tr><td>Goodwill Amortization</td><td class="dn">없음 (Impairment only)</td><td class="dn">없음 (Impairment only)</td></tr>
           </tbody>
         </table>
@@ -680,7 +708,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="card-title">GAAP만 허용</div>
         <ul class="pts">
           <li>LIFO (재고 평가)</li>
-          <li>Straight-Line + DDB 선택 (PPE)</li>
         </ul>
       </div>
       <div class="card c-blue">
@@ -689,23 +716,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <li>Revaluation Model (PPE, IA)</li>
           <li>Investment Property Fair Value Model</li>
           <li>Development Cost Capitalize</li>
-          <li>Impairment Recovery (Goodwill 제외)</li>
-          <li>Units-of-Production (PPE) — IFRS / GAAP 모두 허용 (GAAP 불허는 Component Dep)</li>
+          <li>Impairment Recovery — <strong>Held for use</strong> (Goodwill 제외)</li>
+          <li>Component Depreciation <strong>필수</strong> <span class="dn">(GAAP은 허용하나 잘 안 씀)</span></li>
         </ul>
+      </div>
+      <div class="card c-teal">
+        <div class="card-title">양 기준 모두 허용 <span class="dn">— 한쪽 전유 아님</span></div>
+        <ul class="pts">
+          <li>Straight-Line (정액법)</li>
+          <li>Accelerated / DDB (정률법)</li>
+          <li>Units-of-Production (생산량비례법)</li>
+          <li><strong>Held for sale</strong> 자산의 Impairment Recovery</li>
+        </ul>
+        <div class="kp"><span class="na">⚠</span> 감가상각<strong>방법</strong>은 기준별로 제한되지 않는다 — 자산의 <strong>경제적 효익 소비 패턴</strong>을 반영하면 된다. "정액법·정률법은 GAAP만"은 오답.</div>
       </div>
       <div class="card c-amber">
         <div class="card-title">Prospective (소급 X)</div>
         <ul class="pts">
-          <li>PPE Estimate 변경 (Salvage Value, Useful Life, Dep Method)</li>
+          <li>PPE Estimate 변경 (Salvage Value, Useful Life, <strong>Dep Method</strong>)</li>
         </ul>
       </div>
       <div class="card c-green">
         <div class="card-title">Retrospective (소급 O)</div>
         <ul class="pts">
-          <li>Inventory 정책 변경 (LIFO→FIFO)</li>
+          <li>Inventory 정책 변경 (LIFO→FIFO) — <span class="dn">Change in Accounting Principle</span></li>
           <li>Prior Period Adjustment (오류 수정)</li>
-          <li>Discontinued Operation</li>
         </ul>
+        <div class="kp"><span class="na">⚠</span> <strong>Discontinued Operation은 여기 포함되지 않는다.</strong> 회계정책 변경도 오류수정도 아닌 <strong>표시·분류</strong> 문제다 → 계속영업 아래 <strong>세후 별도 표시</strong>, 비교기간은 중단영업을 분리해 <strong>재표시</strong>. 시험은 이 둘을 구분해 묻는다.</div>
       </div>
     </div>
   </div>

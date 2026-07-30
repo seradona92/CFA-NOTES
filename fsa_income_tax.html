@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | R35 — Analysis of Income Taxes</title>
+<style>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — Income Tax 완전 정리</h1>
+  <p>CFA Level 1 · Reading 35 · DTA/DTL · Tax Base · Valuation Allowance · 슈웨이저 2025 검증</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('con',this)">개념 &amp; 용어</button>
+  <button class="nb" onclick="show('diff',this)">일시적 vs 영구적</button>
+  <button class="nb" onclick="show('base',this)">Tax Base 판정</button>
+  <button class="nb" onclick="show('case',this)">6대 사례</button>
+  <button class="nb" onclick="show('rate',this)">세율변동 · VA</button>
+  <button class="nb" onclick="show('calc',this)">계산 연습</button>
+  <button class="nb" onclick="show('anal',this)">분석가 관점</button>
+  <button class="nb" onclick="show('keyword',this)">키워드</button>
+  <button class="nb" onclick="show('quiz',this)">Quiz</button>
+</div>
+
+<!-- ===================== 개념 ===================== -->
+<div id="tab-con" class="tp active">
+<div class="sec">
+  <div class="st">두 개의 장부 — 관점의 차이</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">회계 (Book) — 재무제표</div><ul class="pts">
+      <li>기준: <strong>IFRS / GAAP</strong></li>
+      <li>원칙: Matching — 수익에 비용을 대응</li>
+      <li>산출: <strong>Pretax Income</strong> (회계이익)</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">세무 (Tax) — 세무신고서</div><ul class="pts">
+      <li>기준: <strong>세법</strong></li>
+      <li>원칙: 담세력 — 벌었으면 세금</li>
+      <li>산출: <strong>Taxable Income</strong> (과세소득)</li>
+    </ul></div>
+  </div>
+  <div class="kp-blue">⭐ 두 장부의 <strong>차이(Difference)</strong>가 이연법인세(DTA·DTL)를 만든다</div>
+</div>
+
+<div class="sec">
+  <div class="st">필수 용어 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>용어</th><th>정의</th><th>어디에</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Accounting Profit</strong> (Pretax Income)</td><td>회계기준에 따른 세전이익</td><td>IS</td></tr>
+        <tr><td><strong>Taxable Income</strong></td><td>세법에 따른 과세소득</td><td>세무신고서</td></tr>
+        <tr><td><strong>Taxes Payable</strong> (Current Tax Expense)</td><td>Taxable Income × 세율 — <strong>실제 납부 확정액</strong></td><td>BS 부채</td></tr>
+        <tr><td><strong>Income Tax Expense</strong></td><td>IS에 계상되는 총 법인세비용</td><td>IS</td></tr>
+        <tr><td><strong>DTA</strong> (이연법인세자산)</td><td>미래에 <strong>덜 낼</strong> 세금 — 지금 더 냄</td><td>BS 자산</td></tr>
+        <tr><td><strong>DTL</strong> (이연법인세부채)</td><td>미래에 <strong>더 낼</strong> 세금 — 지금 덜 냄</td><td>BS 부채</td></tr>
+        <tr><td><strong>Tax Base</strong></td><td>자산·부채의 <strong>세무상</strong> 장부금액</td><td>세무</td></tr>
+        <tr><td><strong>Carrying Value</strong></td><td>자산·부채의 <strong>회계상</strong> 장부금액</td><td>BS</td></tr>
+        <tr><td><strong>Valuation Allowance</strong></td><td>DTA 실현가능성이 낮을 때 차감하는 <strong>평가충당금</strong></td><td>DTA 차감</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">핵심 등식 ★★</div>
+  <div class="fm">Income Tax Expense = Taxes Payable + ΔDTL − ΔDTA</div>
+  <ul class="pts">
+    <li>IS의 <strong>법인세비용</strong>은 실제 납부액이 아니다 — 이연분을 포함한 개념</li>
+    <li>DTL 증가 → 비용 <strong>가산</strong> (미래에 낼 빚이 늘어남)</li>
+    <li>DTA 증가 → 비용 <strong>차감</strong> (미래에 덜 낼 권리가 늘어남)</li>
+  </ul>
+  <div class="card c-green" style="margin-top:.6rem"><div class="ct">✓ 빠른 계산 — 조건 충족 시</div>
+    <div class="fm">영구적 차이 없음 + 세율 변동 없음
+  →  Income Tax Expense = Pretax Income × 세율</div>
+    <div class="tn">이 두 조건이 깨지면 반드시 단계별로 계산해야 한다.</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">세율 개념</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구분</th><th>정의</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Statutory Tax Rate</strong> (법정세율)</td><td>세법에 규정된 세율</td></tr>
+        <tr><td><strong>Effective Tax Rate</strong> (유효세율)</td><td>Income Tax Expense ÷ Pretax Income</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 두 세율이 <strong>달라지는 원인</strong> = ① 영구적 차이 ② 세율 변동 ③ 해외 소득의 상이한 세율 ④ 세액공제. 일시적 차이는 유효세율을 바꾸지 <strong>않는다</strong>.</div>
+</div>
+</div>
+
+<!-- ===================== 차이 ===================== -->
+<div id="tab-diff" class="tp">
+<div class="sec">
+  <div class="st">일시적 차이 vs 영구적 차이 ★★</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">Temporary Difference (일시적 차이)</div><ul class="pts">
+      <li>시간이 지나면 <strong>반대로 뒤집힌다</strong> (reverse)</li>
+      <li>→ <strong>DTA 또는 DTL 발생</strong></li>
+      <li>유효세율에 영향 <strong>없음</strong></li>
+      <li>ex) 감가상각 방법 차이, 선수수익, 대손충당금</li>
+    </ul></div>
+    <div class="card c-red"><div class="ct">Permanent Difference (영구적 차이)</div><ul class="pts">
+      <li>영원히 <strong>뒤집히지 않는다</strong></li>
+      <li>→ <strong>DTA·DTL 발생 안 함</strong></li>
+      <li>유효세율 ≠ 법정세율의 <strong>주원인</strong></li>
+      <li>ex) 과태료·벌금, 접대비 한도초과, 비과세 이자수익</li>
+    </ul></div>
+  </div>
+  <div class="kp-blue">⭐ 판정 기준: <strong>"나중에 반대로 뒤집히는가?"</strong> — 뒤집히면 일시적, 아니면 영구적</div>
+</div>
+
+<div class="sec">
+  <div class="st">일시적 차이의 두 방향</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구분</th><th>지금</th><th>미래</th><th>결과</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Taxable</strong> Temporary Difference</td><td>회계이익 &gt; 과세소득<br>→ 세금 <strong>덜</strong> 냄</td><td>미래에 과세됨</td><td class="na"><strong>DTL</strong></td></tr>
+        <tr><td><strong>Deductible</strong> Temporary Difference</td><td>회계이익 &lt; 과세소득<br>→ 세금 <strong>더</strong> 냄</td><td>미래에 공제됨</td><td class="up"><strong>DTA</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="fm">DTL 발생: 수익을 회계에서 먼저 인식  or  비용을 세무에서 먼저 인식
+DTA 발생: 비용을 회계에서 먼저 인식  or  수익을 세무에서 먼저 인식</div>
+</div>
+
+<div class="sec">
+  <div class="st">직관적 암기법</div>
+  <div class="card c-green"><div class="ct">"지금 더 냈나, 덜 냈나?"</div><ul class="pts">
+    <li>지금 세금을 <strong>더</strong> 냈다 → 나중에 덜 내도 됨 → <strong>DTA</strong> (자산, 선급 성격)</li>
+    <li>지금 세금을 <strong>덜</strong> 냈다 → 나중에 더 내야 함 → <strong>DTL</strong> (부채, 미지급 성격)</li>
+  </ul></div>
+</div>
+</div>
+
+<!-- ===================== Tax Base ===================== -->
+<div id="tab-base" class="tp">
+<div class="sec">
+  <div class="st">Tax Base 정의</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구분</th><th>Tax Base 정의</th></tr></thead>
+      <tbody>
+        <tr><td><strong>자산</strong></td><td>미래에 세무상 <strong>공제받을 수 있는</strong> 금액</td></tr>
+        <tr><td><strong>부채</strong></td><td>장부금액 − 미래에 세무상 공제받을 금액</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">판정 매트릭스 ★★ — 이 표만 외우면 끝</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>관계</th><th>결과</th><th>직관</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2"><strong>자산</strong> (Asset)</td><td>Carrying Value &gt; Tax Base</td><td class="na"><strong>DTL</strong></td><td>세무상 이미 많이 공제받음 → 나중에 더 냄</td></tr>
+        <tr><td>Carrying Value &lt; Tax Base</td><td class="up"><strong>DTA</strong></td><td>세무상 공제 여력 남음 → 나중에 덜 냄</td></tr>
+        <tr><td rowspan="2"><strong>부채</strong> (Liability)</td><td>Carrying Value &gt; Tax Base</td><td class="up"><strong>DTA</strong></td><td>회계상 비용 먼저 인식 → 나중에 공제</td></tr>
+        <tr><td>Carrying Value &lt; Tax Base</td><td class="na"><strong>DTL</strong></td><td>반대</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ <strong>자산과 부채가 정반대</strong>다. 자산은 CV↑ → DTL, 부채는 CV↑ → DTA. 이걸 뒤집는 문제가 가장 많이 나온다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">예제 — 감가상각 차이</div>
+  <div class="card c-blue">
+    <div class="fm">취득원가 1,000, 내용연수 4년
+회계: 정액법  → 1년 후 CV = 750
+세무: 가속상각 → 1년 후 Tax Base = 600
+
+자산: CV(750) > Tax Base(600)  →  DTL 발생
+차이 150 × 세율 20% = DTL 30</div>
+    <div class="tn">세무에서 감가를 더 많이 태웠다 = 지금 과세소득이 작다 = 세금을 덜 냈다 → 미래에 더 낼 빚(DTL).</div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 6대 사례 ===================== -->
+<div id="tab-case" class="tp">
+<div class="sec">
+  <div class="st">시험에 나오는 6대 일시적 차이 ★★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>#</th><th>사례</th><th>회계 (Book)</th><th>세무 (Tax)</th><th>결과</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>선수임대료<br>(Rent received in advance)</td><td>아직 이행 X → 수익 인식 안 함</td><td>현금 받았으면 <strong>즉시 과세</strong></td><td class="up"><strong>DTA</strong></td></tr>
+        <tr><td><strong>2</strong></td><td>감가상각 차이<br>(가속상각 for tax)</td><td>정액법 → 비용 적게</td><td>가속상각 → 비용 <strong>많이</strong></td><td class="na"><strong>DTL</strong></td></tr>
+        <tr><td><strong>3</strong></td><td>투자주식 평가이익</td><td>평가이익 <strong>미리</strong> 인식</td><td>실현(매각) 시 과세</td><td class="na"><strong>DTL</strong></td></tr>
+        <tr><td><strong>4</strong></td><td>대손충당금<br>(Allowance)</td><td>보수적으로 <strong>미리</strong> 손실</td><td>확정돼야 손금 인정</td><td class="up"><strong>DTA</strong></td></tr>
+        <tr><td><strong>5</strong></td><td>R&amp;D 비용</td><td>발생 즉시 전액 비용</td><td>일정기간 <strong>나눠서</strong> 손금</td><td class="up"><strong>DTA</strong></td></tr>
+        <tr><td><strong>6</strong></td><td>퇴직급여 / 보증충당부채</td><td>매년 <strong>미리</strong> 비용</td><td>실제 <strong>지급 시</strong> 손금</td><td class="up"><strong>DTA</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 패턴: <strong>회계가 먼저 비용 잡으면 DTA</strong> (4·5·6), <strong>세무가 먼저 비용 잡으면 DTL</strong> (2). <strong>세무가 먼저 수익 잡으면 DTA</strong> (1), <strong>회계가 먼저 수익 잡으면 DTL</strong> (3).</div>
+</div>
+
+<div class="sec">
+  <div class="st">영구적 차이 사례</div>
+  <ul class="pts">
+    <li><strong>과태료·벌금</strong> — 회계상 비용이지만 세법상 영원히 손금 불인정</li>
+    <li><strong>접대비 한도초과분</strong> — 초과분은 영구 불인정</li>
+    <li><strong>비과세 이자수익</strong> (지방채 등) — 회계 수익이지만 영원히 비과세</li>
+    <li><strong>세액공제</strong> — 과세소득 계산과 무관하게 세금만 감면</li>
+  </ul>
+  <div class="kp-red">⚠ 이들은 DTA·DTL을 만들지 않고 <strong>유효세율만 바꾼다</strong></div>
+</div>
+</div>
+
+<!-- ===================== 세율변동 & VA ===================== -->
+<div id="tab-rate" class="tp">
+<div class="sec">
+  <div class="st">세율 변동 시 처리 ★</div>
+  <div class="kp-blue">DTA·DTL은 <strong>반전(reverse)될 시점의 세율</strong>을 반영해야 한다 → 세율이 바뀌면 기존 잔액을 <strong>재측정</strong></div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>세율 변동</th><th>DTA</th><th>DTL</th><th>Tax Expense</th></tr></thead>
+      <tbody>
+        <tr><td><strong>인상</strong> (예: 20% → 30%)</td><td class="up">증가</td><td class="up">증가</td><td>DTL 순포지션이면 ↑</td></tr>
+        <tr><td><strong>인하</strong> (예: 30% → 20%)</td><td class="na">감소</td><td class="na">감소</td><td>DTL 순포지션이면 ↓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="pts">
+    <li><strong>Current Tax</strong> (Taxes Payable)는 <strong>당기 세율</strong> 적용</li>
+    <li><strong>Deferred Tax</strong>는 <strong>미래 제정세율(enacted rate)</strong> 적용</li>
+    <li>재측정 효과는 <strong>당기 법인세비용</strong>에 반영</li>
+    <li class="warn">DTA·DTL은 같은 방향으로 움직인다 — 한쪽만 증가하지 않는다</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="sec">
+  <div class="st">풀이 절차 — 세율 변동 시 DTA·DTL 재측정</div>
+  <div class="card c-blue">
+    <div class="dm" style="margin-bottom:.3rem"><strong>신호</strong>: enacted tax rate change · "차기부터 세율 인상" · 기초 DTA/DTL 잔액 제시</div>
+    <ul class="pts">
+      <li>① <strong>기말</strong> 누적 일시적차이 확인</li>
+      <li>② 기말 DTA·DTL = 기말 일시적차이 × <strong>반전 시점 세율(새 세율)</strong></li>
+      <li>③ Δ = 기말 − 기초 <span class="dn">(기초는 옛 세율로 계상돼 있음)</span></li>
+      <li>④ Current Tax = 과세소득 × <strong>당기 세율</strong></li>
+      <li>⑤ Tax Expense = Current Tax + ΔDTL − ΔDTA</li>
+      <li class="warn">재측정 효과는 별도 항목이 아니라 <strong>당기 법인세비용</strong>에 흡수된다</li>
+      <li class="warn">세율 인상이면 DTA·DTL <strong>둘 다</strong> 커진다</li>
+    </ul>
+  </div>
+</div>
+
+<div class="st">Valuation Allowance (U.S. GAAP) ★★</div>
+  <div class="card c-amber"><div class="ct">개념</div><ul class="pts">
+    <li>DTA는 <strong>미래에 과세소득이 있어야</strong> 써먹을 수 있다</li>
+    <li>실현 가능성이 <strong>50% 이하</strong>면 그만큼 차감 → 평가충당금 설정</li>
+    <li><strong>DTA의 차감계정(contra account)</strong> — DTA 총액은 남기고 순액을 줄임</li>
+  </ul></div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>Valuation Allowance</th><th>순 DTA</th><th>Tax Expense</th><th>Net Income</th><th>경영진의 시각</th></tr></thead>
+      <tbody>
+        <tr><td class="up"><strong>설정 / 증가</strong></td><td class="na">감소</td><td class="up">증가</td><td class="na">감소</td><td>미래 이익 전망 <strong>악화</strong></td></tr>
+        <tr><td class="na"><strong>환입 / 감소</strong></td><td class="up">증가</td><td class="na">감소</td><td class="up">증가</td><td>미래 이익 전망 <strong>개선</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ <strong>방향 주의</strong> — 평가충당금을 <strong>늘리면</strong> 순 DTA가 줄고 법인세비용이 늘어 NI가 감소한다. "충당금 증가 = 미래 이익 전망 악화" 신호. 반대로 적는 실수가 매우 흔하다.</div>
+  <div class="tn">설정 근거: 최근 수년 누적 결손, 이월결손금 미사용 이력 → 실현 가능성 낮다고 판단. 반대로 수주잔고·계약이 충분하면 설정 불필요.</div>
+</div>
+
+<div class="sec">
+  <div class="st">IFRS vs U.S. GAAP</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+      <tbody>
+        <tr><td>DTA 인식</td><td>실현 가능성이 <strong>높은 범위까지만</strong> 인식</td><td>전액 인식 후 <strong>Valuation Allowance</strong>로 차감</td></tr>
+        <tr><td>결과</td><td colspan="2" class="up">순액 기준으로는 <strong>동일한 효과</strong></td></tr>
+        <tr><td>재평가 자산의 이연법인세</td><td>자본(OCI)에 반영</td><td>재평가 자체를 인정 안 함</td></tr>
+        <tr><td>BS 분류</td><td colspan="2">모두 <strong>비유동</strong>으로 표시</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 평가충당금이라는 <strong>계정 자체는 U.S. GAAP에만</strong> 존재. IFRS는 아예 인식 단계에서 걸러낸다.</div>
+</div>
+</div>
+
+<!-- ===================== 계산 ===================== -->
+<div id="tab-calc" class="tp">
+<div class="sec">
+  <div class="st">계산 5단계 ★</div>
+  <div class="fm">1) Pretax Financial Income  = Revenue − Expense            (회계)
+2) Taxable Income           = Pretax ± 일시적차이 ± 영구적차이  (세무)
+3) Current Tax Expense      = Taxable Income × 당기세율   → Taxes Payable
+4) Deferred Tax Expense     = 일시적차이 × 미래세율       → DTA / DTL
+5) Income Tax Expense       = (3) + (4)  →  NI = Pretax − (5)</div>
+</div>
+
+<div class="sec">
+  <div class="st">예제 A — DTA 발생과 반전</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">X1년</div>
+      <div class="fm">Pretax Income      1,000
+일시적 차이        +200  (가산)
+Taxable Income     1,200
+세율 20%
+
+Current Tax  = 1,200 × 20% = 240
+Deferred     = 200 × 20% = 40  → DTA 40 ↑
+Tax Expense  = 240 − 40 = 200
+NI           = 1,000 − 200 = 800</div>
+    </div>
+    <div class="card c-green"><div class="ct">X2년 (반전)</div>
+      <div class="fm">Pretax Income      1,000
+일시적 차이        −200  (차감)
+Taxable Income       800
+세율 20%
+
+Current Tax  = 800 × 20% = 160
+Deferred     = DTA 40 ↓  (사용)
+Tax Expense  = 160 + 40 = 200
+NI           = 1,000 − 200 = 800</div>
+    </div>
+  </div>
+  <div class="kp-green">✓ 영구적 차이·세율 변동이 없으므로 <strong>두 해 모두 Tax Expense = 1,000 × 20% = 200</strong> — 빠른 공식과 일치</div>
+</div>
+
+<div class="sec">
+  <div class="st">예제 B — 세율이 바뀌는 경우</div>
+  <div class="card c-amber">
+    <div class="fm">Pretax Income 1,000, 일시적 차이 +200
+당기 세율 20%, 차기부터 30%로 인상 확정
+
+Current Tax  = (1,000 + 200) × 20% = 240     ← 당기 세율
+Deferred Tax = 200 × 30% = 60  → DTA 60 ↑    ← 미래 세율 ⭐
+Tax Expense  = 240 − 60 = 180
+Effective Tax Rate = 180 ÷ 1,000 = 18%  ≠  법정세율 20%</div>
+    <div class="tn">이연분에 미래 세율을 쓰는 이유: DTA는 <strong>미래에 공제받을</strong> 금액이므로 그때의 세율로 평가해야 한다.</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">유효세율 조정표 (Effective Tax Rate Reconciliation)</div>
+  <div class="fm">법정세율
+ ± 영구적 차이 효과
+ ± 해외 소득 세율 차이
+ ± 세액공제
+ ± 세율 변동에 따른 이연법인세 재측정
+ ± Valuation Allowance 변동
+= 유효세율</div>
+  <ul class="pts">
+    <li>공시된 조정표는 <strong>세금 전략과 이익의 지속성</strong>을 읽는 자료</li>
+    <li class="warn">유효세율의 급격한 변동이 <strong>일회성 항목</strong> 때문이면 미래 이익 예측에서 제외</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 분석 ===================== -->
+<div id="tab-anal" class="tp">
+<div class="sec">
+  <div class="st">DTL을 부채로 볼 것인가 자본으로 볼 것인가 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>상황</th><th>분석가의 처리</th><th>논리</th></tr></thead>
+      <tbody>
+        <tr><td>DTL이 <strong>반전될 것으로 예상</strong></td><td class="na"><strong>부채</strong>로 취급</td><td>실제로 납부할 의무가 생긴다</td></tr>
+        <tr><td>DTL이 <strong>반전되지 않을 것으로 예상</strong><br>(설비투자가 계속 증가)</td><td class="up"><strong>자본</strong>으로 재분류</td><td>영원히 갚지 않는 부채 = 실질적 자기자본</td></tr>
+        <tr><td>시기가 불확실</td><td>Case by case</td><td>현재가치 할인 후 일부만 부채 처리</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 부채비율·레버리지 비율에 직접 영향 — 여신심사에서 DTL 취급이 갈리면 결론도 갈린다</div>
+</div>
+
+<div class="sec">
+  <div class="st">DTA 분석 포인트</div>
+  <ul class="pts">
+    <li>DTA가 지나치게 크면 <strong>실현 가능성</strong>을 의심 — 그만큼의 미래 과세소득이 나올까?</li>
+    <li>이월결손금(tax loss carryforward)에서 생긴 DTA는 특히 주의</li>
+    <li class="warn">Valuation Allowance 변동은 <strong>경영진의 재량</strong> → Earnings Management 통로</li>
+    <li>충당금을 갑자기 환입해 이익을 만든 사례가 실제로 존재</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">공시 항목</div>
+  <ul class="pts">
+    <li>DTA·DTL의 구성 내역과 잔액</li>
+    <li><strong>Valuation Allowance 잔액과 순변동</strong></li>
+    <li>유효세율 조정표 (법정세율 → 유효세율)</li>
+    <li>이월결손금·세액공제의 금액과 만료 시기</li>
+    <li>미인식 이연법인세가 있는 일시적 차이</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 키워드 ===================== -->
+<div id="tab-keyword" class="tp">
+<div class="sec">
+  <div class="st">시험 키워드 → 바로 떠올릴 것</div>
+  <div class="kw-grid">
+    <div class="kw"><span class="kk">tax base of asset &gt; carrying value</span><span class="ka">→</span><span class="kv">DTA ⭐</span></div>
+    <div class="kw"><span class="kk">carrying value of asset &gt; tax base</span><span class="ka">→</span><span class="kv">DTL</span></div>
+    <div class="kw"><span class="kk">carrying value of liability &gt; tax base</span><span class="ka">→</span><span class="kv">DTA (자산과 반대) ⭐</span></div>
+    <div class="kw"><span class="kk">accelerated depreciation for tax</span><span class="ka">→</span><span class="kv">DTL</span></div>
+    <div class="kw"><span class="kk">rent received in advance</span><span class="ka">→</span><span class="kv">DTA</span></div>
+    <div class="kw"><span class="kk">warranty / bad debt / pension 충당</span><span class="ka">→</span><span class="kv">DTA</span></div>
+    <div class="kw"><span class="kk">fines and penalties</span><span class="ka">→</span><span class="kv">영구적 차이 (DTA·DTL 없음)</span></div>
+    <div class="kw"><span class="kk">permanent difference</span><span class="ka">→</span><span class="kv">유효세율 ≠ 법정세율의 원인</span></div>
+    <div class="kw"><span class="kk">tax rate increases</span><span class="ka">→</span><span class="kv">DTA·DTL 둘 다 증가 ⭐</span></div>
+    <div class="kw"><span class="kk">increased valuation allowance</span><span class="ka">→</span><span class="kv">Tax Expense ↑, NI ↓, 순DTA ↓ ⭐</span></div>
+    <div class="kw"><span class="kk">valuation allowance 환입</span><span class="ka">→</span><span class="kv">NI ↑ — 이익조정 의심</span></div>
+    <div class="kw"><span class="kk">income tax expense</span><span class="ka">→</span><span class="kv">Taxes Payable + ΔDTL − ΔDTA</span></div>
+    <div class="kw"><span class="kk">effective tax rate</span><span class="ka">→</span><span class="kv">Tax Expense ÷ Pretax Income</span></div>
+    <div class="kw"><span class="kk">DTL not expected to reverse</span><span class="ka">→</span><span class="kv">자본으로 재분류</span></div>
+    <div class="kw"><span class="kk">deferred tax 측정 세율</span><span class="ka">→</span><span class="kv">미래 제정세율 (당기세율 아님)</span></div>
+    <div class="kw"><span class="kk">IFRS DTA 인식</span><span class="ka">→</span><span class="kv">실현 가능한 범위까지만 (VA 계정 없음)</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">시험 함정 Top Picks</div>
+  <div class="card c-red"><div class="ct">⚠ 자주 틀리는 것</div><ul class="pts">
+    <li class="warn">자산과 부채의 <strong>판정 방향이 정반대</strong> — 자산 CV↑ → DTL, 부채 CV↑ → DTA</li>
+    <li class="warn">Valuation Allowance <strong>증가</strong> = 순DTA 감소 = NI <strong>감소</strong> (반대로 외우기 쉬움)</li>
+    <li class="warn">Deferred Tax는 <strong>미래 세율</strong>, Current Tax는 당기 세율</li>
+    <li class="warn">세율 변동 시 DTA·DTL은 <strong>같은 방향</strong>으로 움직인다</li>
+    <li class="warn">영구적 차이는 DTA·DTL을 만들지 <strong>않는다</strong> — 유효세율만 바꾼다</li>
+    <li class="warn">Income Tax Expense ≠ Taxes Payable — 이연분을 반드시 가감</li>
+  </ul></div>
+</div>
+</div>
+
+<!-- ===================== Quiz ===================== -->
+<div id="tab-quiz" class="tp">
+<div class="sec">
+  <div class="st">Reading 35 — Quiz</div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q1</span>자산의 세무기준액(tax base)이 장부금액을 초과하고 미래에 반전이 예상된다면?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. DTA가 발생한다</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. DTL이 발생한다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 아무것도 발생하지 않는다</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>자산에서 <strong>Tax Base &gt; Carrying Value</strong>면 세무상 공제 여력이 남아 있다는 뜻 → 미래에 세금을 덜 낸다 → <strong>DTA</strong>.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q2</span>회계는 정액법, 세무는 가속상각을 쓴다. 당기 회계 감가비 10,000, 세무 감가비 8,000일 때 옳은 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. DTL이 증가한다</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 법인세비용이 납부세액보다 작다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 자산의 장부금액이 세무기준액보다 크다</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>세무 감가비(8,000)가 <strong>더 작으므로</strong> 과세소득이 커져 납부세액이 크다. 이는 <strong>DTA</strong>가 증가하는 상황이고, Tax Expense = Payable − ΔDTA 이므로 비용 &lt; 납부세액. 자산 CV(장부) &lt; Tax Base가 된다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q3</span>U.S. GAAP 기업이 기말에 평가충당금(Valuation Allowance)을 증가시켰다. 당기 법인세비용에 미치는 영향은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 증가</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 감소</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 영향 없음</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>평가충당금 증가 → 순 DTA <strong>감소</strong> → 법인세비용 <strong>증가</strong> → NI <strong>감소</strong>. 동시에 경영진이 미래 과세소득 전망을 낮게 본다는 신호다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q4</span>법정세율이 20%에서 30%로 인상되었다. 기존 DTA와 DTL에 미치는 영향은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. DTA 증가, DTL 감소</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 둘 다 증가</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 둘 다 감소</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>DTA·DTL은 반전 시점의 세율로 측정되므로 세율이 오르면 <strong>둘 다 증가</strong>한다. 재측정 효과는 당기 법인세비용에 반영된다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q5</span>다음 중 이연법인세를 발생시키지 <strong>않는</strong> 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 선수임대료</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 세법상 손금불산입되는 과태료</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 대손충당금 설정</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>과태료는 <strong>영구적 차이</strong> — 미래에 반전되지 않으므로 DTA·DTL을 만들지 않는다. 다만 <strong>유효세율</strong>을 법정세율보다 높인다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q6</span>Pretax Income 1,000, 일시적 차이 +200(가산), 당기세율 20%, 차기 세율 30% 확정. 이연법인세 금액은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. DTA 40</button>
+      <button class="opt" onclick="ans(this,'correct')">B. DTA 60</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. DTL 60</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>이연분은 <strong>반전 시점의 세율(30%)</strong>로 측정 → 200 × 30% = <strong>60</strong>. 과세소득이 회계이익보다 커서 지금 세금을 더 내므로 <strong>DTA</strong>다. Current Tax는 당기세율 20% 적용.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q7</span>분석가가 어떤 기업의 DTL이 향후에도 계속 반전되지 않을 것으로 판단했다. 가장 적절한 조정은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 유동부채로 재분류</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 자본으로 재분류</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 자산에서 차감</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>설비투자가 지속 증가해 DTL이 계속 이월되면 실질적으로 갚지 않는 항목이므로 <strong>자본</strong>으로 보아 레버리지 비율을 조정한다. 반전이 예상되면 부채로 취급.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q8</span>법인세비용(Income Tax Expense)의 계산식으로 옳은 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. Taxes Payable − ΔDTL + ΔDTA</button>
+      <button class="opt" onclick="ans(this,'correct')">B. Taxes Payable + ΔDTL − ΔDTA</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Pretax Income × 법정세율 (항상)</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>DTL 증가는 미래 납부 의무 증가 → 비용 가산. DTA 증가는 미래 절세 권리 증가 → 비용 차감. C는 영구적 차이·세율 변동이 <strong>없을 때만</strong> 성립한다.</div>
+  </div>
+  <div class="qb">
+    <div class="qq"><span class="qn">C1</span><strong>[계산]</strong> Pretax Income 500,000 · 영구적 차이(과태료) 20,000 · 일시적 차이 +40,000(가산) · 세율 25%. Taxes Payable은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 125,000</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 140,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 135,000</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>Taxable Income = 500,000 + 20,000 + 40,000 = 560,000<br>Taxes Payable = 560,000 × 25% = <strong>140,000</strong><br>영구적 차이도 <strong>과세소득 계산에는 포함</strong>된다 — 다만 DTA·DTL을 만들지 않을 뿐.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">C2</span><strong>[계산]</strong> 위 조건에서 Income Tax Expense와 유효세율은? <span class="dn">(일시적차이 40,000은 DTA 발생, 세율 25% 유지)</span></div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 130,000 / 26%</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 140,000 / 28%</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 125,000 / 25%</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>ΔDTA = 40,000 × 25% = 10,000<br>Tax Expense = 140,000 − 10,000 = <strong>130,000</strong><br>유효세율 = 130,000 ÷ 500,000 = <strong>26%</strong> ≠ 법정 25%<br>차이의 원인은 <strong>영구적 차이(과태료)</strong>뿐이다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">C3</span><strong>[계산]</strong> 기초 DTL 60,000(세율 20% 기준). 세율이 30%로 인상되었고 일시적차이는 변동 없음. 재측정이 당기 법인세비용에 미치는 영향은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 30,000 증가</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 30,000 감소</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 영향 없음</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>기초 일시적차이 = 60,000 ÷ 20% = 300,000<br>새 DTL = 300,000 × 30% = 90,000<br>ΔDTL = 90,000 − 60,000 = <strong>+30,000</strong> → Tax Expense <strong>30,000 증가</strong>, NI 감소.</div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>

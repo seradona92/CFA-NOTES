@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | R29 — Analyzing Balance Sheets</title>
+<style>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — Balance Sheet 완전 정리</h1>
+  <p>CFA Level 1 · Reading 29 · 금융상품 · 무형자산·영업권 · 자본 · 슈웨이저 2025 검증</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('str',this)">BS 구조</button>
+  <button class="nb" onclick="show('fin',this)">금융상품</button>
+  <button class="nb" onclick="show('ia',this)">무형자산 · 영업권</button>
+  <button class="nb" onclick="show('liab',this)">부채</button>
+  <button class="nb" onclick="show('eq',this)">자본</button>
+  <button class="nb" onclick="show('ratio',this)">비율 · Common-size</button>
+  <button class="nb" onclick="show('keyword',this)">키워드</button>
+  <button class="nb" onclick="show('quiz',this)">Quiz</button>
+</div>
+
+<!-- ===================== 구조 ===================== -->
+<div id="tab-str" class="tp active">
+<div class="sec">
+  <div class="st">BS의 두 가지 표시 형식</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">Classified BS (분류식)</div><ul class="pts">
+      <li>유동 / 비유동을 <strong>구분</strong>해 표시</li>
+      <li>U.S. GAAP에서 일반적</li>
+      <li>CA / NCA / CL / NCL</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">Liquidity-based Format (유동성 배열)</div><ul class="pts">
+      <li>유동·비유동 구분 <strong>없이</strong> 유동성 순서로 배열</li>
+      <li>IFRS에서 허용 — 더 목적적합할 때</li>
+      <li><strong>은행·금융기관</strong>이 주로 사용</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">유동(Current)의 정의 ★</div>
+  <div class="kp-blue">⭐ <strong>1년</strong>과 <strong>영업순환주기(operating cycle)</strong> 중 <strong>더 긴 기간</strong> 이내</div>
+  <div class="fm">Operating Cycle: 현금 → 재고 매입 → 판매 → 매출채권 → 현금 회수 → 반복</div>
+  <div class="tn">대부분 기업은 영업순환주기가 1년 이하라 실무상 1년 기준으로 본다. 다만 조선·건설처럼 주기가 긴 산업은 1년을 넘는 자산도 유동으로 분류될 수 있다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">측정 기준이 뒤섞여 있다 — BS의 한계 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>한계</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mixture of Values</strong></td><td>항목마다 측정기준이 다름 — 역사적원가, 상각후원가, 공정가치가 <strong>한 표에 혼재</strong></td></tr>
+        <tr><td><strong>Completeness</strong></td><td>드러나지 않는 가치가 존재 — <strong>인적자본, 브랜드 평판, 내부창출 영업권</strong>은 자산으로 인식 안 됨</td></tr>
+        <tr><td><strong>추정 의존</strong></td><td>대손·충당부채·손상 등 상당 부분이 경영진 추정</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 따라서 <strong>장부가 ≠ 시장가치</strong>. BS만으로 기업가치를 판단할 수 없다는 말문제가 자주 나온다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">자산 인식의 두 조건</div>
+  <ul class="pts">
+    <li><strong>통제(control)</strong> 가능할 것</li>
+    <li><strong>미래 경제적 효익</strong>이 유입될 가능성이 높을 것 (probable)</li>
+    <li>추가로 <strong>신뢰성 있는 측정</strong>이 가능해야 인식</li>
+  </ul>
+  <div class="tn">이 조건 때문에 아무리 뛰어난 직원·브랜드라도 BS에 자산으로 올라가지 않는다.</div>
+</div>
+</div>
+
+<!-- ===================== 금융상품 ===================== -->
+<div id="tab-fin" class="tp">
+<div class="sec">
+  <div class="st">금융자산 3분류 ★★ — 최빈 출제</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>IFRS 9 (현행)</th><th>U.S. GAAP 대응</th><th>측정</th><th>미실현손익</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Amortized Cost</strong><br>(상각후원가)</td><td>Held-to-Maturity (HTM)</td><td class="up">상각후원가<br>(공정가치 평가 X)</td><td class="na">인식 안 함</td></tr>
+        <tr><td><strong>FVOCI</strong><br>(기타포괄손익-공정가치)</td><td>Available-for-Sale (AFS)</td><td>공정가치</td><td class="up"><strong>OCI</strong> → AOCI (자본)</td></tr>
+        <tr><td><strong>FVPL</strong><br>(당기손익-공정가치)</td><td>Trading / Held-for-Trading</td><td>공정가치</td><td class="na"><strong>NI</strong> → Retained Earnings</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 축: <strong>보유 의도</strong>가 분류를 결정하고, 분류가 <strong>평가손익의 위치</strong>(NI vs OCI vs 미인식)를 결정한다</div>
+  <div class="tn">이자수익·배당수익·손상차손은 세 분류 모두 <strong>NI</strong>에 반영된다 — 차이는 <strong>미실현 평가손익</strong>의 처리에만 있다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">보유 의도별 판정</div>
+  <div class="g3">
+    <div class="card c-green"><div class="ct">Amortized Cost</div><ul class="pts">
+      <li>만기까지 <strong>보유 목적</strong></li>
+      <li>채무증권만 가능</li>
+      <li>시가 변동 무시 (존버)</li>
+    </ul></div>
+    <div class="card c-blue"><div class="ct">FVOCI</div><ul class="pts">
+      <li>만기보유도 단기매매도 <strong>아님</strong></li>
+      <li>중간 성격</li>
+      <li>평가손익 자본에 누적</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">FVPL</div><ul class="pts">
+      <li><strong>단기 매매차익</strong> 목적</li>
+      <li>파생상품 포함</li>
+      <li>손익 즉시 NI 반영</li>
+    </ul></div>
+  </div>
+  <div class="kp-red">⚠ 같은 채권이라도 <strong>분류가 다르면 BS 금액과 NI가 달라진다</strong> — 기업 간 비교 시 반드시 확인</div>
+</div>
+
+<div class="sec">
+  <div class="st">현금흐름 분류 연결</div>
+  <ul class="pts">
+    <li><strong>FVPL(단기매매)</strong> 증권의 매매 → <strong>CFO</strong></li>
+    <li><strong>투자 목적</strong> 증권의 매매 → <strong>CFI</strong></li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 무형자산 ===================== -->
+<div id="tab-ia" class="tp">
+<div class="sec">
+  <div class="st">무형자산 — 취득 경로별 처리 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>취득 경로</th><th>처리</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td><strong>외부 구입</strong> (Purchased)</td><td class="up">자산으로 <strong>자본화</strong></td><td>취득원가로 인식</td></tr>
+        <tr><td><strong>내부 창출</strong> (Internally developed)</td><td class="na">원칙 <strong>비용 처리</strong></td><td>예외 아래 참조</td></tr>
+        <tr><td><strong>사업결합으로 취득</strong></td><td>식별가능하면 개별 자산<br>나머지는 <strong>영업권</strong></td><td>공정가치로 인식</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 논리: 돈 주고 샀다면 미래 효익이 검증된 것이지만, 내부에서 만든 건 <strong>자기 판단</strong>이라 원칙적으로 비용</div>
+</div>
+
+<div class="sec">
+  <div class="st">R&amp;D — IFRS vs GAAP ★★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+      <tbody>
+        <tr><td><strong>연구비</strong> (Research)</td><td class="na">비용</td><td class="na">비용</td></tr>
+        <tr><td><strong>개발비</strong> (Development)</td><td class="up"><strong>요건 충족 시 자본화</strong></td><td class="na">비용</td></tr>
+        <tr><td>소프트웨어 (판매·자가사용)</td><td>위와 동일</td><td class="up"><strong>기술적 실현가능성 이후 자본화</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ IFRS는 <strong>개발비</strong>, U.S. GAAP은 <strong>소프트웨어</strong>가 예외 — 서로 다른 항목이라는 점이 함정</div>
+  <ul class="pts">
+    <li>자본화하면 자산↑·초기 NI↑, 이후 상각으로 비용 인식 → <strong>공격적 회계</strong> 신호가 될 수 있음</li>
+    <li>비교 시 자본화 정책 차이를 조정해야 함</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">영업권 (Goodwill) ★</div>
+  <div class="fm">Goodwill = 인수대가(Acquisition Cost) − 식별가능 순자산의 공정가치</div>
+  <div class="card c-blue" style="margin-top:.6rem">
+    <div class="ct">예제</div>
+    <div class="fm">인수대가                         2,000
+식별가능 순자산 공정가치        (1,000)
+   = Cash 100 + AR 200 + 재고 500
+   + PP&E 700 − 부채 500
+Goodwill                          1,000</div>
+    <div class="tn">피인수기업 장부의 기존 영업권(200)은 <strong>식별가능 자산이 아니므로 제거</strong>하고 다시 계산한다.</div>
+  </div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>항목</th><th>처리</th></tr></thead>
+      <tbody>
+        <tr><td>상각 (Amortization)</td><td class="na"><strong>하지 않음</strong> (비한정 내용연수)</td></tr>
+        <tr><td>손상검사 (Impairment)</td><td class="up"><strong>매년 실시</strong> — 손상 시 NI 차감</td></tr>
+        <tr><td>내부창출 영업권</td><td class="na">인식 <strong>불가</strong></td></tr>
+        <tr><td>손상 환입</td><td class="na">IFRS·GAAP 모두 <strong>불가</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">분석 시 영업권을 자산에서 제외하고 비율을 재계산하는 조정이 흔하다 — 현금창출력이 없는 항목이기 때문.</div>
+</div>
+
+<div class="sec">
+  <div class="st">내용연수에 따른 구분</div>
+  <div class="g2">
+    <div class="card c-green"><div class="ct">Finite Life (한정)</div><ul class="pts">
+      <li>내용연수에 걸쳐 <strong>상각</strong></li>
+      <li>손상 징후 있을 때 검사</li>
+      <li>ex) 특허권, 라이선스, 고객목록</li>
+    </ul></div>
+    <div class="card c-purple"><div class="ct">Indefinite Life (비한정)</div><ul class="pts">
+      <li><strong>상각 안 함</strong></li>
+      <li><strong>매년</strong> 손상검사</li>
+      <li>ex) 영업권, 일부 상표권</li>
+    </ul></div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 부채 ===================== -->
+<div id="tab-liab" class="tp">
+<div class="sec">
+  <div class="st">부채의 두 성격</div>
+  <div class="g2">
+    <div class="card c-red"><div class="ct">Financial Liability (금융부채)</div><ul class="pts">
+      <li><strong>이자가 발생</strong>하는 부채</li>
+      <li>차입금, 사채, 어음</li>
+      <li>레버리지 비율의 분자</li>
+    </ul></div>
+    <div class="card c-green"><div class="ct">Operating Liability (영업부채)</div><ul class="pts">
+      <li>영업활동에서 <strong>자연 발생</strong>, 이자 없음</li>
+      <li>매입채무, 미지급비용, 선수수익</li>
+      <li>운전자본의 구성요소</li>
+    </ul></div>
+  </div>
+  <div class="tn">여신심사에서 Net Debt 계산 시 <strong>금융부채만</strong> 잡는 이유가 여기에 있다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">비유동 금융부채 — 측정</div>
+  <ul class="pts">
+    <li>장기차입금·사채는 원칙적으로 <strong>상각후원가(amortized cost)</strong>로 측정</li>
+    <li>일정 요건 충족 시 <strong>공정가치 측정</strong> 선택 가능 (Fair Value Option)</li>
+    <li>장부금액과 시장가치가 달라질 수 있음 → 주석의 공정가치 공시 확인</li>
+  </ul>
+  <div class="tn">할인·할증 발행 사채의 유효이자율 상각 계산은 Fixed Income에서 다룬다. FSA에서는 <strong>측정 기준과 표시</strong>가 논점.</div>
+</div>
+
+<div class="sec">
+  <div class="st">Deferred Tax Liability</div>
+  <ul class="pts">
+    <li>회계이익 &gt; 과세소득에서 발생하는 <strong>미래 납부 의무</strong></li>
+    <li>IFRS·GAAP 모두 <strong>비유동</strong>으로 분류</li>
+    <li>반전 예상되면 부채, 계속 이월되면 자본으로 재분류해 분석</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">유동부채 주요 항목</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>성격</th></tr></thead>
+      <tbody>
+        <tr><td>Accounts Payable</td><td>외상 매입 — 영업부채</td></tr>
+        <tr><td>Notes Payable</td><td>어음 발행 — 금융부채</td></tr>
+        <tr><td>Current Portion of LT Debt</td><td>장기차입금 중 <strong>1년 내 상환분</strong></td></tr>
+        <tr><td>Accrued Expenses</td><td>발생했으나 미지급 — 미지급법인세·미지급급여</td></tr>
+        <tr><td>Unearned Revenue</td><td>선수금 — 현금 먼저 받고 의무 미이행</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 자본 ===================== -->
+<div id="tab-eq" class="tp">
+<div class="sec">
+  <div class="st">자본의 구성 ★</div>
+  <div class="fm">Equity = Contributed Capital + Retained Earnings + AOCI − Treasury Stock + NCI</div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Capital Stock</strong></td><td>액면가 × 발행주식수</td></tr>
+        <tr><td><strong>APIC</strong> (주식발행초과금)</td><td>(발행가 − 액면가) × 주식수</td></tr>
+        <tr><td><strong>Retained Earnings</strong></td><td>기초 RE + NI − 배당</td></tr>
+        <tr><td><strong>AOCI</strong></td><td>OCI 누적액 (자본 항목)</td></tr>
+        <tr><td><strong>Treasury Stock</strong></td><td>자기주식 — 자본의 <strong>차감</strong> 항목</td></tr>
+        <tr><td><strong>NCI</strong> (비지배지분)</td><td>종속기업 중 지배하지 않는 몫</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 상환우선주(Redeemable Preferred Stock)는 형식은 자본이지만 상환 의무가 있어 <strong>금융부채</strong>로 분류</div>
+</div>
+
+<div class="sec">
+  <div class="st">자기주식(Treasury Stock) 3가지 거래 ★</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>매입 (Purchase)</th><th>소각 (Retire)</th><th>재발행 (Reissue)</th></tr></thead>
+      <tbody>
+        <tr><td>BS 변화</td><td>Cash ↓ · TS ↑</td><td>Capital Stock ↓ · TS ↓</td><td>Cash ↑ · TS ↓</td></tr>
+        <tr><td>Issued Shares</td><td class="na">불변</td><td class="na">감소</td><td class="na">불변</td></tr>
+        <tr><td>Outstanding Shares</td><td class="na">감소</td><td class="na">불변</td><td class="up">증가</td></tr>
+        <tr><td>EPS</td><td class="up">증가</td><td class="na">불변</td><td class="na">감소</td></tr>
+        <tr><td>총 자본</td><td class="na">감소</td><td class="na">불변</td><td class="up">증가</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 소각 시 EPS가 불변인 이유: 자기주식은 매입 시점에 이미 <strong>유통주식에서 제외</strong>됐기 때문</div>
+</div>
+
+<div class="sec">
+  <div class="st">OCI 항목 — 자본 직행 ★</div>
+  <div class="card c-purple"><div class="ct">암기: 재·환·연·헤·공</div><ul class="pts">
+    <li><strong>재</strong>평가잉여금 (Revaluation surplus) — <em>IFRS만</em></li>
+    <li><strong>환</strong>산손익 — 해외사업장 외화환산</li>
+    <li><strong>연</strong>금 재측정손익 — DB형 확정급여제도</li>
+    <li><strong>헤</strong>지 — 현금흐름위험회피 파생상품</li>
+    <li><strong>공</strong>정가치 — FVOCI 금융자산 평가손익</li>
+  </ul></div>
+  <div class="fm">Comprehensive Income = Net Income + OCI
+누적되면  →  AOCI (BS 자본)</div>
+</div>
+
+<div class="sec">
+  <div class="st">자본 증감 원인 정리</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>증가 (+)</th><th>감소 (−)</th></tr></thead>
+      <tbody>
+        <tr><td>Capital Stock · APIC</td><td>유상증자·주식발행</td><td>감자·소각</td></tr>
+        <tr><td>Retained Earnings</td><td>Net Income</td><td>배당 (Dividend)</td></tr>
+        <tr><td>AOCI</td><td colspan="2">OCI 항목의 증감</td></tr>
+        <tr><td>Treasury Stock</td><td>재발행·소각 (TS 감소)</td><td>자기주식 매입</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 비율 ===================== -->
+<div id="tab-ratio" class="tp">
+<div class="sec">
+  <div class="st">Common-Size Balance Sheet</div>
+  <div class="kp-blue">기준(100%) = <strong>Total Assets</strong> — IS·CF는 Revenue 기준이므로 혼동 주의</div>
+  <ul class="pts">
+    <li>자산 구성 → 사업 모델을 드러냄 (재고 비중 큰 유통업 vs PP&amp;E 비중 큰 제조업)</li>
+    <li>부채 비중 → 자본구조와 지급능력</li>
+    <li>규모가 다른 기업 간 비교, 시계열 추세 분석에 사용</li>
+  </ul>
+</div>
+
+<div class="sec">
+  <div class="st">유동성 비율 — 보수성 순서 ★</div>
+  <div class="fm">Current Ratio = 유동자산 ÷ 유동부채
+Quick Ratio   = (현금 + 단기투자 + 매출채권) ÷ 유동부채
+Cash Ratio    = (현금 + 단기투자) ÷ 유동부채</div>
+  <div class="kp-blue">⭐ 아래로 갈수록 <strong>보수적</strong> — 재고를 빼고(Quick), 매출채권까지 뺀다(Cash)</div>
+  <div class="tn">재고가 많은 기업은 Current Ratio는 좋아 보여도 Quick Ratio가 급락한다 — 유동성 착시를 잡아내는 도구.</div>
+</div>
+
+<div class="sec">
+  <div class="st">지급능력(Solvency) 비율</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>비율</th><th>공식</th></tr></thead>
+      <tbody>
+        <tr><td>Debt-to-Equity</td><td>총부채 ÷ 자기자본</td></tr>
+        <tr><td>Debt-to-Capital</td><td>총부채 ÷ (총부채 + 자기자본)</td></tr>
+        <tr><td>Debt-to-Assets</td><td>총부채 ÷ 총자산</td></tr>
+        <tr><td>Financial Leverage</td><td>평균 총자산 ÷ 평균 자기자본</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tn">문제에서 "Debt"의 정의(총부채 vs 이자부부채)를 반드시 확인 — 공식이 여러 개라 보통 지문에 제시된다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">운전자본</div>
+  <div class="fm">Working Capital = 유동자산 − 유동부채</div>
+  <ul class="pts">
+    <li>(+)면 단기 지급여력 있음, (−)면 유동성 압박</li>
+    <li>과도하게 크면 자산이 <strong>비효율적으로 묶여</strong> 있다는 뜻도 됨</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 키워드 ===================== -->
+<div id="tab-keyword" class="tp">
+<div class="sec">
+  <div class="st">시험 키워드 → 바로 떠올릴 것</div>
+  <div class="kw-grid">
+    <div class="kw"><span class="kk">liquidity-based presentation</span><span class="ka">→</span><span class="kv">IFRS 허용, 은행이 사용</span></div>
+    <div class="kw"><span class="kk">current asset 정의</span><span class="ka">→</span><span class="kv">1년 vs 영업순환주기 중 <strong>긴 것</strong></span></div>
+    <div class="kw"><span class="kk">held-to-maturity / amortized cost</span><span class="ka">→</span><span class="kv">평가손익 인식 안 함</span></div>
+    <div class="kw"><span class="kk">trading securities / FVPL</span><span class="ka">→</span><span class="kv">평가손익 → NI</span></div>
+    <div class="kw"><span class="kk">available-for-sale / FVOCI</span><span class="ka">→</span><span class="kv">평가손익 → OCI → AOCI ⭐</span></div>
+    <div class="kw"><span class="kk">internally developed intangible</span><span class="ka">→</span><span class="kv">원칙 비용 처리</span></div>
+    <div class="kw"><span class="kk">development costs (IFRS)</span><span class="ka">→</span><span class="kv">요건 충족 시 자본화 ⭐</span></div>
+    <div class="kw"><span class="kk">software (U.S. GAAP)</span><span class="ka">→</span><span class="kv">기술적 실현가능성 이후 자본화</span></div>
+    <div class="kw"><span class="kk">goodwill amortization</span><span class="ka">→</span><span class="kv">상각 X, 매년 손상검사 O</span></div>
+    <div class="kw"><span class="kk">internally generated goodwill</span><span class="ka">→</span><span class="kv">인식 불가</span></div>
+    <div class="kw"><span class="kk">redeemable preferred stock</span><span class="ka">→</span><span class="kv">금융부채로 분류 ⭐</span></div>
+    <div class="kw"><span class="kk">treasury stock purchase</span><span class="ka">→</span><span class="kv">유통주식 ↓, EPS ↑, 자본 ↓</span></div>
+    <div class="kw"><span class="kk">treasury stock retirement</span><span class="ka">→</span><span class="kv">EPS 불변, 총자본 불변</span></div>
+    <div class="kw"><span class="kk">common-size balance sheet</span><span class="ka">→</span><span class="kv">기준 = Total Assets</span></div>
+    <div class="kw"><span class="kk">quick ratio</span><span class="ka">→</span><span class="kv">재고 제외</span></div>
+    <div class="kw"><span class="kk">deferred tax liability 분류</span><span class="ka">→</span><span class="kv">비유동</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">시험 함정 Top Picks</div>
+  <div class="card c-red"><div class="ct">⚠ 자주 틀리는 것</div><ul class="pts">
+    <li class="warn">FVOCI 평가손익은 <strong>NI가 아니라 OCI</strong> — FVPL과 헷갈리기 쉬움</li>
+    <li class="warn">IFRS는 <strong>개발비</strong>, GAAP은 <strong>소프트웨어</strong>가 자본화 예외 (서로 다른 항목)</li>
+    <li class="warn">영업권은 <strong>상각하지 않고</strong> 손상만 — 손상 환입도 불가</li>
+    <li class="warn">자기주식 <strong>소각</strong>은 EPS·총자본에 영향 없음</li>
+    <li class="warn">Common-size BS 기준은 <strong>Total Assets</strong> (Revenue 아님)</li>
+    <li class="warn">상환우선주는 <strong>부채</strong>로 분류</li>
+  </ul></div>
+</div>
+</div>
+
+<!-- ===================== Quiz ===================== -->
+<div id="tab-quiz" class="tp">
+<div class="sec">
+  <div class="st">Reading 29 — Quiz</div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q1</span>FVOCI(매도가능증권)로 분류된 금융자산의 미실현 평가손익은 어디에 인식되는가?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 당기순이익(NI)</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 기타포괄손익(OCI) → AOCI</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 인식하지 않는다</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>FVOCI는 공정가치로 측정하되 평가손익을 <strong>OCI</strong>로 보내 AOCI에 누적한다. FVPL은 NI, 상각후원가(HTM)는 평가손익을 인식하지 않는다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q2</span>내부적으로 창출한 영업권(internally generated goodwill)의 처리는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 공정가치로 자산 인식</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 자산으로 인식하지 않는다</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 매년 상각한다</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>영업권은 <strong>사업결합으로 취득한 경우에만</strong> 인식한다. 내부창출 영업권은 신뢰성 있는 측정이 어려워 인식 불가 — BS의 Completeness 한계 사례.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q3</span>개발비(development costs)의 자본화가 가능한 기준은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. U.S. GAAP만</button>
+      <button class="opt" onclick="ans(this,'correct')">B. IFRS만 (요건 충족 시)</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 둘 다 항상 자본화</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>IFRS는 개발단계에서 요건을 충족하면 자본화 허용, 연구비는 비용. U.S. GAAP은 R&amp;D 모두 비용이되 <strong>소프트웨어</strong>만 기술적 실현가능성 이후 자본화 예외.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q4</span>인수대가 2,000, 식별가능 순자산 공정가치 1,000일 때 영업권은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'correct')">A. 1,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 2,000</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 3,000</button>
+    </div>
+    <div class="qe"><strong>정답: A</strong><br>Goodwill = 2,000 − 1,000 = <strong>1,000</strong>. 피인수기업 장부에 있던 기존 영업권은 식별가능 자산이 아니므로 제거하고 계산한다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q5</span>자기주식을 <strong>소각(retire)</strong>했을 때 EPS에 미치는 영향은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 증가</button>
+      <button class="opt" onclick="ans(this,'wrong')">B. 감소</button>
+      <button class="opt" onclick="ans(this,'correct')">C. 변화 없다</button>
+    </div>
+    <div class="qe"><strong>정답: C</strong><br>자기주식은 <strong>매입 시점</strong>에 이미 유통주식에서 빠졌다. 소각은 발행주식수만 줄일 뿐 유통주식수와 총자본에 영향이 없다. EPS가 오르는 건 <strong>매입</strong> 시점이다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q6</span>유동자산(Current Asset)의 분류 기준으로 옳은 것은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 항상 1년 이내</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 1년과 영업순환주기 중 더 긴 기간 이내</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 1년과 영업순환주기 중 더 짧은 기간 이내</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>둘 중 <strong>긴 쪽</strong>이 기준. 조선·건설처럼 영업순환주기가 1년을 넘는 산업에서는 1년 넘는 자산도 유동으로 분류될 수 있다.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q7</span>상환우선주(Redeemable Preferred Stock)의 분류는?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. 자본</button>
+      <button class="opt" onclick="ans(this,'correct')">B. 금융부채</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. 기타포괄손익</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>형식은 주식이지만 <strong>상환 의무</strong>가 있어 실질이 부채다. 레버리지 비율 계산 시 부채에 포함해야 한다 — 형식보다 실질 우선.</div>
+  </div>
+
+  <div class="qb">
+    <div class="qq"><span class="qn">Q8</span>Common-size Balance Sheet의 기준(100%) 항목은?</div>
+    <div class="opts">
+      <button class="opt" onclick="ans(this,'wrong')">A. Revenue</button>
+      <button class="opt" onclick="ans(this,'correct')">B. Total Assets</button>
+      <button class="opt" onclick="ans(this,'wrong')">C. Total Equity</button>
+    </div>
+    <div class="qe"><strong>정답: B</strong><br>BS는 <strong>Total Assets</strong> 기준, IS와 CF는 <strong>Revenue</strong> 기준. 세 재무제표의 기준을 바꿔 묻는 문제가 자주 출제된다.</div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>

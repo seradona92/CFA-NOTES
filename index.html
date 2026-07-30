@@ -14,6 +14,7 @@
   --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
   --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
   --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
 }
 @media(prefers-color-scheme:dark){:root{
   --bg:#1c1c1a;--card:#252523;--text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
@@ -23,6 +24,7 @@
   --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
   --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
   --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+  --red-bg:#2b0f0f;--red-bd:rgba(212,80,80,0.28);--red-t:#f0a0a0;
 }}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1.5rem 4rem}
 .wrap{max-width:600px;margin:0 auto}
@@ -39,7 +41,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ic-amber{background:var(--amber-bg)}
 .ic-purple{background:var(--purple-bg)}
 .ic-teal{background:var(--teal-bg)}
-.card-title{font-size:15px;font-weight:500;color:var(--text)}
+.ic-red{background:var(--red-bg)}
+.card-title{font-size:15px;font-weight:500;color:var(--text);flex:1}
+.rno{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.03em;flex-shrink:0}
 .card-desc{font-size:12px;color:var(--text2);margin-left:44px}
 .card-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;margin-left:44px}
 .tag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
@@ -48,6 +52,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-amber{background:var(--amber-bg);color:var(--amber-t);border:0.5px solid var(--amber-bd)}
 .tag-purple{background:var(--purple-bg);color:var(--purple-t);border:0.5px solid var(--purple-bd)}
 .tag-teal{background:var(--teal-bg);color:var(--teal-t);border:0.5px solid var(--teal-bd)}
+.tag-red{background:var(--red-bg);color:var(--red-t);border:0.5px solid var(--red-bd)}
 .footer{margin-top:3rem;font-size:11px;color:var(--text3);text-align:center}
 </style>
 </head>
@@ -58,12 +63,148 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <p>FSA · Quantitative Methods — 학습 레퍼런스</p>
   </div>
 
-  <div class="section-title">Financial Statement Analysis (FSA)</div>
+  <div class="section-title">복습 핵심 도구 — 1회 학습 후 사용</div>
+
+  <a class="card-link" href="fsa_master_map.html">
+    <div class="card-top">
+      <div class="card-icon ic-teal">🗺️</div>
+      <div class="card-title">FSA Master Map</div>
+      <div class="rno">전 범위</div>
+    </div>
+    <div class="card-desc">Reading을 가로지르는 연쇄효과 7개 · 한 거래 → 3표 · ROE 연결 · 회독 순서</div>
+    <div class="card-tags">
+      <span class="tag tag-teal">연쇄 지도</span>
+      <span class="tag tag-teal">3표 동시효과</span>
+      <span class="tag tag-teal">DuPont 연결</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_traps.html">
+    <div class="card-top">
+      <div class="card-icon ic-red">🎯</div>
+      <div class="card-title">시험 함정 총정리</div>
+      <div class="rno">전수</div>
+    </div>
+    <div class="card-desc">핵심 20 + 방향 함정 + IFRS/GAAP 혼동 + 영역별 전수 — 시험 직전 회독용</div>
+    <div class="card-tags">
+      <span class="tag tag-red">핵심 20</span>
+      <span class="tag tag-red">방향 함정</span>
+      <span class="tag tag-red">기준 혼동</span>
+    </div>
+  </a>
+
+  <div class="section-title">처음 학습 — Reading 순서 (FSA)</div>
+
+  <a class="card-link" href="fsa_intro_quality.html">
+    <div class="card-top">
+      <div class="card-icon ic-purple">📋</div>
+      <div class="card-title">개요 · Reporting Quality · 모델링</div>
+      <div class="rno">R27·36·38</div>
+    </div>
+    <div class="card-desc">재무제표 체계 · 감사의견 4종 · 품질 스펙트럼 · 분식 수법 · Porter 5 Forces</div>
+    <div class="card-tags">
+      <span class="tag tag-purple">감사의견</span>
+      <span class="tag tag-purple">Reporting Quality</span>
+      <span class="tag tag-purple">분식 탐지</span>
+      <span class="tag tag-purple">모델링</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_income_statement.html">
+    <div class="card-top">
+      <div class="card-icon ic-blue">📈</div>
+      <div class="card-title">Income Statement 완전 정리</div>
+      <div class="rno">R28</div>
+    </div>
+    <div class="card-desc">수익인식 5단계 · 비경상항목 · 회계변경 · Basic/Diluted EPS · Common-size</div>
+    <div class="card-tags">
+      <span class="tag tag-blue">수익인식</span>
+      <span class="tag tag-blue">EPS</span>
+      <span class="tag tag-blue">희석증권</span>
+      <span class="tag tag-blue">회계변경</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_balance_sheet.html">
+    <div class="card-top">
+      <div class="card-icon ic-green">⚖️</div>
+      <div class="card-title">Balance Sheet 완전 정리</div>
+      <div class="rno">R29</div>
+    </div>
+    <div class="card-desc">금융상품 3분류(FVPL·FVOCI·상각후원가) · 무형자산 · 영업권 · 자본 · 자기주식</div>
+    <div class="card-tags">
+      <span class="tag tag-green">금융상품</span>
+      <span class="tag tag-green">Goodwill</span>
+      <span class="tag tag-green">자기주식</span>
+      <span class="tag tag-green">OCI</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_cashflow.html">
+    <div class="card-top">
+      <div class="card-icon ic-teal">💵</div>
+      <div class="card-title">Cash Flow 완전 정리</div>
+      <div class="rno">R30–31</div>
+    </div>
+    <div class="card-desc">직접법·간접법 통합 예제 · CFO/CFI/CFF 분류 · IFRS vs GAAP · FCFF/FCFE · CF 비율</div>
+    <div class="card-tags">
+      <span class="tag tag-teal">직접·간접법</span>
+      <span class="tag tag-teal">IFRS vs GAAP</span>
+      <span class="tag tag-teal">FCFF·FCFE</span>
+      <span class="tag tag-teal">CF 품질</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_inventory_ppe_ia.html">
+    <div class="card-top">
+      <div class="card-icon ic-amber">📦</div>
+      <div class="card-title">Inventory / PPE / Intangible Assets</div>
+      <div class="rno">R32–33</div>
+    </div>
+    <div class="card-desc">FIFO/LIFO · LIFO Reserve · 감가상각 · Revaluation · Impairment · IFRS vs GAAP</div>
+    <div class="card-tags">
+      <span class="tag tag-amber">Inventory</span>
+      <span class="tag tag-amber">PPE</span>
+      <span class="tag tag-amber">IA</span>
+      <span class="tag tag-amber">IFRS vs GAAP</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_lease_4_2.html">
+    <div class="card-top">
+      <div class="card-icon ic-teal">🏢</div>
+      <div class="card-title">Lease · Pension · Share-Based Comp</div>
+      <div class="rno">R34</div>
+    </div>
+    <div class="card-desc">Finance vs Operating · Lessee/Lessor 매트릭스 T계정 · DB/DC · 스톡옵션 · IFRS vs GAAP</div>
+    <div class="card-tags">
+      <span class="tag tag-teal">Lease</span>
+      <span class="tag tag-teal">Pension</span>
+      <span class="tag tag-teal">SBC</span>
+      <span class="tag tag-teal">T계정</span>
+    </div>
+  </a>
+
+  <a class="card-link" href="fsa_income_tax.html">
+    <div class="card-top">
+      <div class="card-icon ic-red">🧾</div>
+      <div class="card-title">Income Tax 완전 정리</div>
+      <div class="rno">R35</div>
+    </div>
+    <div class="card-desc">DTA/DTL · Tax Base 판정 매트릭스 · 6대 사례 · 세율변동 · Valuation Allowance</div>
+    <div class="card-tags">
+      <span class="tag tag-red">DTA·DTL</span>
+      <span class="tag tag-red">Tax Base</span>
+      <span class="tag tag-red">Valuation Allowance</span>
+      <span class="tag tag-red">유효세율</span>
+    </div>
+  </a>
 
   <a class="card-link" href="fsa_ratio_complete.html">
     <div class="card-top">
       <div class="card-icon ic-blue">📊</div>
       <div class="card-title">재무비율 완전 정리</div>
+      <div class="rno">R37</div>
     </div>
     <div class="card-desc">Profitability · Activity · Liquidity · Solvency · Valuation · DuPont</div>
     <div class="card-tags">
@@ -78,6 +219,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="card-top">
       <div class="card-icon ic-green">🧮</div>
       <div class="card-title">재무비율 인터랙티브 계산기</div>
+      <div class="rno">TOOL</div>
     </div>
     <div class="card-desc">BS/IS 수치 입력 → 비율 실시간 계산 · 항목 클릭 시 관련 비율 하이라이트</div>
     <div class="card-tags">
@@ -86,44 +228,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </a>
 
-  <a class="card-link" href="fsa_inventory_ppe_ia.html">
-    <div class="card-top">
-      <div class="card-icon ic-amber">📦</div>
-      <div class="card-title">Inventory / PPE / Intangible Assets</div>
-    </div>
-    <div class="card-desc">FIFO/LIFO · 감가상각 · Revaluation · Impairment · Goodwill · IFRS vs GAAP</div>
-    <div class="card-tags">
-      <span class="tag tag-amber">Inventory</span>
-      <span class="tag tag-amber">PPE</span>
-      <span class="tag tag-amber">IA</span>
-      <span class="tag tag-amber">IFRS vs GAAP</span>
-    </div>
-  </a>
-
-  <a class="card-link" href="fsa_lease_4_2.html">
-    <div class="card-top">
-      <div class="card-icon ic-teal">🏢</div>
-      <div class="card-title">Lease 완전 정리</div>
-    </div>
-    <div class="card-desc">Finance vs Operating · Lessee/Lessor T계정 · IFRS vs GAAP · 슈웨이저 검증 완료</div>
-    <div class="card-tags">
-      <span class="tag tag-teal">Lessee</span>
-      <span class="tag tag-teal">Lessor</span>
-      <span class="tag tag-teal">T계정</span>
-      <span class="tag tag-teal">IFRS vs GAAP</span>
-    </div>
-  </a>
-
   <div class="section-title">Quantitative Methods</div>
 
   <a class="card-link" href="quant_r3_r9.html">
     <div class="card-top">
       <div class="card-icon ic-purple">📐</div>
-      <div class="card-title">Quant R3–R9 완전 정리</div>
+      <div class="card-title">Quant R1–R11 완전 정리</div>
+      <div class="rno">R1–11</div>
     </div>
-    <div class="card-desc">통계 · 확률 · 포트폴리오 수학 · 시뮬레이션 · 추정/검정 · 회귀분석 · 독립성 검정</div>
+    <div class="card-desc">수익률·TVM · 통계 · 확률 · 포트폴리오 · 시뮬레이션 · 추정/검정 · 독립성 · 회귀 · Big Data</div>
     <div class="card-tags">
-      <span class="tag tag-purple">R3~R9</span>
+      <span class="tag tag-purple">R1~R11</span>
       <span class="tag tag-purple">가설검정</span>
       <span class="tag tag-purple">회귀분석</span>
       <span class="tag tag-purple">키워드 매핑</span>

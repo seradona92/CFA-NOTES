@@ -142,7 +142,7 @@ tr:hover td{background:var(--bg2)}
 <div class="page">
 <div class="ph">
   <h1>FSA — LOS 34 완전 정리</h1>
-  <p>CFA Level 1 · Lease + Pension + Share-Based Comp · 슈웨이저 기준 · T계정 중심 · Disclosure 제외</p>
+  <p>CFA Level 1 · Reading 34 · Lease + Pension + Share-Based Comp · T계정 중심 · 슈웨이저 2025 검증</p>
 </div>
 <div class="nav">
   <button class="nb active" onclick="show('개요',this)">개요 &amp; 구분법</button>
@@ -152,6 +152,7 @@ tr:hover td{background:var(--bg2)}
   <button class="nb" onclick="show('ifrs',this)">IFRS vs GAAP</button>
   <button class="nb" onclick="show('pension',this)">Pension</button>
   <button class="nb" onclick="show('sbc',this)">Share-Based</button>
+  <button class="nb" onclick="show('disc',this)">Disclosure</button>
   <button class="nb" onclick="show('keyword',this)">키워드</button>
   <button class="nb" onclick="show('quiz',this)">Quiz</button>
 </div>
@@ -178,13 +179,14 @@ tr:hover td{background:var(--bg2)}
       <tbody>
         <tr><td><strong>1</strong></td><td>Ownership transfer</td><td>리스 종료 후 소유권 이전</td></tr>
         <tr><td><strong>2</strong></td><td>Bargain purchase option (expected to exercise)</td><td>염가매수선택권 — 행사 가능성 높음</td></tr>
-        <tr><td><strong>3</strong></td><td>Most of useful life</td><td>내용연수의 <strong>75% 이상</strong> 사용</td></tr>
-        <tr><td><strong>4</strong></td><td>PV of payments ≥ asset FV</td><td>리스료 현가 ≥ 공정가치의 <strong>90%</strong></td></tr>
+        <tr><td><strong>3</strong></td><td>Most of useful life</td><td>리스기간이 자산 내용연수의 <strong>대부분</strong>을 차지</td></tr>
+        <tr><td><strong>4</strong></td><td>PV of payments ≥ asset FV</td><td>리스료 현가 ≥ 자산의 <strong>공정가치</strong></td></tr>
         <tr><td><strong>5</strong></td><td>Specialized / no other use</td><td>해당 lessee 외 사용 불가 특수 자산</td></tr>
       </tbody>
     </table>
   </div>
   <div class="kp">5가지 중 하나도 해당 없으면 → Operating Lease</div>
+  <div class="kp-red">⚠ <strong>75% · 90%는 현행 기준이 아니다.</strong> 과거 U.S. GAAP의 bright-line rule(내용연수 75%, 공정가치 90%)로, 현행 CFA·IFRS 문구는 숫자 없이 <strong>"most of useful life"</strong>, <strong>"PV ≥ fair value"</strong>다. 지문에 75%·90%가 보이면 판단 근거로 쓰되, <strong>정답 문구로는 고르지 말 것</strong>.</div>
 </div>
 <div class="sec">
   <div class="st">기본 개념 비교</div>
@@ -272,7 +274,7 @@ tr:hover td{background:var(--bg2)}
     <div class="mtx-c last"><div class="tT mid"><span class="mln m-mu">(별도 없음)</span></div></div>
     <div class="mtx-c cf last"><div class="tT mid"><span class="mln m-mu">—</span></div></div>
   </div>
-  <div class="m-note">Operating: ROU = Lease Liability (기본 예제에서 일치 — 선급·초기직접원가 조정 없을 때). 상각 = 원금상환액으로 동시 처리.</div>
+  <div class="m-note">Operating: ROU 상각 = 원금상환액 → <strong>ROU = Lease Liability가 매 기간 일치</strong>. 상각과 이자를 나누지 않고 Lease Expense 한 줄로 표시.</div>
   </div>
 
   <div class="mtx-wrap">
@@ -678,6 +680,119 @@ Underfunded (P/A &lt; PBO) → Net Pension Liability (BS 부채)</div>
 </div>
 
 <!-- keyword -->
+<!-- ===================== Disclosure ===================== -->
+<div id="tab-disc" class="tp">
+<div class="sec">
+  <div class="st">공시의 목적 (LOS 34.c)</div>
+  <div class="kp-blue">이용자가 리스·연금·주식보상이 <strong>재무상태 · 경영성과 · 현금흐름</strong>에 미치는 영향을 평가할 수 있도록 정량·정성 정보를 제공</div>
+</div>
+
+<div class="sec">
+  <div class="st">Lessee 공시 ★ — 시험 키워드</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>구분</th><th>공시 항목</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="4"><strong>정량</strong><br>(금액)</td><td><strong>ROU 자산 장부금액</strong> — 기초자산 <strong>종류별</strong></td></tr>
+        <tr><td><strong>리스 관련 총 현금유출액</strong></td></tr>
+        <tr><td>리스부채에서 발생한 <strong>이자비용</strong> (IS)</td></tr>
+        <tr><td>ROU 자산 <strong>감가상각비</strong> — 종류별 / ROU 자산 <strong>증가액</strong></td></tr>
+        <tr><td><strong>예외 항목</strong></td><td><strong>단기리스 · 저가치리스</strong> 관련 비용<br><strong>변동리스료</strong> 중 리스부채에 포함되지 않은 비용</td></tr>
+        <tr><td><strong>만기 분석</strong></td><td>리스부채 <strong>maturity analysis</strong> + 유동 / 비유동 <strong>구분</strong></td></tr>
+        <tr><td rowspan="4"><strong>정성</strong></td><td>리스 활동의 성격</td></tr>
+        <tr><td>리스부채에 반영되지 않은 <strong>미래 현금유출 노출</strong> (잔존가치보증 등)</td></tr>
+        <tr><td>리스로 부과된 <strong>제약 및 약정</strong> (covenants)</td></tr>
+        <tr><td><strong>판매후리스</strong> (sale and leaseback) 거래</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ 만기 분석에서 <strong>차기 원금상환액 = 유동부채</strong>, 나머지 원금 = 비유동부채. 유동비율에 직접 영향.</div>
+</div>
+
+<div class="sec">
+  <div class="st">변동리스료 (Variable Lease Payments) — 두 유형</div>
+  <div class="g2">
+    <div class="card c-blue"><div class="ct">① 지수·이율 연동</div><ul class="pts">
+      <li>시장금리·물가지수에 연동</li>
+      <li><strong>리스부채·ROU에 포함</strong></li>
+      <li>지수 변동 시 <strong>재측정</strong></li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">② 매출·사용량 연동</div><ul class="pts">
+      <li>미래 매출·사용량에 따라 변동</li>
+      <li>리스부채·ROU에 <strong>포함 안 함</strong></li>
+      <li><strong>발생 시 비용</strong> 처리</li>
+    </ul></div>
+  </div>
+  <div class="tn">②가 많은 계약은 BS에 부채가 적게 잡혀 레버리지가 낮아 보인다 — 분석 시 주석 확인 필요.</div>
+</div>
+
+<div class="sec">
+  <div class="st">Lessor 공시</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Finance Lease</th><th>Operating Lease</th></tr></thead>
+      <tbody>
+        <tr><td>자산 제거 시 <strong>매각 손익</strong> (selling profit/loss)</td><td><strong>리스수익</strong> — 변동리스료 수익은 별도 표시</td></tr>
+        <tr><td>순투자에서 발생한 <strong>이자수익</strong></td><td>수취 리스료 <strong>만기 분석</strong><br>(향후 <strong>5년 각각</strong> + 이후 합계, 할인 전)</td></tr>
+        <tr><td>리스부채에 미포함된 <strong>변동리스료 수익</strong></td><td>기초자산은 BS에 남으므로<br><strong>IAS 16</strong>(유형자산) · <strong>IAS 36</strong>(손상) 공시 적용</td></tr>
+        <tr><td><strong>순투자 변동</strong>의 유의적 사유 설명</td><td>—</td></tr>
+        <tr><td>수취 리스료 만기 분석 +<br><strong>할인 전 리스료 → 순투자 조정표</strong></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">Pension 공시</div>
+  <div class="g2">
+    <div class="card c-green"><div class="ct">DC형 — 매우 단순</div><ul class="pts">
+      <li>IS에 비용 처리된 <strong>사용자 기여금</strong>만 별도 공시</li>
+      <li>그 외 요구사항 없음</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">DB형 — 3대 목적</div><ul class="pts">
+      <li>제도의 <strong>특성과 위험</strong> 설명</li>
+      <li>재무제표상 <strong>금액</strong> 식별</li>
+      <li>미래 현금흐름의 <strong>금액·시기·불확실성</strong></li>
+    </ul></div>
+  </div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>DB형 최소 공시 항목</th></tr></thead>
+      <tbody>
+        <tr><td>제도의 성격 · 지배구조 · 규제 체계 · <strong>위험 노출</strong></td></tr>
+        <tr><td><strong>기초 → 기말 조정표</strong>: Funded Status, PVDBO(PBO), Plan Assets 각각의 변동 구성요소<br><em>(IS 비용 반영분과 OCI 반영분 포함)</em></td></tr>
+        <tr><td><strong>민감도 분석</strong> — 할인율·임금상승률·사망률 변동이 PVDBO에 미치는 영향 ⭐</td></tr>
+        <tr><td>Plan Assets의 <strong>자산 종류별 구성</strong></td></tr>
+        <tr><td>차기 이후 <strong>예상 기여금</strong></td></tr>
+        <tr><td>확정급여채무의 <strong>만기 프로파일</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ DB형 공시의 핵심은 <strong>가정(assumptions)</strong>이다 — 할인율을 높이면 PVDBO가 줄어 Funded Status가 좋아 보이므로, 동종업계 대비 가정의 공격성을 반드시 비교</div>
+</div>
+
+<div class="sec">
+  <div class="st">Share-Based Compensation 공시</div>
+  <ul class="pts">
+    <li>제도의 <strong>성격</strong>과 주요 조건 — grant date, vesting date, service period, <strong>결제 방식</strong>(주식 교부 vs 현금)</li>
+    <li><strong>Grant-date 공정가치를 어떻게 산정했는지</strong> — 옵션가격모형과 <strong>투입 가정</strong>(변동성, 무위험이자율, 기대만기, 배당수익률) ⭐</li>
+    <li>주식보상거래가 <strong>손익과 재무상태에 미친 영향</strong></li>
+  </ul>
+  <div class="kp-red">⚠ 옵션 공정가치는 <strong>변동성 가정</strong>에 매우 민감하다 — 가정을 낮추면 보상비용이 줄어 NI가 늘어난다. 이익조정 통로로 지목되는 지점.</div>
+</div>
+
+<div class="sec">
+  <div class="st">공시 파트 — 시험 나오는 각도</div>
+  <div class="card c-red"><div class="ct">⚠ 문제화되는 방식</div><ul class="pts">
+    <li class="warn">"다음 중 lessee가 공시해야 <strong>하지 않는</strong> 것은?" — 보기 구별</li>
+    <li class="warn">만기 분석에서 <strong>유동/비유동 구분</strong>이 유동비율에 주는 영향</li>
+    <li class="warn">DB형 <strong>가정 변경</strong>(할인율↑)이 PVDBO·Funded Status에 주는 방향</li>
+    <li class="warn">옵션 <strong>변동성 가정</strong>이 보상비용·NI에 주는 방향</li>
+    <li class="warn">변동리스료 유형에 따라 <strong>부채 인식 여부</strong>가 갈리는 점</li>
+  </ul></div>
+</div>
+</div>
+
 <div id="tab-keyword" class="tp">
 <div class="sec">
   <div class="st">시험 키워드 → 바로 떠올릴 것</div>
@@ -685,8 +800,8 @@ Underfunded (P/A &lt; PBO) → Net Pension Liability (BS 부채)</div>
     <div class="kw"><span class="kk">ROU asset is classified as...</span><span class="ka">→</span><span class="kv">Intangible asset ⭐ (PP&E 아님)</span></div>
     <div class="kw"><span class="kk">ownership transfers</span><span class="ka">→</span><span class="kv">Finance Lease (기준 1)</span></div>
     <div class="kw"><span class="kk">bargain purchase option / expected</span><span class="ka">→</span><span class="kv">Finance Lease (기준 2)</span></div>
-    <div class="kw"><span class="kk">75% of useful life</span><span class="ka">→</span><span class="kv">Finance Lease (기준 3)</span></div>
-    <div class="kw"><span class="kk">PV ≥ 90% of fair value</span><span class="ka">→</span><span class="kv">Finance Lease (기준 4)</span></div>
+    <div class="kw"><span class="kk">most of the asset's useful life</span><span class="ka">→</span><span class="kv">Finance Lease (기준 3) — 75% 아님 ⭐</span></div>
+    <div class="kw"><span class="kk">PV of payments ≥ fair value</span><span class="ka">→</span><span class="kv">Finance Lease (기준 4) — 90% 아님 ⭐</span></div>
     <div class="kw"><span class="kk">specialized / no other use</span><span class="ka">→</span><span class="kv">Finance Lease (기준 5)</span></div>
     <div class="kw"><span class="kk">implicit interest rate</span><span class="ka">→</span><span class="kv">Lessor의 IRR (PV = 자산 FV)</span></div>
     <div class="kw"><span class="kk">guaranteed residual value</span><span class="ka">→</span><span class="kv">Obsolescence risk → lessee 부담</span></div>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | 시험 함정 총정리</title>
+<style>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — 시험 함정 총정리</h1>
+  <p>CFA Level 1 · R27–R38 전 범위 · 핵심 20 + 영역별 전수 · 시험 직전 회독용</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('top',this)">핵심 20</button>
+  <button class="nb" onclick="show('dir',this)">방향 함정</button>
+  <button class="nb" onclick="show('std',this)">IFRS vs GAAP</button>
+  <button class="nb" onclick="show('is',this)">IS · EPS</button>
+  <button class="nb" onclick="show('bs',this)">BS</button>
+  <button class="nb" onclick="show('cf',this)">CF</button>
+  <button class="nb" onclick="show('inv',this)">재고·장기자산</button>
+  <button class="nb" onclick="show('lease',this)">리스·연금·SBC</button>
+  <button class="nb" onclick="show('tax',this)">법인세</button>
+  <button class="nb" onclick="show('qual',this)">개요·품질·모델링</button>
+</div>
+
+<!-- ===================== 최빈 20 ===================== -->
+<div id="tab-top" class="tp active">
+<div class="sec">
+  <div class="st">시험 3일 전 — 이것만은 ★★★</div>
+  <div class="kp-red">아래 20개는 전 노트의 함정 중 <strong>자주 혼동되는 핵심</strong>만 추린 것이다. 다른 탭은 영역별 전수 목록.</div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>#</th><th>함정</th><th>정답</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>감가상각 <strong>방법</strong> 변경은 정책 변경이다</td><td class="up"><strong>추정</strong> 변경 → Prospective</td></tr>
+        <tr><td>2</td><td>TSM에 기말주가를 쓴다</td><td class="up"><strong>평균시장가(AMP)</strong></td></tr>
+        <tr><td>3</td><td>전환우선주 배당도 ×(1−t)</td><td class="up"><strong>CB 이자만</strong> 세후, 우선주 배당은 그대로</td></tr>
+        <tr><td>4</td><td>주식배당·분할을 월수 가중한다</td><td class="up"><strong>기초까지 소급</strong>, 가중 X</td></tr>
+        <tr><td>5</td><td>U.S. GAAP 이자 지급은 CFF</td><td class="up"><strong>CFO</strong> (배당 지급만 CFF)</td></tr>
+        <tr><td>6</td><td>간접법에서 처분이익을 가산</td><td class="up"><strong>차감</strong> (대금 전액이 CFI)</td></tr>
+        <tr><td>7</td><td>자산 CV &gt; Tax Base → DTA</td><td class="up"><strong>DTL</strong> (부채는 반대로 DTA)</td></tr>
+        <tr><td>8</td><td>평가충당금 증가 → NI 증가</td><td class="up">순DTA↓ → 세금비용↑ → <strong>NI 감소</strong></td></tr>
+        <tr><td>9</td><td>세율 인상 시 DTA↑ DTL↓</td><td class="up"><strong>둘 다 증가</strong></td></tr>
+        <tr><td>10</td><td>Finance Lease 기준은 75%·90%</td><td class="up">숫자 없음 — <strong>most of life</strong>, <strong>PV ≥ FV</strong></td></tr>
+        <tr><td>11</td><td>IFRS Net Interest = PBO × r</td><td class="up"><strong>Funded Status 순액</strong> × r</td></tr>
+        <tr><td>12</td><td>스톡옵션 비용은 grant date <strong>주가</strong> 기준</td><td class="up"><strong>옵션 자체의 FV</strong> (BSM/Binomial)</td></tr>
+        <tr><td>13</td><td>FVOCI 평가손익은 NI</td><td class="up"><strong>OCI</strong> → AOCI</td></tr>
+        <tr><td>14</td><td>자기주식 <strong>소각</strong>하면 EPS 상승</td><td class="up"><strong>불변</strong> (상승은 매입 시점)</td></tr>
+        <tr><td>15</td><td>IFRS 손상 회수가능액은 NRV 기준</td><td class="up"><strong>FV − 처분부대원가</strong> vs VIU 중 큰 값</td></tr>
+        <tr><td>16</td><td>U.S. GAAP은 손상 환입 무조건 불허</td><td class="up"><strong>Held for sale은 허용</strong> (held for use만 불허)</td></tr>
+        <tr><td>17</td><td>Common-size BS 기준은 매출</td><td class="up"><strong>Total Assets</strong> (IS·CF는 매출)</td></tr>
+        <tr><td>18</td><td>MD&amp;A도 감사 대상</td><td class="up"><strong>본문 + 주석만</strong></td></tr>
+        <tr><td>19</td><td>Adverse는 증거 부족일 때</td><td class="up">증거는 충분, <strong>왜곡이 심각</strong> (부족은 Disclaimer)</td></tr>
+        <tr><td>20</td><td>Discontinued Operation은 정책 변경</td><td class="up"><strong>표시·분류</strong> 문제 — 세후 별도 표시</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ===================== 방향 함정 ===================== -->
+<div id="tab-dir" class="tp">
+<div class="sec">
+  <div class="st">방향(↑↓)이 헷갈리는 것 — FSA 최다 출제 유형</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>상황</th><th>연쇄 효과</th></tr></thead>
+      <tbody>
+        <tr><td>기말재고 <strong>증가</strong></td><td>COGS ↓ → NI ↑ → RE ↑ → 세금 ↑</td></tr>
+        <tr><td><strong>FIFO</strong> (인플레이션기)</td><td>COGS ↓ · 재고 ↑ · NI ↑ · 세금 ↑ · <strong>CFO ↓</strong></td></tr>
+        <tr><td><strong>LIFO</strong> (인플레이션기)</td><td>COGS ↑ · 재고 ↓ · NI ↓ · 세금 ↓ · <strong>CFO ↑</strong></td></tr>
+        <tr><td><strong>LIFO Liquidation</strong></td><td>오래된 싼 재고 판매 → COGS ↓ → <strong>NI ↑</strong> (지속 불가)</td></tr>
+        <tr><td><strong>자본화</strong> (vs 비용화)</td><td>자산 ↑ · 초기 NI ↑ · <strong>CFO ↑ / CFI ↓</strong> · 이후 감가상각 ↑</td></tr>
+        <tr><td>내용연수·잔존가치 <strong>증가</strong></td><td>감가비 ↓ → NI ↑ <span class="dn">(공격적 회계)</span></td></tr>
+        <tr><td><strong>Finance Lease</strong> (vs Operating)</td><td>초기 IS비용 ↑ · EBIT ↑ · 이자비용 ↑ · <strong>CFO ↑ / CFF ↓</strong> · ROU자산 ↓</td></tr>
+        <tr><td>DB형 <strong>할인율 인상</strong></td><td>PBO ↓ → Funded Status <strong>개선되어 보임</strong></td></tr>
+        <tr><td>옵션 <strong>변동성 가정 인하</strong></td><td>옵션 FV ↓ → 보상비용 ↓ → <strong>NI ↑</strong></td></tr>
+        <tr><td><strong>DTL 증가</strong></td><td>법인세비용 ↑ · NI ↓ · <strong>현금 유출은 없음</strong>(CFO 가산)</td></tr>
+        <tr><td><strong>DTA 증가</strong></td><td>법인세비용 ↓ · NI ↑</td></tr>
+        <tr><td><strong>평가충당금 증가</strong></td><td>순DTA ↓ · 세금비용 ↑ · NI ↓ · 미래이익 전망 <strong>악화</strong> 신호</td></tr>
+        <tr><td><strong>세율 인상</strong></td><td>DTA ↑ · DTL ↑ <span class="dn">(같은 방향)</span></td></tr>
+        <tr><td>매출채권 <strong>증가</strong></td><td>CFO <strong>차감</strong> <span class="dn">(자산은 반대)</span></td></tr>
+        <tr><td>매입채무 <strong>증가</strong></td><td>CFO <strong>가산</strong> <span class="dn">(부채는 그대로)</span></td></tr>
+        <tr><td><strong>자기주식 매입</strong></td><td>유통주식 ↓ · EPS ↑ · 총자본 ↓</td></tr>
+        <tr><td><strong>자기주식 소각</strong></td><td>발행주식 ↓ · <strong>EPS·총자본 불변</strong></td></tr>
+        <tr><td>재고 <strong>평가감(write-down)</strong></td><td>재고 ↓ · NI ↓ · 회전율은 <strong>양방향 가능</strong> <span class="dn">(분모↓ vs COGS↑)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-blue">⭐ 암기 축 두 개: <strong>"자산은 반대, 부채는 그대로"</strong>(CF) / <strong>"지금 덜 냈으면 DTL, 더 냈으면 DTA"</strong>(세금)</div>
+</div>
+</div>
+
+<!-- ===================== IFRS vs GAAP ===================== -->
+<div id="tab-std" class="tp">
+<div class="sec">
+  <div class="st">기준 차이 — 한쪽만 되는 것 / 둘 다 되는 것</div>
+  <div class="g2">
+    <div class="card c-red"><div class="ct">U.S. GAAP만</div><ul class="pts">
+      <li><strong>LIFO</strong> 재고평가</li>
+      <li><strong>Valuation Allowance</strong> 계정 (DTA 차감)</li>
+      <li>소프트웨어 개발비 자본화 <span class="dn">(기술적 실현가능성 이후)</span></li>
+      <li>배당 지급 = <strong>CFF 고정</strong>, 이자 지급 = CFO 고정, 세금 = 전액 CFO</li>
+    </ul></div>
+    <div class="card c-blue"><div class="ct">IFRS만</div><ul class="pts">
+      <li><strong>Revaluation Model</strong> (PPE·IA)</li>
+      <li>Investment Property <strong>Fair Value Model</strong></li>
+      <li><strong>개발비</strong> 자본화 (요건 충족 시)</li>
+      <li><strong>Held for use</strong> 자산의 손상 환입</li>
+      <li>재고 평가손실 <strong>환입</strong> (원가 한도)</li>
+      <li><strong>Component Depreciation 필수</strong></li>
+      <li>저가치 리스(≤$5,000) 면제</li>
+      <li>CF 분류 <strong>선택권</strong> (이자·배당)</li>
+    </ul></div>
+  </div>
+  <div class="card c-teal" style="margin-top:.6rem"><div class="ct">둘 다 허용 — "한쪽만"으로 착각하기 쉬운 것</div><ul class="pts">
+    <li><strong>감가상각 방법 전체</strong> — 정액법·정률법(DDB)·생산량비례법</li>
+    <li><strong>Held for sale</strong> 자산의 손상 환입 <span class="dn">(최초 손상액 한도)</span></li>
+    <li>단기리스(≤12개월) 면제</li>
+    <li>영업권 <strong>상각 불가 · 환입 불가</strong></li>
+    <li>Goodwill 매년 손상검사</li>
+    <li>회계정책 변경 <strong>Retrospective</strong>, 추정 변경 <strong>Prospective</strong></li>
+  </ul></div>
+</div>
+
+<div class="sec">
+  <div class="st">같은 항목, 다른 처리</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>IFRS</th><th>U.S. GAAP</th></tr></thead>
+      <tbody>
+        <tr><td>손상 판정</td><td><strong>1단계</strong> (Recoverable Amount)</td><td><strong>2단계</strong> (Undiscounted CF 테스트 → Loss)</td></tr>
+        <tr><td>재고 시가</td><td>NRV</td><td>FIFO: NRV / LIFO: Replacement Cost <span class="dn">(Ceiling·Floor)</span></td></tr>
+        <tr><td>연금 Past Service Cost</td><td>IS 즉시 전액</td><td>OCI → 서비스기간 상각</td></tr>
+        <tr><td>연금 Net Interest</td><td>Interest − Expected Return <strong>통합</strong></td><td>Interest cost <strong>별도 항목</strong></td></tr>
+        <tr><td>이자 지급 (CF)</td><td>CFO <em>or</em> CFF</td><td>CFO</td></tr>
+        <tr><td>배당 지급 (CF)</td><td>CFO <em>or</em> CFF</td><td>CFF</td></tr>
+        <tr><td>이자·배당 수취 (CF)</td><td>CFO <em>or</em> CFI</td><td>CFO</td></tr>
+        <tr><td>법인세 (CF)</td><td>원칙 CFO, 귀속되면 CFI·CFF</td><td>전액 CFO</td></tr>
+        <tr><td>Operating Lease (lessee)</td><td>Finance와 <strong>동일 처리</strong></td><td>별도 방식 (Lease Exp 한 줄, 전액 CFO)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ===================== IS·EPS ===================== -->
+<div id="tab-is" class="tp">
+<div class="sec">
+  <div class="st">R28 — 손익계산서 · EPS</div>
+  <ul class="pts">
+    <li class="warn">수익 인식은 <strong>현금 수취</strong>가 아니라 <strong>수행의무 이행</strong> 시점</li>
+    <li class="warn"><strong>Agent</strong>는 순액(수수료)만 매출 — 총액 인식하면 매출 과대계상</li>
+    <li class="warn">계약 변경은 <strong>전진</strong> 적용 — 전년도 IS 수정 안 함</li>
+    <li class="warn"><strong>Unusual/Infrequent</strong>는 계속영업 안(세전), <strong>Discontinued</strong>는 아래(세후)</li>
+    <li class="warn">감가상각 <strong>방법</strong> 변경 = 추정 변경 = <strong>Prospective</strong> ★★</li>
+    <li class="warn">LIFO→FIFO는 정책 변경 = <strong>Retrospective</strong>, 반대(FIFO→LIFO)는 전진법</li>
+    <li class="warn">오류 수정은 <strong>Retrospective Restatement</strong> + 주석 공시</li>
+    <li class="warn">Basic EPS 분모는 기말 주식수가 아니라 <strong>가중평균(WASO)</strong></li>
+    <li class="warn">주식배당·액면분할은 <strong>기초까지 소급</strong>, 월수 가중 안 함 ★★</li>
+    <li class="warn">TSM은 <strong>평균시장가</strong> — 기말주가 쓰면 오답 ★★</li>
+    <li class="warn">행사가 &gt; 평균시장가면 <strong>Antidilutive</strong> → 제외</li>
+    <li class="warn">CB만 분자에 <strong>이자 ×(1−t)</strong>, 전환우선주 배당은 <strong>세조정 없음</strong> ★★</li>
+    <li class="warn">옵션·워런트는 분자 <strong>변화 없음</strong>, 분모만 순증</li>
+    <li class="warn">희석증권은 <strong>각각 따로</strong> 판정 — 묶어서 판단 금지</li>
+    <li class="warn"><strong>Diluted EPS &gt; Basic EPS는 불가능</strong> — 나왔다면 Antidilutive를 넣은 것</li>
+    <li class="warn">Common-size IS 기준 = <strong>Revenue</strong></li>
+    <li class="warn">감가상각 방법이 달라도 <strong>총 비용은 동일</strong> — 시점 배분만 다름</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== BS ===================== -->
+<div id="tab-bs" class="tp">
+<div class="sec">
+  <div class="st">R29 — 재무상태표</div>
+  <ul class="pts">
+    <li class="warn"><strong>FVOCI</strong> 평가손익은 OCI → AOCI, <strong>FVPL</strong>은 NI ★★</li>
+    <li class="warn"><strong>상각후원가(HTM)</strong>는 평가손익 아예 인식 안 함</li>
+    <li class="warn">이자·배당수익과 <strong>손상차손</strong>은 세 분류 모두 <strong>NI</strong> — 차이는 미실현 평가손익뿐</li>
+    <li class="warn">유동 정의 = 1년과 영업순환주기 중 <strong>더 긴 것</strong></li>
+    <li class="warn"><strong>상환우선주</strong>는 형식이 자본이어도 <strong>금융부채</strong></li>
+    <li class="warn">내부창출 <strong>영업권</strong>은 인식 불가</li>
+    <li class="warn">영업권은 <strong>상각 X, 매년 손상검사 O, 환입 X</strong></li>
+    <li class="warn">IFRS는 <strong>개발비</strong>, GAAP은 <strong>소프트웨어</strong>가 자본화 예외 — 서로 다른 항목 ★</li>
+    <li class="warn">자기주식 <strong>매입</strong> → EPS↑·자본↓ / <strong>소각</strong> → EPS·자본 <strong>불변</strong> ★</li>
+    <li class="warn">Common-size BS 기준 = <strong>Total Assets</strong> ★</li>
+    <li class="warn">DTL은 IFRS·GAAP 모두 <strong>비유동</strong></li>
+    <li class="warn">장부가 ≠ 시장가치 — 측정기준이 혼재하고 인적자본·브랜드는 미인식</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== CF ===================== -->
+<div id="tab-cf" class="tp">
+<div class="sec">
+  <div class="st">R30–31 — 현금흐름표</div>
+  <ul class="pts">
+    <li class="warn">GAAP: <strong>배당 지급만 CFF</strong>, 이자 지급은 CFO ★★</li>
+    <li class="warn">배당 <strong>수취</strong>(CFO)와 배당 <strong>지급</strong>(CFF)을 바꿔놓는 문제 빈출</li>
+    <li class="warn">간접법에서 처분<strong>이익</strong>은 <strong>차감</strong>, 처분<strong>손실</strong>은 가산 ★★</li>
+    <li class="warn">감가상각비 증가는 CFI가 아니라 <strong>CFO 조정</strong> 항목</li>
+    <li class="warn">직접법·간접법은 <strong>CFO만</strong> 방식이 다르고 <strong>금액은 동일</strong>, CFI·CFF는 완전 동일</li>
+    <li class="warn"><strong>비현금거래</strong>는 CF에 표시 안 하지만 <strong>주석 공시 대상</strong></li>
+    <li class="warn">자산 증가 → CFO <strong>차감</strong> / 부채 증가 → CFO <strong>가산</strong></li>
+    <li class="warn">DTL 증가는 CFO <strong>가산</strong> (실제 안 낸 세금)</li>
+    <li class="warn"><strong>FCFF</strong>는 세후 이자 가산, <strong>FCFE</strong>는 가산 <strong>안 함</strong> ★</li>
+    <li class="warn">FCFE = CFO − FCInv + <strong>Net Borrowing</strong></li>
+    <li class="warn">배당 <strong>선언액</strong> ≠ <strong>지급액</strong> — 미지급배당 증감 반영</li>
+    <li class="warn">감가상각누계액 증가 = IS 감가비면 <strong>PP&amp;E 처분 없음</strong></li>
+    <li class="warn">CFO 증가가 <strong>운전자본 압축</strong> 때문이면 지속 불가능 — CF 품질 낮음</li>
+    <li class="warn">Common-size CF 기준 = <strong>Revenue</strong></li>
+    <li class="warn">단기매매(FVPL) 증권 매매는 <strong>CFO</strong>, 투자목적은 CFI</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 재고·장기자산 ===================== -->
+<div id="tab-inv" class="tp">
+<div class="sec">
+  <div class="st">R32–33 — 재고 · 장기자산</div>
+  <ul class="pts">
+    <li class="warn">인플레이션기 <strong>FIFO</strong>: 재고↑·COGS↓·NI↑·세금↑·<strong>CFO↓</strong></li>
+    <li class="warn"><strong>LIFO Reserve</strong>를 재고에 더해 FIFO로 환산 — 세금 고려 시 현금·RE도 조정</li>
+    <li class="warn"><strong>LIFO Liquidation</strong>은 LIFO Reserve와 <strong>다른 개념</strong> — 판매량&gt;구매량 → COGS↓ → NI↑ (지속 불가)</li>
+    <li class="warn">Perpetual vs Periodic: <strong>FIFO는 동일</strong>, LIFO는 다름</li>
+    <li class="warn">IFRS 손상 회수가능액 = max(<strong>FV−처분부대원가</strong>, VIU) — <strong>NRV는 재고 용어</strong> ★★</li>
+    <li class="warn">GAAP 손상은 <strong>2단계</strong>: 1단계는 <strong>할인 안 한</strong> 미래CF와 비교</li>
+    <li class="warn">GAAP 손상 환입은 <strong>held for use만</strong> 불허 — <strong>held for sale은 허용</strong> ★★</li>
+    <li class="warn">감가상각 <strong>방법</strong>은 IFRS·GAAP <strong>모두</strong> 정액·정률·생산량비례 허용 ★</li>
+    <li class="warn"><strong>DDB</strong>는 계산식에서 잔존가치를 빼지 않지만 <strong>잔존가치 아래로는 상각 못 함</strong></li>
+    <li class="warn"><strong>Component Depreciation</strong>: IFRS 필수, GAAP 허용하나 잘 안 씀</li>
+    <li class="warn">Revaluation Gain은 <strong>OCI</strong>, Loss는 <strong>NI</strong> — 단 기존 OCI 잔액 있으면 먼저 상계</li>
+    <li class="warn">Investment Property <strong>FV Model</strong>은 Gain도 <strong>NI</strong> — PPE Revaluation과 반대 ★</li>
+    <li class="warn">이자 자본화분은 CFO가 아니라 <strong>CFI</strong>로 나감</li>
+    <li class="warn">재고 평가감은 회전율에 <strong>양방향</strong> 영향 가능</li>
+    <li class="warn">Discontinued Operation은 정책 변경이 아니라 <strong>표시·분류</strong> 문제 ★</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 리스·연금·SBC ===================== -->
+<div id="tab-lease" class="tp">
+<div class="sec">
+  <div class="st">R34 — 리스 · 연금 · 주식보상</div>
+  <ul class="pts">
+    <li class="warn">Finance Lease 기준에 <strong>75%·90% 숫자 없음</strong> — "most of useful life", "PV ≥ fair value" ★★</li>
+    <li class="warn">5가지 중 <strong>하나라도</strong> 해당하면 Finance Lease</li>
+    <li class="warn"><strong>ROU asset은 무형자산</strong>으로 분류 (PP&amp;E 아님) — 슈웨이저 명시</li>
+    <li class="warn">GAAP Operating Lease도 <strong>BS에 ROU·부채 인식</strong> — 상각·IS·CF만 다름</li>
+    <li class="warn">Finance는 초기 IS비용이 <strong>더 크고</strong>, 총 비용은 양쪽 동일</li>
+    <li class="warn">Finance가 Operating보다 <strong>CFO 높고 CFF 낮다</strong></li>
+    <li class="warn">Operating은 ROU = Lease Liability가 <strong>매 기간 일치</strong>, Finance는 중간에 <strong>ROU &lt; Liab</strong></li>
+    <li class="warn">Lessor는 Finance·Operating <strong>모두 전액 CFO</strong> — Lessee Finance(원금 CFF)와 다름 ★</li>
+    <li class="warn">저가치(≤$5,000) 면제는 <strong>IFRS만</strong>, 단기(≤12개월)는 양쪽</li>
+    <li class="warn">IFRS <strong>Net Interest = Funded Status 순액 × 할인율</strong> — PBO에만 곱하면 오답 ★★</li>
+    <li class="warn">DB형 <strong>할인율 인상</strong> → PBO↓ → Funded Status 개선되어 보임</li>
+    <li class="warn">DC형은 Pension Expense = 기여액, <strong>BS 잔액 없음</strong></li>
+    <li class="warn">Benefit 지급은 PBO·Plan Asset 동시 감소 → <strong>Funded Status 불변</strong></li>
+    <li class="warn">SBC 비용은 grant date <strong>주가가 아니라 옵션 FV</strong>(BSM/Binomial) ★★</li>
+    <li class="warn">Grant date 이후 주가 변동은 비용에 <strong>무관</strong> (FV 고정)</li>
+    <li class="warn">SBC 비용 인식해도 <strong>Equity 총액 불변</strong> (RE↓ = APIC↑)</li>
+    <li class="warn">옵션 <strong>변동성 가정↓</strong> → 보상비용↓ → NI↑ (이익조정 통로)</li>
+    <li class="warn">리스 만기분석에서 <strong>차기 원금 = 유동부채</strong> → 유동비율에 직접 영향</li>
+    <li class="warn">변동리스료: <strong>지수·이율 연동</strong>은 부채 포함, <strong>매출·사용량 연동</strong>은 제외 후 발생시 비용</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 법인세 ===================== -->
+<div id="tab-tax" class="tp">
+<div class="sec">
+  <div class="st">R35 — 법인세</div>
+  <ul class="pts">
+    <li class="warn"><strong>자산과 부채가 정반대</strong>: 자산 CV&gt;Tax Base → DTL / 부채 CV&gt;Tax Base → DTA ★★</li>
+    <li class="warn">자산 Tax Base &gt; CV → <strong>DTA</strong></li>
+    <li class="warn"><strong>영구적 차이</strong>는 DTA·DTL을 만들지 않고 <strong>유효세율만</strong> 바꾼다 ★</li>
+    <li class="warn">일시적 차이는 유효세율을 바꾸지 <strong>않는다</strong></li>
+    <li class="warn"><strong>Income Tax Expense = Taxes Payable + ΔDTL − ΔDTA</strong> — 납부액과 다름</li>
+    <li class="warn">Current Tax는 <strong>당기 세율</strong>, Deferred는 <strong>미래 제정세율</strong> ★</li>
+    <li class="warn">세율 인상 → DTA·DTL <strong>둘 다 증가</strong> (반대 방향 아님) ★★</li>
+    <li class="warn"><strong>평가충당금 증가</strong> → 순DTA↓ → 세금비용↑ → <strong>NI↓</strong>, 미래이익 전망 악화 신호 ★★</li>
+    <li class="warn">평가충당금 계정은 <strong>U.S. GAAP만</strong> — IFRS는 인식 단계에서 제한</li>
+    <li class="warn">DTL이 <strong>반전 안 될 것</strong>으로 보면 분석상 <strong>자본</strong>으로 재분류</li>
+    <li class="warn">"Pretax × 세율"은 <strong>영구차이·세율변동 없을 때만</strong> 성립</li>
+    <li class="warn">감가상각(세무 가속) → DTL / 선수임대료·대손·보증·퇴직급여 → DTA</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 개요·품질 ===================== -->
+<div id="tab-qual" class="tp">
+<div class="sec">
+  <div class="st">R27 · 36 · 38 — 개요 · 품질 · 모델링</div>
+  <ul class="pts">
+    <li class="warn"><strong>MD&amp;A·Proxy는 감사 대상 아님</strong> — 본문 + 주석만 ★★</li>
+    <li class="warn">적정의견 = 회계처리 문제 없음 ≠ <strong>재무상태 우수</strong></li>
+    <li class="warn"><strong>합리적</strong> 확신이지 절대적 확신 아님 — 부정 전수 적발 보장 아님</li>
+    <li class="warn">재무제표 작성 책임은 <strong>경영진</strong>, 내부통제 책임도 <strong>경영진</strong></li>
+    <li class="warn"><strong>Adverse</strong>: 증거 충분 + 왜곡 심각 / <strong>Disclaimer</strong>: 증거 자체 부족 ★★</li>
+    <li class="warn">계속기업 의문은 <strong>강조사항</strong>으로 적정의견에도 붙을 수 있음</li>
+    <li class="warn">Segment 보고 기준 = 매출·자산·이익 중 하나라도 <strong>10% 이상</strong></li>
+    <li class="warn">보고품질 높고 <strong>이익품질 낮은 건 가능</strong> — 역은 불가능 ★</li>
+    <li class="warn">가공거래 단계에서는 이익품질을 <strong>평가할 수조차 없다</strong></li>
+    <li class="warn"><strong>자본화·긴 내용연수·정액법·손상 지연</strong> = 공격적 / 반대는 보수적</li>
+    <li class="warn">보수적 회계도 지나치면 왜곡(<strong>Big Bath</strong>) — 목표는 <strong>중립</strong></li>
+    <li class="warn"><strong>Channel stuffing</strong> → 매출채권 회전일수 급증 / <strong>Bill-and-hold</strong> → 재고가 안 줄어듦</li>
+    <li class="warn">non-GAAP 지표 사용 시 <strong>GAAP과의 조정표</strong> 공시 의무</li>
+    <li class="warn">Porter 5 forces가 <strong>약할수록</strong> 가격결정력이 높다</li>
+    <li class="warn"><strong>Conservatism = Anchoring</strong>(기존 예측 고착) ↔ <strong>Representativeness</strong>(분류 의존 → base-rate neglect) ★</li>
+    <li class="warn">신뢰구간이 지나치게 좁다 → <strong>Overconfidence</strong> / 모델 과잉복잡화 → <strong>Illusion of control</strong></li>
+    <li class="warn">경기순환 기업의 예측기간은 <strong>충분히 길게</strong> — 한 국면만 담으면 왜곡</li>
+  </ul>
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>

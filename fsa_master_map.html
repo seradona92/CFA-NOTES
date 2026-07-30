@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA | Master Map — 연쇄 지도</title>
+<style>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefec;
+  --text:#1a1a18;--text2:#5c5c58;--text3:#9a9a94;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --blue-bg:#e8f1fb;--blue-bd:rgba(24,95,165,0.22);--blue-t:#0c447c;
+  --green-bg:#eaf3de;--green-bd:rgba(59,109,17,0.22);--green-t:#27500a;
+  --amber-bg:#faeeda;--amber-bd:rgba(133,79,11,0.28);--amber-t:#633806;
+  --red-bg:#fcebeb;--red-bd:rgba(163,45,45,0.22);--red-t:#791f1f;
+  --purple-bg:#eeedfe;--purple-bd:rgba(83,74,183,0.22);--purple-t:#3c3489;
+  --teal-bg:#e1f5ee;--teal-bd:rgba(15,110,86,0.22);--teal-t:#085041;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0f0ec;--text2:#a0a09a;--text3:#606058;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --blue-bg:#0c2240;--blue-bd:rgba(55,138,221,0.28);--blue-t:#85b7eb;
+  --green-bg:#172704;--green-bd:rgba(99,153,34,0.28);--green-t:#c0dd97;
+  --amber-bg:#2a1800;--amber-bd:rgba(239,159,39,0.28);--amber-t:#fac775;
+  --red-bg:#200a0a;--red-bd:rgba(226,75,74,0.28);--red-t:#f09595;
+  --purple-bg:#1a1840;--purple-bd:rgba(127,119,221,0.28);--purple-t:#afa9ec;
+  --teal-bg:#03201a;--teal-bd:rgba(29,158,117,0.28);--teal-t:#5dcaa5;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:14px;line-height:1.65}
+.page{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.ph{margin-bottom:1.5rem}
+.ph h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.ph p{font-size:12.5px;color:var(--text2)}
+.nav{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.nb{padding:6px 15px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-size:13px;transition:all .15s;user-select:none}
+.nb.active,.nb:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tp{display:none}.tp.active{display:block}
+.sec{margin-bottom:2rem}
+.st{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border)}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.ct{font-size:13px;font-weight:600;margin-bottom:.6rem}
+.c-blue{background:var(--blue-bg);border-color:var(--blue-bd)}.c-blue .ct{color:var(--blue-t)}
+.c-green{background:var(--green-bg);border-color:var(--green-bd)}.c-green .ct{color:var(--green-t)}
+.c-amber{background:var(--amber-bg);border-color:var(--amber-bd)}.c-amber .ct{color:var(--amber-t)}
+.c-red{background:var(--red-bg);border-color:var(--red-bd)}.c-red .ct{color:var(--red-t)}
+.c-purple{background:var(--purple-bg);border-color:var(--purple-bd)}.c-purple .ct{color:var(--purple-t)}
+.c-teal{background:var(--teal-bg);border-color:var(--teal-bd)}.c-teal .ct{color:var(--teal-t)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+.tw{overflow-x:auto;border-radius:10px;border:.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;color:var(--text2);padding:7px 10px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+td{padding:7px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.tc{text-align:center}
+.up{color:var(--green-t);font-weight:600}
+.dn{color:var(--red-t);font-weight:600}
+.na{color:var(--text3)}
+.warn{color:var(--amber-t);font-weight:600}
+.fm{background:var(--bg2);border-left:3px solid var(--blue-bd);border-radius:0 8px 8px 0;padding:.5rem .75rem;font-family:monospace;font-size:13px;margin:.4rem 0}
+.pts{list-style:none;padding:0}
+.pts li{padding:3px 0 3px 16px;position:relative;font-size:13px}
+.pts li::before{content:'·';position:absolute;left:4px;color:var(--text3)}
+.kp{background:var(--amber-bg);border:.5px solid var(--amber-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--amber-t);margin-top:.5rem}
+.kp-red{background:var(--red-bg);border:.5px solid var(--red-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--red-t);margin-top:.5rem}
+.kp-blue{background:var(--blue-bg);border:.5px solid var(--blue-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--blue-t);margin-top:.5rem}
+.kp-green{background:var(--green-bg);border:.5px solid var(--green-bd);border-radius:8px;padding:.5rem .75rem;font-size:12.5px;color:var(--green-t);margin-top:.5rem}
+/* T-ACCOUNT */
+.t-lbl{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:.6rem}
+.t-bl{background:var(--blue-bg);color:var(--blue-t)}
+.t-gr{background:var(--green-bg);color:var(--green-t)}
+.t-am{background:var(--amber-bg);color:var(--amber-t)}
+.t-pu{background:var(--purple-bg);color:var(--purple-t)}
+.t-te{background:var(--teal-bg);color:var(--teal-t)}
+.t-step{font-size:11px;font-weight:600;color:var(--text2);margin:.6rem 0 .3rem;text-transform:uppercase;letter-spacing:.05em}
+.t-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+@media(max-width:600px){.t-grid{grid-template-columns:1fr}}
+.tb{background:var(--bg);border:.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tb-title{background:var(--bg2);padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);text-align:center;border-bottom:.5px solid var(--border)}
+.tb-inner{display:grid;grid-template-columns:1fr 1fr;min-height:72px}
+.tdr{padding:8px;border-right:.5px solid var(--border)}
+.tcr{padding:8px}
+.tsh{font-size:9px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.04em}
+.dr{font-size:12px;color:var(--blue-t);font-weight:600;line-height:1.6}
+.cr{font-size:12px;color:var(--red-t);font-weight:600;line-height:1.6}
+.dm{font-size:11px;color:var(--text3);line-height:1.5}
+.te{padding:8px;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+.tn{font-size:11px;color:var(--text2);padding:.4rem .6rem;background:var(--bg2);border-radius:6px;margin-bottom:.75rem;line-height:1.5}
+/* MATRIX T-ACCOUNT (시점 × BS/IS/CF) — 차변/대변 컨벤션 */
+.mtx-wrap{margin-bottom:1rem;overflow-x:auto}
+.mtx-cap{font-size:12.5px;font-weight:600;margin-bottom:.5rem;padding:4px 10px;border-radius:6px;display:inline-block}
+.mtx{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:0;border:.5px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);min-width:560px}
+.mtx-hd{text-align:center;font-weight:700;font-size:12px;color:var(--text2);padding:7px 0;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.mtx-hd.corner{background:var(--bg2)}
+.mtx-rl{display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text2);padding:0 8px;background:var(--bg2);border-right:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.mtx-rl.last{border-bottom:none}
+.mtx-c{padding:9px 7px 12px;border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);min-height:74px}
+.mtx-c.cf{border-right:none}
+.mtx-c.last{border-bottom:none}
+.tT{border-top:1.4px solid var(--text);position:relative;padding-top:6px}
+.tT.split{display:grid;grid-template-columns:1fr 1fr}
+.tT.split::before{content:"";position:absolute;left:50%;top:0;bottom:-4px;width:0;border-left:1.4px solid var(--text)}
+.tT .dside{padding-right:5px}
+.tT .cside{padding-left:5px;text-align:right}
+.tT.mid{text-align:center}
+.mln{font-size:12px;line-height:1.55;display:block;font-weight:600}
+.m-dr{color:var(--blue-t)}
+.m-cr{color:var(--red-t)}
+.m-am{color:var(--amber-t)}
+.m-mu{color:var(--text3);font-weight:400}
+.m-note{font-size:10.5px;color:var(--text3);margin-top:8px;line-height:1.5}
+.mtx-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin:.4rem 0 .9rem}
+.mtx-legend span{display:inline-flex;align-items:center;gap:5px}
+.mtx-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+/* KW */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.5rem;align-items:flex-start}
+.kk{font-size:11px;color:var(--text2);flex:1;font-family:monospace}
+.ka{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px}
+.kv{font-size:12px;font-weight:600;color:var(--text);flex:1.2}
+/* QUIZ */
+.qb{background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qq{font-size:13px;font-weight:600;margin-bottom:.75rem;line-height:1.5}
+.qn{display:inline-block;background:var(--bg2);color:var(--text3);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-right:8px}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{padding:8px 13px;border-radius:6px;border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:12.5px;cursor:pointer;transition:all .13s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--text2)}
+.opt.correct{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-t)}
+.opt.wrong{background:var(--red-bg);border-color:var(--red-bd);color:var(--red-t)}
+.opt.reveal{background:var(--teal-bg);border-color:var(--teal-bd)}
+.qe{display:none;margin-top:.6rem;padding:.6rem .75rem;background:var(--bg2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.65;border-left:3px solid var(--green-bd)}
+.qe.show{display:block}
+.qe strong{color:var(--text);font-weight:600}
+</style>
+</style>
+</head>
+<body>
+<div class="page">
+<div class="ph">
+  <h1>FSA — Master Map</h1>
+  <p>CFA Level 1 · Reading 간 연쇄효과 · 한 거래 → 3표 · ROE 연결 · 회독 가이드</p>
+</div>
+<style>
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:.5rem 0 .25rem}
+.cbox{flex:1 1 0;min-width:96px;background:var(--bg2);border:.5px solid var(--border);border-radius:8px;padding:.5rem .55rem;font-size:11.5px;line-height:1.45}
+.cbox b{display:block;font-size:11px;color:var(--text2);font-weight:600;margin-bottom:2px}
+.carr{display:flex;align-items:center;justify-content:center;padding:0 5px;color:var(--text3);font-size:14px;flex:0 0 auto}
+.cb-blue{background:var(--blue-bg);border-color:var(--blue-bd)}
+.cb-green{background:var(--green-bg);border-color:var(--green-bd)}
+.cb-amber{background:var(--amber-bg);border-color:var(--amber-bd)}
+.cb-red{background:var(--red-bg);border-color:var(--red-bd)}
+.cb-purple{background:var(--purple-bg);border-color:var(--purple-bd)}
+.src{font-size:10.5px;color:var(--text3);margin-top:.15rem}
+.chn-t{font-size:13px;font-weight:600;margin:1.1rem 0 .2rem}
+@media(max-width:640px){.chain{flex-direction:column}.carr{padding:2px 0;transform:rotate(90deg)}}
+</style>
+
+<div class="nav">
+  <button class="nb active" onclick="show('chain',this)">연쇄 지도</button>
+  <button class="nb" onclick="show('cross',this)">한 거래 → 3표</button>
+  <button class="nb" onclick="show('dupont',this)">ROE 연결</button>
+  <button class="nb" onclick="show('nav2',this)">노트 찾아가기</button>
+</div>
+
+<!-- ===================== 연쇄 지도 ===================== -->
+<div id="tab-chain" class="tp active">
+<div class="sec">
+  <div class="st">FSA는 Reading 단위로 나오지 않는다</div>
+  <div class="kp-blue">⭐ 시험은 <strong>"이 선택이 다른 재무제표와 비율을 어떻게 바꾸는가"</strong>를 묻는다. 아래 7개 연쇄만 손에 익으면 대부분의 방향 문제는 자동으로 풀린다.</div>
+</div>
+
+<div class="sec">
+  <div class="chn-t">① 수익인식 <span class="src">R28 → R29 → R30 → R36</span></div>
+  <div class="chain">
+    <div class="cbox cb-blue"><b>선택</b>이행 시점 판단<br>총액 vs 순액</div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>IS</b>Revenue ↑<br>Margin 변동</div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>BS</b>AR ↑<br>또는 계약부채 ↑</div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>CF</b>CFO는 <strong>불변</strong><br>NI만 증가</div>
+    <div class="carr">→</div>
+    <div class="cbox cb-red"><b>신호</b>NI ≫ CFO<br>발생액 과다</div>
+  </div>
+  <div class="src">조기 인식·총액 인식 → 매출과 이익은 늘지만 현금은 그대로 → <strong>매출채권 회전일수 급증</strong>이 탐지 신호 (Channel stuffing)</div>
+
+  <div class="chn-t">② 자본화 vs 비용화 <span class="src">R33 → R28 → R30 → R37</span></div>
+  <div class="chain">
+    <div class="cbox cb-blue"><b>자본화 선택</b>지출을 자산으로</div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>초기</b>자산 ↑ · 비용 ↓<br>NI ↑ · Equity ↑</div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>CF</b>CFO <strong>↑</strong><br>CFI <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox cb-amber"><b>이후</b>감가상각 ↑<br>후기 NI <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>비율</b>ROA·회전율 ↓<br>부채비율 ↓</div>
+  </div>
+  <div class="src">총 현금유출은 동일 — <strong>분류와 시점</strong>만 달라진다. 자본화는 공격적 회계의 대표 수단.</div>
+
+  <div class="chn-t">③ 재고 원가흐름 <span class="src">R32 → R28 → R30 → R37</span></div>
+  <div class="chain">
+    <div class="cbox cb-blue"><b>FIFO</b>(인플레이션기)</div>
+    <div class="carr">→</div>
+    <div class="cbox">COGS <strong>↓</strong><br>기말재고 ↑</div>
+    <div class="carr">→</div>
+    <div class="cbox">NI ↑ · RE ↑<br>운전자본 ↑</div>
+    <div class="carr">→</div>
+    <div class="cbox cb-red">세금 <strong>↑</strong><br>→ CFO <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox">Current Ratio ↑<br>재고회전율 ↓</div>
+  </div>
+  <div class="src">LIFO는 전부 반대. <strong>LIFO Liquidation</strong>은 예외 — 오래된 싼 재고가 팔려 COGS↓·NI↑ (지속 불가능한 이익).</div>
+
+  <div class="chn-t">④ 리스 분류 <span class="src">R34 → R29 → R30 → R37 · <strong>U.S. GAAP lessee 기준</strong></span></div>
+  <div class="chain">
+    <div class="cbox cb-blue"><b>Finance</b>(vs Operating)</div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>BS</b>부채 동일<br>ROU 자산 <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox"><b>IS</b>초기 비용 ↑<br>EBIT ↑ · 이자 ↑</div>
+    <div class="carr">→</div>
+    <div class="cbox cb-green"><b>CF</b>CFO <strong>↑</strong><br>CFF <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox">이자보상배율 ↓<br>EBITDA 지표 ↑</div>
+  </div>
+  <div class="src">U.S. GAAP lessee의 Finance vs Operating 비교 기준 (IFRS lessee는 단일 모형). 부채는 양쪽 동일. Finance가 <strong>CFO를 좋아 보이게</strong> 만드는 이유 — 원금분이 CFF로 빠지기 때문. ROU 자산은 Finance가 <strong>더 빨리 감소</strong>해 중간 기간에 ROU &lt; 부채가 된다.<br><strong>※ IFRS lessee는 단일모형</strong>이라 이 비교는 U.S. GAAP에만 적용된다.</div>
+
+  <div class="chn-t">⑤ 이연법인세 <span class="src">R35 → R28 → R29</span></div>
+  <div class="chain">
+    <div class="cbox cb-blue"><b>일시적 차이</b>회계 vs 세무</div>
+    <div class="carr">→</div>
+    <div class="cbox">지금 덜 냄 → <strong>DTL</strong><br>지금 더 냄 → <strong>DTA</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox">Tax Expense<br>= Payable +ΔDTL −ΔDTA</div>
+    <div class="carr">→</div>
+    <div class="cbox">NI 변동<br>유효세율은 <strong>불변</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox cb-amber">DTL 반전 안 되면<br><strong>자본</strong>으로 재분류</div>
+  </div>
+  <div class="src">영구적 차이는 이 사슬을 타지 않고 <strong>유효세율만</strong> 바꾼다. 평가충당금 증가 → 순DTA↓ → NI↓.</div>
+
+  <div class="chn-t">⑥ 감가상각 가정 <span class="src">R33 → R28 → R37 → R36</span></div>
+  <div class="chain">
+    <div class="cbox cb-blue"><b>내용연수 ↑</b>잔존가치 ↑<br>정액법 선택</div>
+    <div class="carr">→</div>
+    <div class="cbox">감가비 <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox">NI ↑ · 자산 BV ↑</div>
+    <div class="carr">→</div>
+    <div class="cbox">ROA는 <strong>양방향</strong><br>(분자↑ 분모↑)</div>
+    <div class="carr">→</div>
+    <div class="cbox cb-red">공격적 회계<br>신호</div>
+  </div>
+  <div class="src">CF에는 영향 없음(비현금). 총 감가비는 방법과 무관하게 동일 — <strong>시점 배분</strong>만 다르다.</div>
+
+  <div class="chn-t">⑦ 손상 (Impairment) <span class="src">R33 → R28 → R37</span></div>
+  <div class="chain">
+    <div class="cbox cb-blue"><b>손상 인식</b></div>
+    <div class="carr">→</div>
+    <div class="cbox">자산 ↓ · 손상차손 ↑<br>당기 NI <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox cb-amber">이후 감가비 <strong>↓</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox">이후 NI <strong>↑</strong></div>
+    <div class="carr">→</div>
+    <div class="cbox cb-red">ROA·회전율<br><strong>개선되어 보임</strong></div>
+  </div>
+  <div class="src">현금 직접 영향 없음 — 간접법 CFO에서는 가산 조정된다. <strong>Big Bath</strong>의 작동 원리 — 당기에 털면 이후 지표가 좋아진다.</div>
+</div>
+</div>
+
+<!-- ===================== 한 거래 → 3표 ===================== -->
+<div id="tab-cross" class="tp">
+<div class="sec">
+  <div class="st">하나의 선택이 세 재무제표를 동시에 건드린다</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>선택 / 사건</th><th>BS</th><th>IS</th><th>CF</th></tr></thead>
+      <tbody>
+        <tr><td><strong>지출 자본화</strong></td><td>자산 ↑</td><td>초기 비용 ↓ → NI ↑</td><td class="up">CFO ↑ / CFI ↓</td></tr>
+        <tr><td><strong>FIFO</strong> (인플레)</td><td>재고 ↑ · RE ↑</td><td>COGS ↓ → NI ↑</td><td class="na">CFO ↓ <span class="dn">(세금↑)</span></td></tr>
+        <tr><td><strong>Finance Lease</strong> <span class="dn">(GAAP lessee)</span></td><td>ROU 감소 <strong>더 빠름</strong> · 부채 동일</td><td>초기 비용 ↑ · EBIT ↑</td><td class="up">CFO ↑ / CFF ↓</td></tr>
+        <tr><td><strong>손상 인식</strong></td><td>자산 ↓ · RE ↓</td><td>손상차손 → NI ↓</td><td class="na">현금 직접 영향 없음<br><span class="dn">간접법 CFO에서 가산</span></td></tr>
+        <tr><td><strong>재평가 이익</strong> (IFRS)</td><td>자산 ↑ · <strong>재평가잉여금 ↑</strong> <span class="dn">(자본)</span></td><td class="na">NI 영향 없음 → <strong>OCI</strong></td><td class="na">영향 없음 <span class="dn">(비현금)</span></td></tr>
+        <tr><td><strong>DTL 증가</strong></td><td>부채 ↑</td><td>법인세비용 ↑ → NI ↓</td><td class="na">현금 직접 영향 없음<br><span class="dn">간접법 CFO에서 가산</span></td></tr>
+        <tr><td><strong>평가충당금 증가</strong></td><td>순 DTA ↓</td><td>법인세비용 ↑ → NI ↓</td><td class="na">현금 직접 영향 없음<br><span class="dn">간접법 CFO에서 가산</span></td></tr>
+        <tr><td><strong>주식보상 인식</strong></td><td>RE ↓ · APIC ↑ <span class="dn">(총자본 불변)</span></td><td>보상비용 → NI ↓</td><td class="na">현금 직접 영향 없음<br><span class="dn">간접법 CFO에서 가산</span></td></tr>
+        <tr><td><strong>자기주식 매입</strong></td><td>현금 ↓ · 자본 ↓</td><td class="na">영향 없음 · EPS ↑</td><td class="na">CFF ↓</td></tr>
+        <tr><td><strong>PP&amp;E 처분이익</strong></td><td>자산 ↓ · 현금 ↑</td><td>처분이익 → NI ↑</td><td class="na">CFI 유입 · <strong>CFO에서 차감</strong></td></tr>
+        <tr><td><strong>사채 발행</strong></td><td>현금 ↑ · 부채 ↑</td><td class="na">영향 없음</td><td class="up">CFF ↑</td></tr>
+        <tr><td><strong>배당 선언</strong> (미지급)</td><td>RE ↓ · 미지급배당 ↑</td><td class="na">영향 없음</td><td class="na">지급 전까지 영향 없음</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ <strong>"NI는 늘었는데 CFO는 그대로"</strong> 패턴이 보이면 대부분 발생액(accrual) 조정이 원인이다 — 수익 조기인식, 자본화, 충당금 축소.</div>
+</div>
+</div>
+
+<!-- ===================== ROE 연결 ===================== -->
+<div id="tab-dupont" class="tp">
+<div class="sec">
+  <div class="st">모든 FSA 주제는 결국 ROE로 모인다</div>
+  <div class="fm">ROE = Net Profit Margin × Asset Turnover × Financial Leverage
+        (   IS   )   (     BS 왼쪽     )   (   BS 오른쪽   )</div>
+  <div class="tw" style="margin-top:.6rem">
+    <table>
+      <thead><tr><th>FSA 주제</th><th>주로 건드리는 곳</th><th>ROE에 미치는 경로</th></tr></thead>
+      <tbody>
+        <tr><td>수익인식 · 비용인식</td><td>Net Profit Margin</td><td>Margin ↑ → ROE ↑</td></tr>
+        <tr><td>재고 방법 (FIFO/LIFO)</td><td>Margin + Turnover</td><td>FIFO: Margin ↑, 재고↑로 Turnover ↓</td></tr>
+        <tr><td>자본화 vs 비용화</td><td>Margin + Turnover</td><td>초기 Margin ↑, 자산↑로 Turnover ↓</td></tr>
+        <tr><td>감가상각 가정</td><td>Margin + Turnover</td><td>내용연수↑ → Margin ↑, 자산 BV↑ → Turnover ↓</td></tr>
+        <tr><td>손상</td><td>Turnover</td><td>자산↓ → 이후 Turnover ↑ · ROA 개선 착시</td></tr>
+        <tr><td>리스 분류</td><td>Leverage + Margin</td><td>부채 동일하나 EBIT·이자 구조 변화</td></tr>
+        <tr><td>법인세 (DTL)</td><td>Leverage</td><td>DTL을 자본으로 보면 Leverage ↓</td></tr>
+        <tr><td>자기주식 매입</td><td>Leverage</td><td>자본 ↓ → Leverage ↑ → <strong>ROE ↑</strong></td></tr>
+        <tr><td>재평가 (IFRS)</td><td>Leverage</td><td>자본 ↑ → Leverage ↓ → ROE ↓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="kp-red">⚠ <strong>ROE 상승이 항상 좋은 게 아니다.</strong> Margin·Turnover 개선이면 진짜, <strong>Leverage 증가</strong>(자사주 매입·차입)만으로 오른 것이면 위험이 함께 커진 것 — 이자보상배율을 반드시 같이 본다.</div>
+</div>
+
+<div class="sec">
+  <div class="st">5-Factor 확장</div>
+  <div class="fm">ROE = Tax Burden × Interest Burden × EBIT Margin × Asset Turnover × Leverage
+      (NI/EBT)     (EBT/EBIT)      (EBIT/Sales)</div>
+  <ul class="pts">
+    <li><strong>Tax Burden</strong> 낮을수록 세부담 큼 → 법인세 파트와 연결</li>
+    <li><strong>Interest Burden</strong> 낮을수록 이자부담 큼 → 리스·부채 파트와 연결</li>
+    <li class="warn">두 지표는 <strong>낮을수록 부담이 큰</strong> 역방향 지표 — 방향 헷갈리기 쉬움</li>
+  </ul>
+</div>
+</div>
+
+<!-- ===================== 노트 찾아가기 ===================== -->
+<div id="tab-nav2" class="tp">
+<div class="sec">
+  <div class="st">주제 → 어느 노트를 볼 것인가</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>찾는 주제</th><th>노트</th></tr></thead>
+      <tbody>
+        <tr><td>수익인식 5단계 · EPS(Basic/Diluted) · 회계변경 · 비경상항목</td><td><strong>Income Statement</strong> (R28)</td></tr>
+        <tr><td>금융상품 분류(FVPL·FVOCI·상각후원가) · 영업권 · 자기주식 · OCI 항목</td><td><strong>Balance Sheet</strong> (R29)</td></tr>
+        <tr><td>직접·간접법 · CFO/CFI/CFF 분류 · FCFF/FCFE · CF 비율</td><td><strong>Cash Flow</strong> (R30–31)</td></tr>
+        <tr><td>FIFO/LIFO · LIFO Reserve · 감가상각 · 재평가 · 손상 · 무형자산</td><td><strong>Inventory / PPE / IA</strong> (R32–33)</td></tr>
+        <tr><td>리스 분류·회계처리 · 연금(DB/DC) · 주식보상 · 공시</td><td><strong>Lease · Pension · SBC</strong> (R34)</td></tr>
+        <tr><td>DTA/DTL · Tax Base · 세율변동 · 평가충당금 · 유효세율</td><td><strong>Income Tax</strong> (R35)</td></tr>
+        <tr><td>감사의견 · 보고품질 · 분식 수법 · Porter · 행동편향</td><td><strong>개요·Quality·모델링</strong> (R27·36·38)</td></tr>
+        <tr><td>수익성·활동성·유동성·레버리지 비율 · DuPont</td><td><strong>재무비율 완전정리</strong> (R37)</td></tr>
+        <tr><td>시험 직전 함정 회독</td><td><strong>시험 함정 총정리</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="st">회독 순서 제안</div>
+  <div class="g3">
+    <div class="card c-green"><div class="ct">1회독 — 이해</div><ul class="pts">
+      <li>개요 → IS → BS → CF</li>
+      <li>재고·장기자산 → 리스·연금</li>
+      <li>세금 → 품질 → 비율</li>
+      <li class="dn">각 노트의 개념·비교 탭 중심</li>
+    </ul></div>
+    <div class="card c-blue"><div class="ct">2회독 — 계산</div><ul class="pts">
+      <li>각 노트의 <strong>계산 탭 + Quiz</strong></li>
+      <li>EPS · 간접법 CFO · LIFO 환산</li>
+      <li>DTA/DTL · 리스 상각표</li>
+      <li class="dn">틀린 것만 표시해두기</li>
+    </ul></div>
+    <div class="card c-amber"><div class="ct">직전 — 압축</div><ul class="pts">
+      <li><strong>Master Map</strong> 연쇄 7개</li>
+      <li><strong>함정 총정리</strong> 핵심 20</li>
+      <li>IFRS vs GAAP 탭만</li>
+      <li class="dn">각 노트 키워드 탭</li>
+    </ul></div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+function ans(btn, result) {
+  const block = btn.closest('.qb');
+  block.querySelectorAll('.opt').forEach(o=>{
+    o.disabled=true;
+    if(o===btn) o.classList.add(result);
+    else if(result==='wrong' && o.getAttribute('onclick').includes('correct')) o.classList.add('reveal');
+  });
+  block.querySelector('.qe').classList.add('show');
+}
+</script>
+</body>
+</html>
